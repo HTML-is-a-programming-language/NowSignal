@@ -1,0 +1,1 @@
+TASKS.md와 docs/google-forms-pilot-runbook.md를 읽고 현재 상태를 확인한 뒤, Google Forms 실제 생성·설정 검증 단계부터 이어서 진행해줘. 제품 코드는 아직 작성하지 말고 커밋 메시지는 한글로 작성해줘.
