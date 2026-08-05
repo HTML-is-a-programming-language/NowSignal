@@ -5,7 +5,7 @@
 - 최종 갱신일: 2026-08-05
 - 연구 Protocol: `v1.0` (`protocol_reviewed`)
 - 개인정보 공식 근거 확인일: 2026-08-05
-- Pilot 실행 상태: `blocked` — 실제 처리 주체·철회 채널·저장소 보호조치·Interview 도구 확인 전 수집 금지
+- Pilot 실행 상태: `blocked` — 법적 책임 운영자·저장소 보호조치·삭제 모의 실행 확인 전 수집 금지
 - 완료한 Interview: 0건
 - 확보한 참여자: 0명
 - 실제 직접 인용: 0건
@@ -105,7 +105,7 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 5. 보통 어떤 방식으로 정보를 확인합니까? (`multi_select`: 날씨, 대기질, 공식 경보, 지도·검색, 주변 사람, 확인하지 않음, 기타)
 6. Browser 또는 앱의 위치 권한을 보통 어떻게 설정합니까? (`allow`, `ask_each_time`, `deny`, `unsure`)
 7. Interview 가능한 방식과 시간대는 무엇입니까? (`availability`)
-8. 화면 공유는 선택사항이고 거부해도 참여할 수 있습니다. 실시간 화면 공유에 참여할 의향이 있습니까? (`yes/no/unsure`)
+8. 본인 기기를 직접 조작해 보여주는 화면 관찰은 선택사항이고 거부해도 참여할 수 있습니다. 화면 관찰에 참여할 의향이 있습니까? (`yes/no/unsure`)
 
 연락처는 일정 조율 목적으로만 공개 저장소 밖의 별도 연락처 표에 보관하고 Interview ID와 분리한다. 실제 저장 도구와 접근권한을 확인하기 전에는 수집하지 않는다 (`protocol_decided`, `operation_not_verified`).
 
@@ -124,6 +124,7 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권리와 불이익을 알리고, 목적에 필요한 최소 정보만 수집하며, 목적 달성 또는 보유기간 종료 후 복구되지 않게 파기하는 원칙을 사용한다.
 
 - [개인정보 보호법 제15조 — 동의 시 고지 항목](https://law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1020398563)
+- [개인정보 보호법 제2조 — 개인정보처리자의 범위](https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1030669293)
 - [개인정보 보호법 제16조 — 최소 수집](https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029335669)
 - [개인정보 보호법 제21조 — 파기](https://www.law.go.kr/LSW/lsLinkCommonInfo.do?ancYnChk=&chrClsCd=010202&lsJoLnkSeq=1020398651)
 - [개인정보 보호법 시행령 제17조 — 자유롭고 명확하며 이해하기 쉬운 동의](https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1013462603)
@@ -131,7 +132,8 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 
 ### 7.1 처리 역할과 접근
 
-- 개인정보 처리 책임 역할은 프로젝트 책임자가 맡는다. 실제 Consent에는 책임자의 실명 또는 법인명과 비공개 문의·철회 채널을 적는다.
+- 참여자에게 표시할 개인정보 처리 프로젝트명은 `NowSignal`이며, 문의·철회 전용 Email은 `html.programming.language@gmail.com`이다 (`user_confirmed`).
+- 개인정보 보호법상 개인정보처리자는 법인·단체뿐 아니라 개인도 될 수 있다. `NowSignal`이 등록된 법인·단체·사업자명이 아니라 Project 또는 Service 이름이라면 실제 Consent에는 책임 운영자의 실명 또는 등록된 사업자명을 함께 적는다 (`blocking_not_verified`).
 - Pilot의 원자료 기본 접근자는 프로젝트 책임자 1명이다. 별도 Interviewer, Observer 또는 Coder를 추가하려면 실명·역할·접근 범위를 사전에 기록한다.
 - Observer는 Pilot에 두지 않는다. 독립 Coding이 필요하면 직접 식별정보와 희귀 맥락을 제거한 Note만 제공한다.
 - 공개 GitHub Issue, Community 댓글, Analytics, Sentry, PostHog, LLM, 생성형 AI 또는 자동 전사 Service에 연락처·동의 증빙·음성·원문·자유서술 Note를 입력하지 않는다.
@@ -161,16 +163,18 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 - 파일은 OS 삭제 후 휴지통에서도 제거하고, 동기화·Backup 사본이 있으면 같은 삭제 범위를 적용한다. 삭제일·담당자·자료 유형만 식별정보 없이 파기 Log에 남긴다.
 - 공개 문서에는 참여자별 행, `PXX`, 일정, 상세 시간·지역·활동 조합을 게시하지 않는다. 3명 미만 희귀 맥락은 별도 소집단으로 표시하지 않는다.
 
-### 7.4 녹음·화면 공유·우발 수집
+### 7.4 녹음·화면 관찰·우발 수집
 
+- Pilot 2건은 약 40~50분의 **대면 1:1 Interview**로 진행한다. 별도 화상회의·녹화·전사 Service를 사용하지 않고 연구자가 승인된 private 저장소에 구조화 Note를 직접 작성한다 (`method_decided`).
 - Pilot은 **음성·영상 녹음 없이 구조화 Note만 작성**하는 것을 기본값으로 확정한다. 음성 녹음 필요성이 Pilot에서 확인되면 Main Interview 전 별도 Decision Log와 Consent 개정 후 허용한다.
-- 화면 공유는 별도 선택 동의 후 참여자가 제어하는 실시간 관찰만 허용한다. 녹화, Screenshot, 화면 Capture와 자동 전사를 금지한다.
-- 화면 공유 전에 개인 알림, 계정명, 대화, 주소와 제3자 정보를 가리도록 안내한다. 노출되면 즉시 공유를 중단하고 해당 내용을 Note에 쓰지 않는다.
+- 화면 관찰은 별도 선택 동의 후 참여자가 자신의 기기를 직접 조작해 보여주는 방식만 허용한다. 기기를 넘겨받지 않으며 녹화, Screenshot, 화면 Capture와 자동 전사를 금지한다.
+- 화면 관찰 전에 개인 알림, 계정명, 대화, 주소와 제3자 정보를 가리도록 안내한다. 노출되면 즉시 관찰을 중단하고 해당 내용을 Note에 쓰지 않는다.
 - 정확한 위치, 이동 경로, 건강정보, 아이 이름, 직장, 계정정보 또는 제3자 개인정보가 말로 우발 노출되면 확장 질문하지 않고 당일 Note에서 삭제하거나 범주 수준으로 일반화하며 `redactions`에 처리 사실만 남긴다.
+- Main Interview에서 대면 방식이 지역 다양성이나 모집 가능성을 훼손한다는 증거가 생길 때만 원격 도구를 재검토한다. 원격 전환 전에는 제공자·처리 위치·기록 기능·국외 처리 가능성을 다시 고지하고 Consent를 개정한다.
 
 ### 7.5 철회·삭제 요청
 
-- 철회 채널은 모집에 사용한 비공개 1:1 채널과 별도로 표시할 전용 연락처다. 실제 계정 또는 주소를 Consent에 넣기 전에는 모집하지 않는다 (`blocking_not_verified`). 공개 Issue나 댓글로 철회를 받지 않는다.
+- 철회 채널은 `html.programming.language@gmail.com`이다 (`configured_not_tested`). 모집 전에 다른 계정에서 송수신과 Spam 분류를 확인한다. 공개 Issue나 댓글로 철회를 받지 않는다.
 - 참여자에게 `PXX`와 별도의 철회 Code, 자료별 예정 삭제일을 제공한다. 요청 접수는 2영업일 안에 확인하고, 연결 가능한 원자료·가명처리 자료·미공개 인용은 7일 안에 삭제한 뒤 완료 사실을 알린다.
 - 연결키 파기와 공개 전 재식별 검토가 끝난 집계는 특정 참여자를 찾을 수 없으므로 개별 삭제를 보장하지 않는다. 이 전환 시점 전에는 Pilot 결과나 직접 인용을 공개하지 않는다.
 - 참여자는 질문을 건너뛰거나 언제든 중단할 수 있다. 보상이 있다면 선택 동의 거부, 부정적 의견 또는 중단을 이유로 감액하지 않는다.
@@ -181,20 +185,20 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 
 > **NowSignal AI 문제 인터뷰 참여 안내**
 >
-> 처리 주체는 **[실명 또는 법인명]**이며 문의·열람·정정·철회·삭제 요청은 **[비공개 전용 연락처]**로 받습니다. 이 연구는 최근 날씨·대기질·주변 상황을 확인해 활동 시각이나 준비를 정한 실제 과정을 이해하기 위한 약 40~50분의 Interview입니다. 제품 구매나 긍정적 평가를 요구하지 않습니다.
+> 개인정보 처리 프로젝트명은 **NowSignal**입니다. 책임 운영자는 **[실명 또는 등록된 사업자명]**이며 문의·열람·정정·철회·삭제 요청은 **html.programming.language@gmail.com**으로 받습니다. 이 연구는 최근 날씨·대기질·주변 상황을 확인해 활동 시각이나 준비를 정한 실제 과정을 이해하기 위한 약 40~50분의 Interview입니다. 제품 구매나 긍정적 평가를 요구하지 않습니다.
 >
 > 필수 수집 항목은 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 가명처리된 연구 Note와 동의 기록입니다. 연구 문제와 현재 대안을 분석하는 목적으로만 사용합니다. 필수 항목 수집에 동의하지 않으면 Interview에는 참여할 수 있지만 그 밖의 불이익은 없습니다.
 >
-> Pilot에서는 음성·영상·화면을 녹화하지 않습니다. 실시간 화면 공유는 선택사항이며 녹화·Capture하지 않습니다. 거부해도 참여와 보상에 영향이 없습니다. 정확한 주소·GPS·이동 경로·건강정보·계정 Password는 요청하지 않습니다.
+> Pilot은 대면 1:1로 진행하며 화상회의·녹화·자동 전사 Service를 사용하지 않습니다. 참여자가 자신의 기기를 직접 조작해 보여주는 화면 관찰은 선택사항이며 녹화·Capture하지 않습니다. 거부해도 참여와 보상에 영향이 없습니다. 정확한 주소·GPS·이동 경로·건강정보·계정 Password는 요청하지 않습니다.
 >
-> 원자료는 공개 Git 저장소와 OneDrive 작업공간에 저장하지 않고, 보호조치를 확인한 비공개 저장소에서 책임자만 접근합니다. 연락처·ID 연결표는 Interview와 보상 완료 후 14일 이내, 연구 Note와 Consent는 **[참여자별 예정 삭제일]**까지 보관한 뒤 삭제합니다. 후속 연락에 별도 동의한 연락처는 최대 90일만 보관합니다. 승인되지 않은 자동 전사나 외부 AI·LLM 처리에는 사용하지 않습니다. Interview 도구가 별도 제공자 또는 국외 처리를 사용하면 **[도구·제공자·처리 위치와 목적]**을 시작 전에 안내합니다.
+> 원자료는 공개 Git 저장소와 OneDrive 작업공간에 저장하지 않고, 보호조치를 확인한 비공개 저장소에서 책임자만 접근합니다. 연락처·ID 연결표는 Interview와 보상 완료 후 14일 이내, 연구 Note와 Consent는 **[참여자별 예정 삭제일]**까지 보관한 뒤 삭제합니다. 후속 연락에 별도 동의한 연락처는 최대 90일만 보관합니다. 승인되지 않은 자동 전사나 외부 AI·LLM 처리에는 사용하지 않습니다. 원격 도구로 전환하면 제공자와 처리 위치를 다시 안내하고 별도 Consent를 받습니다.
 >
 > 답변을 건너뛰거나 언제든 중단·철회할 수 있습니다. 연결 가능한 자료는 철회 접수 후 7일 안에 삭제합니다. 연결키를 파기하고 재식별 위험 검토를 마친 집계 결과는 특정 참여자를 찾을 수 없어 그 이후에는 개별 삭제가 제한됩니다. 공개 Portfolio 직접 인용은 이번 동의에 포함되지 않으며, 정확한 문구·맥락·공개 채널을 보여드린 뒤 별도 승인을 받습니다.
 
 동의 확인 항목은 서로 묶지 않는다.
 
 - [필수] 연구 참여와 위 항목의 수집·가명처리 Note 작성에 동의한다.
-- [선택] 녹화되지 않는 실시간 화면 공유에 동의한다.
+- [선택] 본인 기기를 직접 조작하는 비녹화 화면 관찰에 동의한다.
 - [선택] 90일 이내 한 차례의 후속 Prototype 연구 연락에 동의한다.
 - [확인] Protocol version, 제시 시각, 동의 방법, 실제 처리 주체·연락처, Interview 도구, 예정 삭제일을 안내받았다.
 
@@ -206,9 +210,10 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 
 | 점검 항목 | 현재 상태 | 통과 증거 |
 | --- | --- | --- |
-| 실제 처리 주체 실명 또는 법인명 | `blocking_not_verified` | Consent v1.0의 실제 값 |
-| 비공개 문의·철회 연락처 | `blocking_not_verified` | 송수신 점검과 참여자 안내문 |
-| Interview 도구·제공자·처리 위치·녹화/전사 비활성화 | `blocking_not_verified` | 설정 화면 또는 점검 Note |
+| 참여자 표시 프로젝트명 | `done` | `NowSignal` (`user_confirmed`) |
+| 법적 책임 운영자 실명 또는 등록 사업자명 | `blocking_not_verified` | Consent v1.0의 실제 값 |
+| 비공개 문의·철회 연락처 | `configured_not_tested` | `html.programming.language@gmail.com` 송수신 점검 |
+| Interview 방식·도구 | `done` | 대면 1:1, 외부 회의·녹화·전사 도구 없음 |
 | private root의 장치 암호화·ACL·비동기화 확인 | `blocking_not_verified` | 접근·동기화·암호화 점검 Note |
 | 실제 접근자 실명·역할 | `blocking_not_verified` | 접근자 목록 |
 | 자료별 예정 삭제일 계산 | `blocking_not_verified` | 참여자 Consent 기록 |
@@ -216,6 +221,23 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 | 원자료 Git·LLM 유입 방지 점검 | `done` | 공개 저장소 제외 원칙과 `.gitignore` 방어 규칙 |
 
 2026-08-05의 read-only BitLocker 조회는 현재 권한에서 WMI 접근이 거부되어 장치 암호화 상태를 판정하지 못했다. 이 오류를 암호화 비활성화 또는 활성화의 증거로 사용하지 않고 `blocking_not_verified`를 유지한다.
+
+#### C: 장치 암호화 확인 절차
+
+1. Windows에서 **Terminal**을 검색하고 **관리자 권한으로 실행**한다.
+2. `manage-bde -status C:`를 실행한다.
+3. 다음 네 항목만 확인한다.
+   - `Conversion Status` 또는 변환 상태: `Fully Encrypted`
+   - `Percentage Encrypted` 또는 암호화된 백분율: `100%`
+   - `Protection Status` 또는 보호 상태: `Protection On`
+   - `Encryption Method` 또는 암호화 방법: `None`이 아닌 값
+4. BitLocker 복구 키, 48자리 복구 Password, Key Protector ID는 문서·Issue·채팅에 복사하지 않는다. 점검 결과 공유가 필요하면 위 네 상태만 전달한다.
+5. 명령을 사용할 수 없으면 **설정 → 개인정보 및 보안 → 장치 암호화**가 `켬`인지 확인한다. Windows Pro·Enterprise·Education에서는 **BitLocker 관리** 화면의 C:가 `BitLocker 켬`인지도 확인할 수 있다.
+
+상태가 꺼져 있거나 암호화가 진행 중이면 private root를 만들지 않는다. BitLocker 활성화는 복구 키 Backup과 재부팅 위험을 먼저 검토해야 하므로 별도 승인 작업으로 다룬다.
+
+- [Microsoft Support — BitLocker 개요](https://support.microsoft.com/en-us/windows/security/encryption/bitlocker-overview)
+- [Microsoft Learn — `manage-bde -status`](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/manage-bde-status)
 
 ### 7.8 수집 금지
 
@@ -232,7 +254,7 @@ Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권�
 
 1. 연구 목적, 기록 방식, 철회 권리를 안내하고 Consent를 확인한다.
 2. “정답은 없으며 제품을 평가하는 자리가 아니라 최근 실제 행동을 이해하려는 자리”라고 설명한다.
-3. Pilot은 녹음하지 않는다는 점을 안내하고, 실시간 화면 공유를 할 때만 선택 동의를 다시 확인한다.
+3. Pilot은 녹음하지 않는다는 점을 안내하고, 참여자 기기 화면을 관찰할 때만 선택 동의를 다시 확인한다.
 
 ### 8.2 최근 실제 사례 — 약 15분
 
@@ -295,7 +317,7 @@ consent:
   method: null
   participationAndNote: false
   audioRecording: false
-  liveScreenShare: false
+  participantControlledScreenObservation: false
   futureContact: false
   publicQuoteApprovalId: null
   withdrawnAt: null
@@ -402,11 +424,12 @@ Problem Interview는 제품 만족도나 시장 규모를 측정하지 않는다
 - Pilot 참여자 모집 기준 Privacy·편향 검토: `done`
 - 연구 데이터 최소수집·분리·보관·삭제·철회 Protocol v1.0: `done`
 - Consent 핵심 문안 v1.0 검토: `done`
+- 참여자 표시 프로젝트명 `NowSignal`: `done`
+- 대면 1:1·무녹음 Pilot 방식: `done`
+- 비공개 문의·철회 Email: `configured_not_tested`
 - 모집 채널과 게시 승인: `not_verified`
 - 참여 보상과 예산: `not_verified`
-- 실제 처리 주체와 Interview 진행자: `blocking_not_verified`
-- 비공개 문의·철회 연락처: `blocking_not_verified`
-- Interview 도구·처리 위치·녹화/전사 설정: `blocking_not_verified`
+- 법적 책임 운영자와 Interview 진행자 실명: `blocking_not_verified`
 - private root 장치 암호화·접근권한·비동기화: `blocking_not_verified`
 - 자료별 예정 삭제일과 삭제·철회 모의 실행: `blocking_not_verified`
 - Pilot 일정: `not_verified`

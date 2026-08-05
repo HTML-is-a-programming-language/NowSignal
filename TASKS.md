@@ -46,10 +46,13 @@
 - [x] `done` Pilot Interview 참여자 모집 기준의 Privacy·편향·권력관계 위험 검토
 - [x] `done` 연구 데이터 최소수집·분리·접근·보관·삭제·철회 기준과 Consent 핵심 문안 v1.0 작성
 - [x] `done` 공개 저장소에 연구 원자료가 staging되는 것을 줄이는 `.gitignore` 방어 규칙 추가
+- [x] `done` 참여자 표시 프로젝트명 `NowSignal`, 철회 Email, 대면 1:1·무녹음 Pilot 방식을 사용자 확인값으로 반영
 
 ### 실제 검증 — 아직 수행하지 않음
 
-- [ ] `blocked` 실제 처리 주체·철회 채널·Interview 도구·private 저장소 보호조치·접근자·삭제 모의 실행을 Privacy Preflight로 확인
+- [ ] `blocked` 법적 책임 운영자 실명 또는 등록 사업자명 확인
+- [ ] `not_verified` 철회 Email 송수신·Spam 분류 점검
+- [ ] `blocked` private 저장소 장치 암호화·접근권한·비동기화와 삭제 모의 실행 확인
 - [ ] `not_verified` 참여 동의 후 문제 인터뷰 수행
 - [ ] `not_verified` 가명처리된 비공개 Note에 실제 관찰을 기록하고 공개 인용의 별도 승인 여부 확인
 - [ ] `not_verified` Raw Data UI 대 Action Brief UI 비교 과제 수행
@@ -102,10 +105,11 @@
 
 ## 다음 작업 제안
 
-1. 실제 처리 주체와 비공개 철회 연락처를 정하고, Interview 도구·처리 위치·private 저장소 암호화·접근권한을 확인한다.
-2. 모집 채널·보상·진행자·Pilot 일정을 승인하고 삭제·철회 모의 실행 후 2명 Pilot을 모집한다.
-3. API 활용신청 승인 여부를 결정한다. 승인 전에는 문서 조사까지만 유지한다.
-4. Gate 1의 실제 문제 증거와 Gate 2의 API smoke test가 확보되면 Gate 3 PRD와 wireframe을 작성한다.
+1. `NowSignal`이 등록된 법적 주체가 아니라면 Consent에 표시할 책임 운영자 실명 또는 등록 사업자명을 확정한다.
+2. 철회 Email 송수신과 C: 장치 암호화를 확인한 뒤 private 저장소 접근권한·비동기화·삭제 모의 실행을 검증한다.
+3. 모집 채널·보상·진행자·Pilot 일정을 승인하고 2명 대면 Pilot을 모집한다.
+4. API 활용신청 승인 여부를 결정한다. 승인 전에는 문서 조사까지만 유지한다.
+5. Gate 1의 실제 문제 증거와 Gate 2의 API smoke test가 확보되면 Gate 3 PRD와 wireframe을 작성한다.
 
 ## 제안 커밋 분리
 
