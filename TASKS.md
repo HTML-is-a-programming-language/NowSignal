@@ -9,8 +9,8 @@
 
 | Gate | 상태 | 통과 조건 | 현재 증거 | 다음 판단 |
 | --- | --- | --- | --- | --- |
-| Gate 0 환경 확인 | `done` | 저장소, Git, Node, package manager, 환경변수 이름, 덮어쓰기 위험 확인 | 로컬 초기 빈 저장소, Node 및 package manager 버전 확인, Git/PowerShell 제약 확인 | 원격 상태는 미검증이므로 문서 작업만 진행 |
-| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research 및 인터뷰 계획 문서 | 실제 참여자 모집·인터뷰 전에는 통과 금지 |
+| Gate 0 환경 확인 | `done` | 저장소, Git, Node, package manager, 환경변수 이름, 덮어쓰기 위험 확인 | GitHub 공개 저장소·권한 확인, 작업 브랜치 Push와 upstream SHA 일치 검증, Node 및 package manager 버전 확인 | Git·PowerShell의 로컬 제약은 명령별 우회 유지 |
+| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research, 인터뷰 계획, 연구 데이터·Consent Protocol v1.0 | Privacy Preflight와 실제 참여자 Interview 전에는 통과 금지 |
 | Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표와 Product License Register | 인증키 기반 smoke test 및 이용조건 재확인 전에는 조건부 |
 | Gate 3 Product Design | `blocked` | PRD, Journey, MVP, 제외 범위, Wireframe | 없음 | Gate 1 핵심 가설 판단과 Gate 2 필수 Provider 가능성 확인 필요 |
 | Gate 4 Data Foundation | `planned` | Fetch, Validation, Normalization, Cache, Attribution, Freshness | 없음 | Gate 2 통과 후 시작 |
@@ -29,7 +29,7 @@
 - [x] `done` Node, Corepack, pnpm, npm 버전 확인
 - [x] `done` 환경변수 **이름만** 점검하고 값은 수집하지 않음
 - [x] `done` 기존 **로컬** 파일이 없어 현재 문서와의 덮어쓰기 충돌이 없음을 확인
-- [ ] `not_verified` 설정된 `origin/main`의 실제 내용 확인. `FETCH_HEAD`와 remote-tracking ref가 없어 로컬 상태만으로 원격이 비어 있다고 판단하지 않음
+- [x] `done` GitHub에서 원격이 검증 당시 빈 공개 저장소이고 기본 branch 이름이 `main`임을 확인한 뒤, `docs/gate-0-2-foundation` Push와 local/upstream SHA `5459cdbd961d1259fe05d80e9e02072e34a50f3c` 일치 확인
 - [ ] `planned` Git `dubious ownership`의 지속 해결 방식을 사용자와 결정
 - [ ] `planned` PowerShell 실행 정책을 바꾸지 않고 `.cmd` 실행을 표준 명령으로 문서화
 
@@ -43,12 +43,15 @@
 - [x] `done` 기존 대안과 비교 관찰 계획 작성
 - [x] `done` 성공 지표의 정의·측정식·데이터 출처 초안 작성
 - [x] `done` 목표 직무 공고 3건을 회사 공식 채용 페이지 또는 공식 ATS에서 확인하고 확인일·URL·역량·Gap 기록. 작은 표본이며 시장 주장 아님을 명시
+- [x] `done` Pilot Interview 참여자 모집 기준의 Privacy·편향·권력관계 위험 검토
+- [x] `done` 연구 데이터 최소수집·분리·접근·보관·삭제·철회 기준과 Consent 핵심 문안 v1.0 작성
+- [x] `done` 공개 저장소에 연구 원자료가 staging되는 것을 줄이는 `.gitignore` 방어 규칙 추가
 
 ### 실제 검증 — 아직 수행하지 않음
 
-- [ ] `not_verified` Pilot interview 참여자 모집 기준 검토
+- [ ] `blocked` 실제 처리 주체·철회 채널·Interview 도구·private 저장소 보호조치·접근자·삭제 모의 실행을 Privacy Preflight로 확인
 - [ ] `not_verified` 참여 동의 후 문제 인터뷰 수행
-- [ ] `not_verified` 직접 인용과 관찰을 식별 불가능한 형태로 기록
+- [ ] `not_verified` 가명처리된 비공개 Note에 실제 관찰을 기록하고 공개 인용의 별도 승인 여부 확인
 - [ ] `not_verified` Raw Data UI 대 Action Brief UI 비교 과제 수행
 - [ ] `not_verified` 가설별 evidence count와 반증 사례 정리
 - [ ] `not_verified` 문제 지속 여부와 Gate 3 진입 여부 결정
@@ -99,14 +102,13 @@
 
 ## 다음 작업 제안
 
-1. 실제 인터뷰 모집·진행 전, `docs/03-user-interviews.md`의 동의문과 질문지를 검토한다.
-2. API 활용신청 승인 여부를 결정한다. 승인 전에는 문서 조사까지만 유지한다.
-3. Gate 1의 실제 문제 증거와 Gate 2의 API smoke test가 확보되면 Gate 3 PRD와 wireframe을 작성한다.
+1. 실제 처리 주체와 비공개 철회 연락처를 정하고, Interview 도구·처리 위치·private 저장소 암호화·접근권한을 확인한다.
+2. 모집 채널·보상·진행자·Pilot 일정을 승인하고 삭제·철회 모의 실행 후 2명 Pilot을 모집한다.
+3. API 활용신청 승인 여부를 결정한다. 승인 전에는 문서 조사까지만 유지한다.
+4. Gate 1의 실제 문제 증거와 Gate 2의 API smoke test가 확보되면 Gate 3 PRD와 wireframe을 작성한다.
 
-## 제안 Commit 분리
+## 제안 커밋 분리
 
-- `docs: record gate zero environment audit`
-- `docs: define zero-input local intelligence hypotheses`
-- `docs: plan evidence-based user interviews`
-- `docs: assess official public data feasibility`
-- `docs: register public data license constraints`
+- `문서: 사용자 연구 데이터 처리 기준 확정`
+- `문서: 파일럿 인터뷰 운영값과 실행 준비 기록`
+- `문서: 공개데이터 API 실호출 검증 기록`

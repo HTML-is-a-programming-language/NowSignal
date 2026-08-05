@@ -3,6 +3,9 @@
 - 문서 상태: `planned`
 - 최초 작성일: 2026-08-05
 - 최종 갱신일: 2026-08-05
+- 연구 Protocol: `v1.0` (`protocol_reviewed`)
+- 개인정보 공식 근거 확인일: 2026-08-05
+- Pilot 실행 상태: `blocked` — 실제 처리 주체·철회 채널·저장소 보호조치·Interview 도구 확인 전 수집 금지
 - 완료한 Interview: 0건
 - 확보한 참여자: 0명
 - 실제 직접 인용: 0건
@@ -26,8 +29,8 @@
 
 | 단계 | 목적 | 계획 표본 | 산출물 | 상태 |
 | --- | --- | --- | --- | --- |
-| Pilot Problem Interview | 질문의 유도성, 시간, 이해도 점검 | 2명 | 수정된 Script와 제외 사유 | `planned` |
-| Main Problem Interview | 최근 행동, 현재 대안, 문제 빈도·심각도 확인 | 8명 진행 후 검토, 필요 시 최대 12명 | 익명 Note, Coding matrix, 가설 상태 | `planned` |
+| Pilot Problem Interview | 질문의 유도성, 시간, 이해도 점검 | 2명 | 수정된 Script와 제외 사유 | `blocked` |
+| Main Problem Interview | 최근 행동, 현재 대안, 문제 빈도·심각도 확인 | 8명 진행 후 검토, 필요 시 최대 12명 | 가명처리 Note, Coding matrix, 가설 상태 | `planned` |
 | Comparative Prototype Test | Raw Data UI와 Action Brief UI의 결정 과정 비교 | 별도 계획 수립 | 과제 완료, 결정 시간, 이해·오류 관찰 | `not_started` |
 | 3주 Beta | 실제 변화·추천·알림의 행동 영향 확인 | Data·Safety Gate 이후 결정 | 실제 사용·오류·알림·피드백 | `not_started` |
 
@@ -61,10 +64,11 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 ### 제외 또는 별도 분석 기준
 
 - 연구팀·프로젝트 기여자는 일반 사용자 표본과 분리한다.
+- 연구자와 직속 평가·고용·거래 관계에 있어 참여 거절이 어렵거나 불이익을 우려할 수 있는 사람은 모집하지 않는다.
 - 기상·대기질·재난정보를 직업적으로 해석하는 전문가는 초기 일반 사용자 분석과 분리한다.
 - 의료적 판단이나 질환별 안전 조언을 기대하는 참여 요청은 제품 범위 밖임을 안내한다.
 - 미성년자는 초기 연구에 직접 모집하지 않는다. 아이와 외출하는 맥락은 성인 보호자만 인터뷰한다.
-- Consent를 철회하면 해당 참여자의 미식별 집계 포함 여부까지 확인하고 요청 범위에 따라 삭제한다.
+- Consent를 철회하면 연결 가능한 원자료·가명처리 자료·미공개 인용을 요청 범위에 따라 삭제한다. 연결키를 파기하고 재식별 위험 검토를 마친 집계 결과는 특정 참여자를 찾을 수 없으므로 그 이후의 삭제 한계를 Consent 시점에 알린다.
 
 ## 4. 모집 경로와 편향 관리
 
@@ -101,9 +105,9 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 5. 보통 어떤 방식으로 정보를 확인합니까? (`multi_select`: 날씨, 대기질, 공식 경보, 지도·검색, 주변 사람, 확인하지 않음, 기타)
 6. Browser 또는 앱의 위치 권한을 보통 어떻게 설정합니까? (`allow`, `ask_each_time`, `deny`, `unsure`)
 7. Interview 가능한 방식과 시간대는 무엇입니까? (`availability`)
-8. 화면 공유 또는 사용 흐름 재현에 선택적으로 동의할 수 있습니까? 거부해도 참여 가능합니까? (`yes/no/unsure`)
+8. 화면 공유는 선택사항이고 거부해도 참여할 수 있습니다. 실시간 화면 공유에 참여할 의향이 있습니까? (`yes/no/unsure`)
 
-연락처는 일정 조율 목적으로만 별도 보관하고 Interview ID와 분리한다 (`planned`).
+연락처는 일정 조율 목적으로만 공개 저장소 밖의 별도 연락처 표에 보관하고 Interview ID와 분리한다. 실제 저장 도구와 접근권한을 확인하기 전에는 수집하지 않는다 (`protocol_decided`, `operation_not_verified`).
 
 ## 6. 모집 안내문 초안
 
@@ -113,21 +117,107 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 
 보상 금액과 지급 수단은 아직 정해지지 않았다 (`not_verified`). 확정되지 않은 보상을 모집 글에 쓰지 않는다.
 
-## 7. Consent와 개인정보 처리 계획
+## 7. Consent와 연구 데이터 처리 Protocol v1.0
 
-Interview 시작 전에 다음을 평이한 언어로 안내하고 명시적 동의를 받는다 (`planned`).
+이 절은 실제 참여자 데이터를 받기 전 적용할 내부 운영 기준이다. 개인정보 보호법 준수를 확정하거나 법률 검토를 대신하지 않는다. 실제 처리 주체, 도구, 저장 위치와 국외 처리 여부가 달라지면 다시 검토한다.
 
-- 연구 목적, 예상 시간, 질문 범위
-- 언제든 답변을 건너뛰거나 중단할 권리
-- 녹음 여부를 별도로 선택할 권리와 녹음 거부 시 Note만 남는다는 점
-- 정확한 주소·GPS·이동 경로·건강정보를 수집하지 않는다는 점
-- 익명 ID를 사용하고 연락처와 연구 Note를 분리한다는 점
-- 직접 인용 사용 전 식별 가능 정보를 제거하며, 공개 포트폴리오 인용에 별도 동의를 받는다는 점
-- 보관 위치, 접근자, 예정 삭제일, 철회 연락 방법
+Protocol은 동의 시 수집·이용 목적, 항목, 보유기간, 거부 권리와 불이익을 알리고, 목적에 필요한 최소 정보만 수집하며, 목적 달성 또는 보유기간 종료 후 복구되지 않게 파기하는 원칙을 사용한다.
 
-보관기간·저장소·접근자·철회 채널은 프로젝트의 Privacy 문서와 실제 연구 도구가 정해진 후 확정한다. 확정 전에는 Interview를 시작하지 않는다 (`blocking_not_verified`).
+- [개인정보 보호법 제15조 — 동의 시 고지 항목](https://law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1020398563)
+- [개인정보 보호법 제16조 — 최소 수집](https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029335669)
+- [개인정보 보호법 제21조 — 파기](https://www.law.go.kr/LSW/lsLinkCommonInfo.do?ancYnChk=&chrClsCd=010202&lsJoLnkSeq=1020398651)
+- [개인정보 보호법 시행령 제17조 — 자유롭고 명확하며 이해하기 쉬운 동의](https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1013462603)
+- [개인정보보호위원회 — 개인정보 국외이전 제도](https://www.pipc.go.kr/np/default/page.do?mCode=D060040010)
 
-### 수집 금지
+### 7.1 처리 역할과 접근
+
+- 개인정보 처리 책임 역할은 프로젝트 책임자가 맡는다. 실제 Consent에는 책임자의 실명 또는 법인명과 비공개 문의·철회 채널을 적는다.
+- Pilot의 원자료 기본 접근자는 프로젝트 책임자 1명이다. 별도 Interviewer, Observer 또는 Coder를 추가하려면 실명·역할·접근 범위를 사전에 기록한다.
+- Observer는 Pilot에 두지 않는다. 독립 Coding이 필요하면 직접 식별정보와 희귀 맥락을 제거한 Note만 제공한다.
+- 공개 GitHub Issue, Community 댓글, Analytics, Sentry, PostHog, LLM, 생성형 AI 또는 자동 전사 Service에 연락처·동의 증빙·음성·원문·자유서술 Note를 입력하지 않는다.
+- 외부 Interview·저장 도구가 개인정보를 국외에서 조회·처리·보관할 수 있으면 실제 사용 전에 제공자, 처리 위치, 목적과 보호조치를 검토하고 필요한 고지를 반영한다.
+
+### 7.2 저장 위치와 분리
+
+- 공개 Git 저장소와 현재 OneDrive 동기화 작업공간에는 Screening 응답, 연락처, ID 연결표, Consent 기록, 참여자별 Note, 녹음과 직접 인용을 저장하지 않는다.
+- 예정된 private root는 `%LOCALAPPDATA%\NowSignal\research-private\`다. 이 경로는 장치 암호화와 OS 접근권한을 확인한 뒤에만 사용하며, 확인 전에는 생성하거나 데이터를 넣지 않는다 (`blocking_not_verified`).
+- private root 안에서도 `contacts`, `consent`, `notes`, `audio-temporary`를 분리한다. 연락처와 `PXX` 연결표를 Note와 같은 파일에 두지 않는다.
+- `PXX`는 익명 ID가 아니라 **가명처리된 연구용 ID**다. 연결키 파기 전에는 재식별 가능한 개인정보로 취급한다.
+- `.gitignore`는 우발적 staging을 줄이는 보조 통제일 뿐 안전한 저장소가 아니다. 원자료를 작업공간에 두는 근거로 사용하지 않는다.
+
+### 7.3 수집 항목과 보유기간
+
+| 자료 유형 | 최소 항목·목적 | 삭제 시점 |
+| --- | --- | --- |
+| 불적격·미참여 Screening | 성인 여부, 최근 사례 여부, 시·도, 활동, 가능 시간; 적격 판단·일정 제안 | 선정 결과 통지 또는 모집 종료 후 7일 이내 |
+| 연락처·ID 연결표 | 이름 또는 Handle, 1:1 연락처, `PXX`, 일정·보상 상태 | Interview와 보상 처리 완료 후 14일 이내 |
+| 후속 연락 목록 | 별도 동의한 연락처와 동의일; Prototype 참여 의사 확인 | 90일 또는 첫 후속 모집 종료 중 먼저 도래한 때 |
+| Consent 기록 | Protocol version, 제시 시각·방법, 필수·선택 동의, 예정 삭제일, 철회 기록 | 참여자별 Note와 같은 삭제 시점 |
+| 참여자별 Note·Coding | 시·도 수준 지역, 활동, 출처 순서, 결정 과정, Theme와 가설 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
+| 예외적 음성 녹음 | 별도 동의 시 Note 정확성 확인만 수행 | 확인 직후, 늦어도 녹음 후 7일 이내 |
+| 공개 가능한 종합 결과 | 재식별 위험을 검토한 Theme, 분자·분모, 방법과 한계 | 프로젝트 기록 정책에 따름 |
+
+- 목적을 먼저 달성하면 표의 최대 기간을 기다리지 않고 삭제한다.
+- 파일은 OS 삭제 후 휴지통에서도 제거하고, 동기화·Backup 사본이 있으면 같은 삭제 범위를 적용한다. 삭제일·담당자·자료 유형만 식별정보 없이 파기 Log에 남긴다.
+- 공개 문서에는 참여자별 행, `PXX`, 일정, 상세 시간·지역·활동 조합을 게시하지 않는다. 3명 미만 희귀 맥락은 별도 소집단으로 표시하지 않는다.
+
+### 7.4 녹음·화면 공유·우발 수집
+
+- Pilot은 **음성·영상 녹음 없이 구조화 Note만 작성**하는 것을 기본값으로 확정한다. 음성 녹음 필요성이 Pilot에서 확인되면 Main Interview 전 별도 Decision Log와 Consent 개정 후 허용한다.
+- 화면 공유는 별도 선택 동의 후 참여자가 제어하는 실시간 관찰만 허용한다. 녹화, Screenshot, 화면 Capture와 자동 전사를 금지한다.
+- 화면 공유 전에 개인 알림, 계정명, 대화, 주소와 제3자 정보를 가리도록 안내한다. 노출되면 즉시 공유를 중단하고 해당 내용을 Note에 쓰지 않는다.
+- 정확한 위치, 이동 경로, 건강정보, 아이 이름, 직장, 계정정보 또는 제3자 개인정보가 말로 우발 노출되면 확장 질문하지 않고 당일 Note에서 삭제하거나 범주 수준으로 일반화하며 `redactions`에 처리 사실만 남긴다.
+
+### 7.5 철회·삭제 요청
+
+- 철회 채널은 모집에 사용한 비공개 1:1 채널과 별도로 표시할 전용 연락처다. 실제 계정 또는 주소를 Consent에 넣기 전에는 모집하지 않는다 (`blocking_not_verified`). 공개 Issue나 댓글로 철회를 받지 않는다.
+- 참여자에게 `PXX`와 별도의 철회 Code, 자료별 예정 삭제일을 제공한다. 요청 접수는 2영업일 안에 확인하고, 연결 가능한 원자료·가명처리 자료·미공개 인용은 7일 안에 삭제한 뒤 완료 사실을 알린다.
+- 연결키 파기와 공개 전 재식별 검토가 끝난 집계는 특정 참여자를 찾을 수 없으므로 개별 삭제를 보장하지 않는다. 이 전환 시점 전에는 Pilot 결과나 직접 인용을 공개하지 않는다.
+- 참여자는 질문을 건너뛰거나 언제든 중단할 수 있다. 보상이 있다면 선택 동의 거부, 부정적 의견 또는 중단을 이유로 감액하지 않는다.
+
+### 7.6 참여 동의 안내문 v1.0
+
+아래 핵심 문안은 `protocol_reviewed`다. 대괄호 운영값을 실제 값으로 바꾸고 참여자별 삭제일을 계산하기 전에는 사용할 수 없다.
+
+> **NowSignal AI 문제 인터뷰 참여 안내**
+>
+> 처리 주체는 **[실명 또는 법인명]**이며 문의·열람·정정·철회·삭제 요청은 **[비공개 전용 연락처]**로 받습니다. 이 연구는 최근 날씨·대기질·주변 상황을 확인해 활동 시각이나 준비를 정한 실제 과정을 이해하기 위한 약 40~50분의 Interview입니다. 제품 구매나 긍정적 평가를 요구하지 않습니다.
+>
+> 필수 수집 항목은 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 가명처리된 연구 Note와 동의 기록입니다. 연구 문제와 현재 대안을 분석하는 목적으로만 사용합니다. 필수 항목 수집에 동의하지 않으면 Interview에는 참여할 수 있지만 그 밖의 불이익은 없습니다.
+>
+> Pilot에서는 음성·영상·화면을 녹화하지 않습니다. 실시간 화면 공유는 선택사항이며 녹화·Capture하지 않습니다. 거부해도 참여와 보상에 영향이 없습니다. 정확한 주소·GPS·이동 경로·건강정보·계정 Password는 요청하지 않습니다.
+>
+> 원자료는 공개 Git 저장소와 OneDrive 작업공간에 저장하지 않고, 보호조치를 확인한 비공개 저장소에서 책임자만 접근합니다. 연락처·ID 연결표는 Interview와 보상 완료 후 14일 이내, 연구 Note와 Consent는 **[참여자별 예정 삭제일]**까지 보관한 뒤 삭제합니다. 후속 연락에 별도 동의한 연락처는 최대 90일만 보관합니다. 승인되지 않은 자동 전사나 외부 AI·LLM 처리에는 사용하지 않습니다. Interview 도구가 별도 제공자 또는 국외 처리를 사용하면 **[도구·제공자·처리 위치와 목적]**을 시작 전에 안내합니다.
+>
+> 답변을 건너뛰거나 언제든 중단·철회할 수 있습니다. 연결 가능한 자료는 철회 접수 후 7일 안에 삭제합니다. 연결키를 파기하고 재식별 위험 검토를 마친 집계 결과는 특정 참여자를 찾을 수 없어 그 이후에는 개별 삭제가 제한됩니다. 공개 Portfolio 직접 인용은 이번 동의에 포함되지 않으며, 정확한 문구·맥락·공개 채널을 보여드린 뒤 별도 승인을 받습니다.
+
+동의 확인 항목은 서로 묶지 않는다.
+
+- [필수] 연구 참여와 위 항목의 수집·가명처리 Note 작성에 동의한다.
+- [선택] 녹화되지 않는 실시간 화면 공유에 동의한다.
+- [선택] 90일 이내 한 차례의 후속 Prototype 연구 연락에 동의한다.
+- [확인] Protocol version, 제시 시각, 동의 방법, 실제 처리 주체·연락처, Interview 도구, 예정 삭제일을 안내받았다.
+
+공개 Portfolio 인용은 Interview 후 별도 승인 문서로만 처리한다. Pilot에서는 기본적으로 요청하지 않는다.
+
+### 7.7 실행 전 Privacy Preflight
+
+아래 값을 한 행이라도 확인하지 못하면 실제 연락처·Screening 응답·Interview Note를 수집하지 않는다.
+
+| 점검 항목 | 현재 상태 | 통과 증거 |
+| --- | --- | --- |
+| 실제 처리 주체 실명 또는 법인명 | `blocking_not_verified` | Consent v1.0의 실제 값 |
+| 비공개 문의·철회 연락처 | `blocking_not_verified` | 송수신 점검과 참여자 안내문 |
+| Interview 도구·제공자·처리 위치·녹화/전사 비활성화 | `blocking_not_verified` | 설정 화면 또는 점검 Note |
+| private root의 장치 암호화·ACL·비동기화 확인 | `blocking_not_verified` | 접근·동기화·암호화 점검 Note |
+| 실제 접근자 실명·역할 | `blocking_not_verified` | 접근자 목록 |
+| 자료별 예정 삭제일 계산 | `blocking_not_verified` | 참여자 Consent 기록 |
+| 삭제·철회 모의 실행 | `blocking_not_verified` | 식별정보 없는 파기 Log |
+| 원자료 Git·LLM 유입 방지 점검 | `done` | 공개 저장소 제외 원칙과 `.gitignore` 방어 규칙 |
+
+2026-08-05의 read-only BitLocker 조회는 현재 권한에서 WMI 접근이 거부되어 장치 암호화 상태를 판정하지 못했다. 이 오류를 암호화 비활성화 또는 활성화의 증거로 사용하지 않고 `blocking_not_verified`를 유지한다.
+
+### 7.8 수집 금지
 
 - 정확한 위도·경도와 상세 주소
 - 이동 경로
@@ -142,7 +232,7 @@ Interview 시작 전에 다음을 평이한 언어로 안내하고 명시적 동
 
 1. 연구 목적, 기록 방식, 철회 권리를 안내하고 Consent를 확인한다.
 2. “정답은 없으며 제품을 평가하는 자리가 아니라 최근 실제 행동을 이해하려는 자리”라고 설명한다.
-3. 녹음·화면 공유 동의를 각각 다시 확인한다.
+3. Pilot은 녹음하지 않는다는 점을 안내하고, 실시간 화면 공유를 할 때만 선택 동의를 다시 확인한다.
 
 ### 8.2 최근 실제 사례 — 약 15분
 
@@ -200,10 +290,21 @@ interviewId: PXX
 conductedAt: null
 researcher: null
 consent:
-  participation: false
+  protocolVersion: null
+  presentedAt: null
+  method: null
+  participationAndNote: false
   audioRecording: false
-  screenShare: false
-  portfolioQuote: false
+  liveScreenShare: false
+  futureContact: false
+  publicQuoteApprovalId: null
+  withdrawnAt: null
+  withdrawalScope: null
+dataLifecycle:
+  privateEvidenceId: null
+  scheduledDeletionAt: null
+  deletedAt: null
+  redactionReviewedAt: null
 participantContext:
   coarseRegion: null
   activityContexts: []
@@ -231,7 +332,7 @@ followUpQuestions: []
 redactions: []
 ```
 
-`quotes`에는 실제 발언을 축어 확인한 경우에만 기록한다. 요약을 따옴표 안에 넣지 않는다.
+`quotes`에는 실제 발언을 축어 확인한 경우에만 **비공개 Note**에 기록한다. 요약을 따옴표 안에 넣지 않는다. 공개 Portfolio 인용은 정확한 문구·맥락·채널을 다시 보여주고 별도 승인 ID가 생긴 경우에만 가능하다. Pilot의 `audioRecording`은 `false`여야 한다.
 
 ## 10. Interview 실행 기록
 
@@ -260,7 +361,7 @@ redactions: []
 4. Pilot과 Main, 실제 행동과 가상 질문, 수도권과 비수도권 맥락을 혼합하지 않는다.
 5. 최소 두 명이 일부 Note를 독립 coding할 수 있으면 차이를 기록한다. 단독 연구라면 그 한계를 명시한다.
 6. 예상과 다른 사례, 현재 대안 만족 이유, 전환 비용을 반드시 포함한다.
-7. 상태를 `validated` 또는 `rejected`로 바꿀 때 원자료 위치, 판단 기준, 한계를 링크한다.
+7. 상태를 `validated` 또는 `rejected`로 바꿀 때 공개 문서에는 `privateEvidenceId`, 판단 기준과 한계만 기록한다. 비공개 원자료 경로나 참여자별 Note를 링크하지 않는다.
 
 ## 12. 판단 및 측정 계획
 
@@ -298,12 +399,16 @@ Problem Interview는 제품 만족도나 시장 규모를 측정하지 않는다
 
 ## 14. 실행 전 미해결 항목
 
+- Pilot 참여자 모집 기준 Privacy·편향 검토: `done`
+- 연구 데이터 최소수집·분리·보관·삭제·철회 Protocol v1.0: `done`
+- Consent 핵심 문안 v1.0 검토: `done`
 - 모집 채널과 게시 승인: `not_verified`
 - 참여 보상과 예산: `not_verified`
-- Interview 진행자와 Observer: `not_verified`
-- 녹음·Note 저장소와 접근권한: `not_verified`
-- 보관기간, 삭제 절차, 철회 연락 채널: `blocking_not_verified`
-- Consent 문안 검토: `not_verified`
+- 실제 처리 주체와 Interview 진행자: `blocking_not_verified`
+- 비공개 문의·철회 연락처: `blocking_not_verified`
+- Interview 도구·처리 위치·녹화/전사 설정: `blocking_not_verified`
+- private root 장치 암호화·접근권한·비동기화: `blocking_not_verified`
+- 자료별 예정 삭제일과 삭제·철회 모의 실행: `blocking_not_verified`
 - Pilot 일정: `not_verified`
 
 특히 `blocking_not_verified` 항목을 확정하기 전에는 실제 참여자 데이터를 수집하지 않는다.

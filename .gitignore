@@ -1,0 +1,4 @@
+# 참여자 연구 원자료와 식별정보는 공개 저장소에 커밋하지 않는다.
+# 이 규칙은 보조 통제일 뿐이며, 실제 자료는 저장소·OneDrive 밖에 둔다.
+.research-private/
+research-private/
