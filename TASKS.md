@@ -10,7 +10,7 @@
 | Gate | 상태 | 통과 조건 | 현재 증거 | 다음 판단 |
 | --- | --- | --- | --- | --- |
 | Gate 0 환경 확인 | `done` | 저장소, Git, Node, package manager, 환경변수 이름, 덮어쓰기 위험 확인 | GitHub 공개 저장소·권한 확인, 작업 브랜치 Push와 upstream SHA 일치 검증, Node 및 package manager 버전 확인 | Git·PowerShell의 로컬 제약은 명령별 우회 유지 |
-| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research, 인터뷰 계획, 연구 데이터·Consent Protocol v1.0 | Privacy Preflight와 실제 참여자 Interview 전에는 통과 금지 |
+| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research, 인터뷰 계획, Google Forms 기반 연구 데이터·Consent Protocol v1.1 | Privacy Preflight와 실제 참여자 Interview 전에는 통과 금지 |
 | Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표와 Product License Register | 인증키 기반 smoke test 및 이용조건 재확인 전에는 조건부 |
 | Gate 3 Product Design | `blocked` | PRD, Journey, MVP, 제외 범위, Wireframe | 없음 | Gate 1 핵심 가설 판단과 Gate 2 필수 Provider 가능성 확인 필요 |
 | Gate 4 Data Foundation | `planned` | Fetch, Validation, Normalization, Cache, Attribution, Freshness | 없음 | Gate 2 통과 후 시작 |
@@ -44,17 +44,20 @@
 - [x] `done` 성공 지표의 정의·측정식·데이터 출처 초안 작성
 - [x] `done` 목표 직무 공고 3건을 회사 공식 채용 페이지 또는 공식 ATS에서 확인하고 확인일·URL·역량·Gap 기록. 작은 표본이며 시장 주장 아님을 명시
 - [x] `done` Pilot Interview 참여자 모집 기준의 Privacy·편향·권력관계 위험 검토
-- [x] `done` 연구 데이터 최소수집·분리·접근·보관·삭제·철회 기준과 Consent 핵심 문안 v1.0 작성
+- [x] `done` 연구 데이터 최소수집·분리·접근·보관·삭제·철회 기준과 Consent 핵심 문안 v1.1 작성
 - [x] `done` 공개 저장소에 연구 원자료가 staging되는 것을 줄이는 `.gitignore` 방어 규칙 추가
-- [x] `done` 참여자 표시 프로젝트명 `NowSignal`, 철회 Email, 대면 1:1·무녹음 Pilot 방식을 사용자 확인값으로 반영
+- [x] `done` 개인정보 처리 주체 `NowSignal`, 철회 Email, 대면 1:1·무녹음 Pilot 방식을 사용자 확인값으로 반영
+- [x] `done` Google Forms Cloud-only 운영 방식과 두 Form의 Build sheet·삭제 Runbook 작성
 
 ### 실제 검증 — 아직 수행하지 않음
 
-- [ ] `blocked` 법적 책임 운영자 실명 또는 등록 사업자명 확인
 - [ ] `not_verified` 철회 Email 송수신·Spam 분류 점검
-- [ ] `blocked` private 저장소 장치 암호화·접근권한·비동기화와 삭제 모의 실행 확인
+- [ ] `blocked` 두 Google Form 생성, 전용 계정 소유권·2단계 인증·공동편집자 없음 확인
+- [ ] `blocked` Email·파일·결과 요약·응답 수정·Draft 저장을 끄고 Sheet·Add-on·Drive·Gmail Offline·Drive 동기화·Mail client 연결이 없음을 확인
+- [ ] `blocked` Google 국외 처리 고지와 별도 동의 문안의 법적 충분성 확인
+- [ ] `blocked` 가상 `researchCode`로 제출·조회·개별 삭제·재조회와 Gmail 철회 모의 실행
 - [ ] `not_verified` 참여 동의 후 문제 인터뷰 수행
-- [ ] `not_verified` 가명처리된 비공개 Note에 실제 관찰을 기록하고 공개 인용의 별도 승인 여부 확인
+- [ ] `not_verified` 구조화 Interview Note Form에 실제 관찰을 기록하고 직접 인용을 수집하지 않았는지 확인
 - [ ] `not_verified` Raw Data UI 대 Action Brief UI 비교 과제 수행
 - [ ] `not_verified` 가설별 evidence count와 반증 사례 정리
 - [ ] `not_verified` 문제 지속 여부와 Gate 3 진입 여부 결정
@@ -105,14 +108,15 @@
 
 ## 다음 작업 제안
 
-1. `NowSignal`이 등록된 법적 주체가 아니라면 Consent에 표시할 책임 운영자 실명 또는 등록 사업자명을 확정한다.
-2. 철회 Email 송수신과 C: 장치 암호화를 확인한 뒤 private 저장소 접근권한·비동기화·삭제 모의 실행을 검증한다.
-3. 모집 채널·보상·진행자·Pilot 일정을 승인하고 2명 대면 Pilot을 모집한다.
-4. API 활용신청 승인 여부를 결정한다. 승인 전에는 문서 조사까지만 유지한다.
-5. Gate 1의 실제 문제 증거와 Gate 2의 API smoke test가 확보되면 Gate 3 PRD와 wireframe을 작성한다.
+1. `html.programming.language@gmail.com` 계정으로 동의·Screening Form과 구조화 Interview Note Form을 만들고 Runbook 설정표를 확인한다.
+2. Google 국외 처리 고지 문안을 확정하고 가상 Code로 Form 제출·개별 삭제·재조회와 철회 Email 송수신을 시험한다.
+3. 모집 채널·보상·진행자·Pilot 일정을 승인한 뒤 2명 대면 Pilot을 모집한다.
+4. 실제 Interview의 집계 근거로 Gate 1 가설을 판단한다. 참여자별 Code·응답·직접 인용은 공개 저장소에 기록하지 않는다.
+5. API 활용신청은 별도 사용자 승인을 받은 뒤 진행한다. Gate 1 문제 증거와 Gate 2 필수 Provider 검증 전에는 제품 코드를 작성하지 않는다.
 
 ## 제안 커밋 분리
 
 - `문서: 사용자 연구 데이터 처리 기준 확정`
 - `문서: 파일럿 인터뷰 운영값과 실행 준비 기록`
+- `문서: 구글 폼 파일럿 운영 절차 정리`
 - `문서: 공개데이터 API 실호출 검증 기록`
