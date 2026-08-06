@@ -2,7 +2,7 @@
 
 - 문서 상태: `ready_for_setup`
 - 최초 작성일: 2026-08-05
-- 최종 갱신일: 2026-08-05
+- 최종 갱신일: 2026-08-06
 - 적용 Protocol: `docs/03-user-interviews.md` v1.1
 - 실제 Form 생성 상태: `not_started`
 - 실제 참여자 데이터: 0건
@@ -203,6 +203,14 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 | Google 국외 처리 고지 최종 검토 | `blocking_not_verified` | — |
 | 가상 응답 제출·개별 삭제·재조회 | `not_started` | — |
 | 철회 Email 송수신·Spam·영구 삭제 | `not_started` | — |
+
+### 2026-08-06 실행 기록
+
+- Google Drive 연결 프로필을 읽기 전용으로 확인했으나 지정 전용 계정과 일치하지 않았다.
+- 연결된 계정의 삭제되지 않은 Google Form은 0개였다.
+- 잘못된 소유 계정에 Form을 만들지 않도록 실제 생성·설정은 중단했다.
+- 연결된 개인 계정 주소와 프로필 식별자는 공개 저장소에 기록하지 않는다.
+- 다음 실행은 `html.programming.language@gmail.com`으로 Google Drive 연결을 전환한 뒤 소유 계정 확인부터 재개한다.
 
 ## 9. 공식 참고자료
 
