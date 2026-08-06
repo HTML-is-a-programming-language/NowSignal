@@ -212,6 +212,13 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 - 연결된 개인 계정 주소와 프로필 식별자는 공개 저장소에 기록하지 않는다.
 - 다음 실행은 `html.programming.language@gmail.com`으로 Google Drive 연결을 전환한 뒤 소유 계정 확인부터 재개한다.
 
+### 2026-08-06 연결 복구 기록
+
+- Google Drive 연결 프로필이 지정 전용 계정과 일치함을 확인했다.
+- 지정 계정에서 삭제되지 않은 Google Form이 0개임을 확인했다.
+- Google Forms 작성 화면을 열었으며, Form 생성·질문·분기·응답 설정은 아직 검증하지 않았다.
+- 계정 2단계 인증, 복구 수단, Offline·동기화·Mail client 상태도 계정 화면 확인 전까지 `not_verified`로 유지한다.
+
 ## 9. 공식 참고자료
 
 - [Google Forms 응답 확인·관리](https://support.google.com/docs/answer/139706?hl=ko)

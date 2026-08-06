@@ -52,7 +52,7 @@
 ### 실제 검증 — 아직 수행하지 않음
 
 - [ ] `not_verified` 철회 Email 송수신·Spam 분류 점검
-- [ ] `blocked` 두 Google Form 생성, 전용 계정 소유권·2단계 인증·공동편집자 없음 확인 — 2026-08-06 Google Drive 연결 계정이 지정 전용 계정과 다름을 확인해 오생성 방지를 위해 중단
+- [ ] `blocked` 두 Google Form 생성, 전용 계정 소유권·2단계 인증·공동편집자 없음 확인 — 2026-08-06 지정 전용 계정 연결과 기존 Form 0개를 확인했으며, Forms 작성 화면에서 생성·설정 필요
 - [ ] `blocked` Email·파일·결과 요약·응답 수정·Draft 저장을 끄고 Sheet·Add-on·Drive·Gmail Offline·Drive 동기화·Mail client 연결이 없음을 확인
 - [ ] `blocked` Google 국외 처리 고지와 별도 동의 문안의 법적 충분성 확인
 - [ ] `blocked` 가상 `researchCode`로 제출·조회·개별 삭제·재조회와 Gmail 철회 모의 실행
