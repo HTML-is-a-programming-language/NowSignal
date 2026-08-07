@@ -1,8 +1,10 @@
 # Decision Log
 
-- 기준일: 2026-08-05 (Asia/Seoul)
+- 최초 기준일: 2026-08-05 (Asia/Seoul)
+- 최종 갱신일: 2026-08-07
 - 상태: 초기 결정. 구현·사용자 검증 결과에 따라 재검토한다.
 - 원칙: 이 문서는 선택의 이유와 포기한 장점을 함께 남긴다. `planned` 또는 `not_verified`인 선택은 확정 성과가 아니다.
+- 경로 표기: 뒤에 `planned`가 붙은 경로는 아직 파일이 없는 예정 산출물이며 현재 Markdown Link가 아니다.
 
 ## DL-001 — 프로젝트 주제
 
@@ -89,13 +91,14 @@
 - 장점: 원문 보존과 source attribution을 명확히 검증할 수 있다.
 - 단점: 화면이 길어지고 특정 안전 데이터가 제품에서 제외될 수 있다.
 - 포기한 장점: 간결한 단일 문장 브리핑.
-- 위험: 행정안전부 긴급재난문자 제4유형은 상업적 제품과 충돌할 가능성이 있어 현재 `not_verified`다.
+- 위험: 행정안전부 긴급재난문자는 제3·제4유형 표시가 충돌하며 현재 엄격 해석상 `blocked_for_commercial`이다. 별도 이용허락 전에는 호출·구현·활성화하지 않는다.
 - 검증 방법: Product License Register 검토, 공식 기관 문의 또는 법률 검토, official-alert preservation eval.
 - 재검토 조건: 이용조건 변경 또는 공식적인 별도 이용허락 확보 시.
 - 관련 코드·문서: `docs/product-license-register.md`, `docs/09-public-data-catalog.md`, `docs/11-alert-policy.md` (`planned`)
 
 ## DL-007 — 공개데이터 Provider 선택 상태
 
+- 상태: 초기 후보 목록은 유지하되 Phase별 현재 판정은 DL-012가 대체함
 - 날짜: 2026-08-05
 - 상황: Phase 1과 이후 단계에 Weather, AirQuality, SafetyAlert, LocalEvent, Geocoding Provider가 필요하다.
 - 선택지: 단일 상업 API, 여러 비공식 source, 기관별 공식 API.
@@ -155,6 +158,35 @@
 - 검증 방법: 두 Form의 소유권·2단계 인증·공유·Draft·Sheet·Offline 설정을 확인하고, 가상 `researchCode`로 제출·개별 삭제·재조회와 철회 Email 송수신·영구 삭제를 시험한다. 실제 URL·응답은 공개 증거로 남기지 않는다.
 - 재검토 조건: 공동 연구자·녹음·원격 Interview를 추가하거나, Google Forms 외 도구를 사용하거나, Google의 처리 위치·보관·공유 정책이 달라질 때.
 - 관련 코드·문서: `docs/03-user-interviews.md`, `docs/google-forms-pilot-runbook.md`, `TASKS.md`, [Google Forms 응답 관리](https://support.google.com/docs/answer/139706?hl=ko), [Google 데이터 보관·삭제 정책](https://policies.google.com/technologies/retention?hl=ko), [개인정보 보호법 제28조의8](https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029334953)
+
+## DL-011 — 외부 수동 작업의 Just-in-time 재개
+
+- 날짜: 2026-08-07
+- 상황: Google Forms 완성, 계정 보호, 실제 참여자 모집, API 활용신청·키 발급과 기관 문의는 사용자의 화면 조작·판단·외부 제출이 필요하지만, 제품 정의 전부터 모두 완료할 필요는 없다.
+- 선택지: 모든 외부 수동 작업을 즉시 선행, 작업마다 수시 요청, Codex가 완료 가능한 비코드 준비를 먼저 끝내고 명시적 Trigger에서 최소 수동 작업만 재개.
+- 선택: Form A는 부분 확인 상태로 미게시 유지하고 Form B·계정·법적 검토·Dry-run은 실제 Pilot 증거 수집 승인 시 단계별로 재개한다. API 신청·키 입력·기관 문의는 실호출 또는 Production 판정 Trigger까지 `deferred_manual`로 둔다.
+- 선택 이유: 아직 필요하지 않은 계정·법적·참여자 작업을 강요하지 않으면서도, 실행 직전 차단 조건과 완료 증거를 잃지 않기 위함이다.
+- 장점: 제품 코드 없이 문서·Runbook·Fail-closed 준비를 끝낼 수 있고, 사용자는 필요한 시점에 최소 작업만 수행한다.
+- 단점: Gate 1 실제 문제 증거와 Gate 2 실호출 증거는 계속 `not_verified`이며 두 Gate를 통과할 수 없다.
+- 포기한 장점: Form·키·외부 답변을 미리 확보해 실행 전환 시간을 줄이는 것.
+- 위험: `deferred_manual`을 완료로 오해하거나 부분 확인된 Form A를 게시할 수 있다.
+- 검증 방법: Workflow 상태와 근거 상태를 분리하고, 각 Trigger의 차단 시점·완료 증거를 Checklist로 대조한다.
+- 재검토 조건: 사용자가 Pilot 문제 증거 수집 또는 API 실호출을 명시적으로 승인할 때.
+- 관련 문서: [사용자 수동 작업 체크리스트](./manual-action-checklist.md), [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md), [Provider 실검증 Runbook](./provider-validation-runbook.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md)
+
+## DL-012 — Phase 1 Provider 범위 재판정
+
+- 날짜: 2026-08-07
+- 상황: 초기 후보 목록은 Phase와 배포 조건이 다른 Provider를 함께 나열해, 현재 검증 범위와 상용 차단 범위가 불명확했다.
+- 선택: Phase 1 실검증은 공공데이터포털의 기상청 단기예보·기상특보와 AirKorea 측정소·대기오염정보로 제한한다. AirKorea는 개발 검증 후보지만 Production은 권리·위치 관련 조건 확인 전 차단한다. 행정안전부 긴급재난문자는 별도 이용허락 전 상용 차단, TourAPI는 Phase 3, Web Push는 Phase 4, 외부 지오코더는 기본 경로에서 제외한다.
+- 선택 이유: 실제로 다음 검증에 필요한 Provider와 이후 후보를 분리하고, License가 불명확한 데이터를 조용히 기본 경로에 넣지 않기 위함이다.
+- 장점: Runbook·Quota·Evidence 범위가 작아지고 Provider·Fallback 경계를 명확히 할 수 있다.
+- 단점: 초기 제품의 안전 알림은 날씨 특보에 한정되고 비기상 재난·행사·Push는 제공하지 못한다.
+- 포기한 장점: 첫 Phase부터 모든 지역 정보와 재난 알림을 통합하는 넓은 범위.
+- 위험: AirKorea 조건이 해소되지 않으면 필수 대기질 Provider가 없어 Phase 1 범위를 더 줄여야 한다.
+- 검증 방법: 인증키 Contract smoke, 14일 Canary, 발급 시점 약관 Snapshot과 Provider별 서면 확인.
+- 재검토 조건: Gate 1에서 우선 활동이 달라지거나 Provider 이용조건·Coverage·Quota가 바뀔 때.
+- 관련 문서: [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider 실검증 Runbook](./provider-validation-runbook.md)
 
 ## 다음 Decision Log 예정 항목
 

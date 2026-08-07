@@ -2,7 +2,7 @@
 
 - 문서 상태: `working_draft`
 - 최초 작성일: 2026-08-05
-- 최종 갱신일: 2026-08-05
+- 최종 갱신일: 2026-08-07
 - 조사 기준일: 2026-08-05 (Asia/Seoul)
 - 표본 범위: 회사 공식 Careers 페이지 또는 공식 Careers 페이지에서 연결한 ATS의 현재 접근 가능한 대표 공고 3건
 
@@ -131,7 +131,7 @@ NowSignal AI와의 연결은 다음과 같다 (`hypothesis`).
 
 | 역량 | 만들 증거 | 합격 증거 조건 | 현재 상태 |
 | --- | --- | --- | --- |
-| 문제 정의 | 인터뷰 원자료, 가설 변경 이력, PRD | 실제 참여자·방법·반증 결과와 제품 결정이 연결됨 | `not_verified` |
+| 문제 정의 | 비공개 원자료에 근거한 비식별 집계, 가설 변경 이력, PRD | 실제 참여자·방법·반증 결과와 제품 결정이 연결되고 원자료 자체는 공개되지 않음 | `not_verified` |
 | Agent engineering | Zod I/O, Tool allowlist, Trace, timeout·cost limit, Guardrail Test | 실패 scenario를 포함한 실행 가능한 Test와 Trace | `not_verified` |
 | Data engineering | Provider contract, Normalization, Freshness, Cache, Retry | contract·failure·stale·conflict Test와 관측 가능한 상태 | `not_verified` |
 | Evaluation | dataset, scenario, scorer, result report | 실행 명령, sample count, version, 실제 결과와 한계 | `not_verified` |

@@ -4,10 +4,16 @@
 - 문서 상태: `draft_not_approved`
 - 구현 상태: `not_started`
 - 목적: Provider 데이터가 오래됐거나 불완전·충돌·차단됐을 때 확정적 행동 추천을 만들지 않는 공통 판단안을 Gate 3 합의 전에 준비한다.
+- 공통 계약: [공공 데이터 카탈로그](./09-public-data-catalog.md) 2.2
+- 실행 검증: [Phase 1 Provider 실검증 Runbook](./provider-validation-runbook.md)
 
 이 문서는 제품 설계를 확정하지 않는다. 실제 Contract·Freshness 결과와 사용자 문제 증거가 생긴 뒤 승인해야 하며, 그 전에는 제품 코드에 반영하지 않는다.
 
-## 1. 입력 상태
+## 1. 입력 상태 축
+
+결과 존재 여부, 데이터 품질과 License 판정을 한 문자열로 합치지 않는다.
+
+### 데이터 품질 (`qualityStatus`)
 
 | 상태 | 의미 |
 | --- | --- |
@@ -15,10 +21,17 @@
 | `delayed` | 아직 참고 가능한 범위지만 예상 최신 발행·관측보다 늦음 |
 | `stale` | 승인된 Age 또는 유효기간을 넘음 |
 | `partial` | 응답은 있으나 추천에 필요한 필드 일부가 누락됨 |
-| `conflicting` | 같은 지역·유효시각의 공식 값 또는 License 판정이 충돌함 |
-| `unavailable` | 인증·권한·Quota·Timeout·Backend·Parsing 실패로 사용할 수 없음 |
-| `valid_empty` | 성공 응답이며 해당 Provider 범위에서 대상 데이터가 없음 |
-| `license_blocked` | 기술적으로 응답 가능해도 이용·변경·저장·표시 권리가 해소되지 않음 |
+| `conflicting` | 같은 지역·유효시각의 공식 값이 충돌함 |
+
+### 결과 종류·License
+
+| 축·상태 | 의미 |
+| --- | --- |
+| `resultKind=data` | 데이터가 있으며 `qualityStatus`를 함께 판정함 |
+| `resultKind=valid_empty` | 성공 응답이며 해당 Provider 범위에서 대상 데이터가 없음 |
+| `resultKind=unavailable` | 인증·권한·Quota·Timeout·Backend·Parsing 실패로 사용할 수 없음 |
+| `licenseStatus=license_blocked`, `resultKind=not_fetched` | 이용·변경·저장·표시 권리가 해소되지 않아 Provider 호출·제품 사용을 차단함 |
+| `licenseStatus=license_review_expired`, `resultKind=not_fetched` | 마지막 License 검토가 허용 기간을 지나 Provider 호출·제품 사용을 중단함 |
 
 `fetchedAt`은 관측·발표시각을 대체하지 않는다. Provider 시각이 없으면 Fresh로 추정하지 않고 `partial` 또는 `unavailable` 후보로 둔다.
 
@@ -34,14 +47,17 @@
 | `unavailable` | 장애·다시 시도 시점 표시 | 금지 | 수동 확인·재시도 제공 | 오래된 Cache로 조용히 대체 금지 |
 | `valid_empty` | Provider 범위를 함께 표시 | “안전”으로 확대 해석 금지 | 예: 날씨 특보 없음은 비기상 재난 없음이 아님 | Empty 결과 시각 보존 |
 | `license_blocked` | 제품 데이터로 표시하지 않음 | 금지 | 승인된 대체 Source가 있을 때만 명시적 제공 | 저장·Model 입력 금지 |
+| `license_review_expired` | 제품 데이터로 표시하지 않음 | 금지 | 최신 이용조건 재검토 필요 표시 | 재검토 전 Cache 제공 금지 |
 
 ## 3. 결합 상태 제안
 
-1. 활동 판정에 필수인 Weather와 Air Quality 중 하나가 `stale`, `conflicting`, `unavailable`, `license_blocked`이면 통합 Score와 Best Window를 생성하지 않는다.
+1. 활동 판정에 필수인 Weather와 Air Quality 중 하나가 `resultKind=unavailable|not_fetched`이거나 `qualityStatus=stale|conflicting`이면 통합 Score와 Best Window를 생성하지 않는다.
 2. `partial`은 누락 필드가 해당 활동의 Hard block·Score에 쓰이는지 먼저 확인한다. 영향 분석이 없으면 보수적으로 추천을 중단한다.
 3. Provider 상태를 단순 평균하지 않는다. 공식 특보 같은 Hard block은 일반 점수보다 우선한다.
 4. 공식 특보가 활성이라면 원문·기관·발표·발효시각을 NowSignal 설명보다 먼저 표시한다.
 5. 특보 없음이나 대기질 결측을 0점 위험으로 변환하지 않는다.
+6. KMA 기상특보의 `valid_empty`는 날씨·대기질 활동 판정 자체를 막지 않지만 “모든 재난 안전”으로 확대하지 않는다.
+7. 필수 AirKorea 측정값의 `valid_empty`는 대기질 근거 부재이므로 통합 Score와 Best Window를 막는다.
 
 ## 4. Fallback 제안
 
@@ -62,8 +78,8 @@
 
 - 활동별 필수 Weather·Air Quality 필드와 Hard block은 무엇인가?
 - `delayed` 상태에서 제한적으로 허용할 정보 표시와 금지할 추천은 무엇인가?
-- Provider별 Threshold는 14일 Canary에서 어떤 표본·계절 한계로 확정할 것인가?
+- Canary 시작 전에 고정할 `pre_registered_acceptance_criteria`는 무엇이며, 14일 결과 뒤 어떤 표본·계절 한계를 명시해 `production_policy_threshold`를 승인할 것인가?
 - 사용자에게 Source 충돌·Fallback·마지막 성공시각을 어떤 UI 우선순위로 표시할 것인가?
 - 공식 특보와 일반 Weather가 충돌할 때 UI·알림·기록 우선순위는 무엇인가?
 
-이 질문과 Gate 1 실제 문제 증거가 해결되기 전에는 문서 상태를 `approved`로 바꾸거나 제품 코드를 작성하지 않는다.
+이 질문, Gate 1 실제 문제 증거와 [Provider 실검증](./provider-validation-runbook.md)이 해결되기 전에는 전체 Fail-closed Matrix를 `approved`로 바꾸거나 제품 코드를 작성하지 않는다.

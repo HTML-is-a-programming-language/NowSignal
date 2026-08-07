@@ -2,21 +2,22 @@
 
 - 최초 작성일: 2026-08-07
 - 문서 상태: `ready_for_manual_prerequisites`
-- 실행 상태: `not_run`
+- 실행 이력: `not_run`
+- 현재 진행 상태: `deferred_manual`
 - 범위: 기상청 단기예보, 기상청 기상특보, AirKorea 대기오염정보·측정소정보
-- 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push
-- 관련 문서: [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [사용자 수동 작업](./manual-action-checklist.md)
+- 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push. 로컬 좌표→KMA 격자 변환과 측정소 선택 알고리즘은 Gate 4 설계·테스트 대상이며 이 Provider 실호출 Runbook이 검증 완료로 대신하지 않는다.
+- 관련 문서: [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md)
 
 이 Runbook은 인증키를 받은 뒤 동일한 방법으로 Contract·오류·Freshness를 검증하기 위한 실행 명세다. 아직 API를 호출하지 않았으므로 아래 결과와 수치는 모두 계획이며, 실행 전에는 `verified`로 바꾸지 않는다.
 
 ## 1. Provider·Endpoint 범위
 
-| Provider ID | 공식 상세 | 우선 검증 Endpoint | 개발 호출량 표시 | 현재 판정 |
-| --- | --- | --- | --- | --- |
-| `kma-data-go-kr-vilage-fcst` | [API 15084084](https://www.data.go.kr/data/15084084/openapi.do) | `/getUltraSrtNcst`, 초단기예보·단기예보 상세기능 | 한국어 상세 10,000회/일 | `approved_for_dev_not_run` |
-| `kma-data-go-kr-weather-warning` | [API 15000415](https://www.data.go.kr/data/15000415/openapi.do) | `/getWthrWrnList`, 통보문·현황 상세기능 | 한국어 상세 10,000회/일 | `approved_for_dev_not_run` |
-| `airkorea-air-measurement` | [API 15073861](https://www.data.go.kr/data/15073861/openapi.do) | 측정소별 실시간 측정, `/getMinuDustFrcstDspth` | 500회/일 | `approved_for_dev_not_run` |
-| `airkorea-station` | [API 15073877](https://www.data.go.kr/data/15073877/openapi.do) | `/getMsrstnList`, 근접 측정소 상세기능 | 500회/일 | `approved_for_dev_not_run` |
+| Provider ID | 공식 상세 | 우선 검증 Endpoint | 보수적 실검증 상한 | 개발·License 판정 | 실행 이력 |
+| --- | --- | --- | --- | --- | --- |
+| `kma-data-go-kr-vilage-fcst` | [API 15084084](https://www.data.go.kr/data/15084084/openapi.do) | `/getUltraSrtNcst`, 초단기예보·단기예보 상세기능 | 10,000회/일과 승인 화면 중 더 낮은 값 | `approved_for_dev` | `not_run` |
+| `kma-data-go-kr-weather-warning` | [API 15000415](https://www.data.go.kr/data/15000415/openapi.do) | `/getWthrWrnList`, 통보문·현황 상세기능 | 10,000회/일과 승인 화면 중 더 낮은 값 | `approved_for_dev` | `not_run` |
+| `airkorea-air-measurement` | [API 15073861](https://www.data.go.kr/data/15073861/openapi.do) | 측정소별 실시간 측정, `/getMinuDustFrcstDspth` | 두 AirKorea API 합산 500회/일 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | `not_run` |
+| `airkorea-station` | [API 15073877](https://www.data.go.kr/data/15073877/openapi.do) | `/getMsrstnList`, 근접 측정소 상세기능 | 두 AirKorea API 합산 500회/일 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | `not_run` |
 
 2026-08-07 확인 시 KMA 두 API의 영문 Locale 상세에는 한국어 상세보다 큰 호출량이 표시됐다. 실행 예산은 더 낮은 한국어 상세의 10,000회/일을 사용하고, 실제 승인 화면의 호출량을 확인하기 전 `quota_conflicting_not_verified`로 둔다. AirKorea 두 API가 500회를 공유하는지 각각 적용하는지도 승인 화면에서 확인한다.
 
@@ -33,7 +34,7 @@
 - [ ] 항상 켜진 14일 Canary 실행 환경과 호출 예산 승인
 - [ ] 정확 GPS가 아닌 고정 KMA 격자, 시·도, 공개 측정소 Test target 확정
 
-Preconditions 중 하나라도 충족되지 않으면 실행 상태는 `deferred_manual`이며 실제 호출을 시도하지 않는다.
+Preconditions 중 하나라도 충족되지 않으면 현재 진행 상태는 `deferred_manual`이며 실제 호출을 시도하지 않는다. `not_run`은 실행 이력, `deferred_manual`은 현재 Workflow 상태다.
 
 ## 3. Evidence 규격
 
@@ -43,7 +44,8 @@ Preconditions 중 하나라도 충족되지 않으면 실행 상태는 `deferred
 runId: provider-date-sequence
 providerId: kma-data-go-kr-vilage-fcst
 endpoint: getUltraSrtNcst
-fetchedAt: 0000-00-00T00:00:00+09:00
+evaluatedAt: null
+fetchedAt: null
 request:
   secretRemoved: true
   publicParameters: {}
@@ -60,11 +62,14 @@ time:
 location:
   exactGpsStored: false
   publicGridOrStation: null
-quality:
+result:
+  kind: null
+  qualityStatus: null
+  errorClass: null
   missingRequiredFields: []
-  status: not_run
 license:
   registerId: null
+  status: null
   attributionPresent: false
 review:
   verdict: not_run
@@ -136,8 +141,23 @@ review:
 
 실행 전 Provider별 일일 호출 예산표를 먼저 작성한다. 계획 호출량은 승인 화면의 더 낮은 호출량을 넘지 않으며 장애 조사·수동 재검증 Reserve를 남긴다.
 
+### 6.1 인증키 없이 확정 가능한 보수적 예산 초안
+
+아래는 고정 공개 Test target만 쓰는 검증 부하다. 실제 제품 Traffic 용량 산정이 아니며, 승인 화면·Endpoint 호출 단위·응답 Schema를 확인한 뒤 더 낮아질 수 있다. `ceil`은 올림이다.
+
+| Quota Pool | 기본 호출 계산 | 조사·Retry Reserve 포함 일일 Cap | 보수적 상한 대비 | 실행 전 확인 |
+| --- | ---: | ---: | ---: | --- |
+| KMA 단기예보 | 3개 기능 × 2개 고정 격자 × 24회 = 144 | `ceil(144 × 1.2) = 173` | 10,000 기준 1.73% | 기능별 요청 1회가 한 호출인지, 승인량·리셋 시각 |
+| KMA 기상특보 | 전국 목록 1개 × 5분 간격 288회 | 348 (상세·정정·오류 조사 Reserve 60) | 10,000 기준 3.48% | 목록 응답의 상세 호출 필요량, 승인량·리셋 시각 |
+| AirKorea 두 API 합산 | 측정소 2회 + 2개 측정소 × 24회 + 예보 4회 = 54 | 100 (Contract·Retry·결측 조사 포함) | 공유 500 가정 기준 20% | 두 API quota 공유 여부, 측정소·예보 호출 단위, 리셋 시각 |
+
+Reserve는 고의 Rate Limit·Quota 소진 시험에 쓰지 않는다. 첫날 Contract smoke도 해당 일일 Cap 안에서 수행한다. 실제 승인 상한이 이 표보다 낮거나 호출 단위가 예상보다 크면 target·주기를 줄여 새 예산표를 승인하기 전 Canary를 시작하지 않는다.
+
+### 6.2 수집 항목
+
 매 호출에서 다음 값을 분리 기록한다.
 
+- `evaluatedAt`
 - `fetchedAt`
 - Provider의 `observedAt` 또는 `issuedAt`
 - `validFrom`, `validUntil`
@@ -153,7 +173,7 @@ review:
 - 지역 Coverage와 특정 측정소 의존도
 - 사용 호출량과 승인량 대비 비율
 
-14일이 끝나기 전에는 Freshness threshold를 확정하지 않는다. 공식 SLA가 아닌 관찰 표본이며 계절·장애·지역 한계를 함께 기록한다.
+Canary 시작 전에는 표본 성공률·Age·필수 필드·Coverage에 대한 `pre_registered_acceptance_criteria`를 고정하고 소급 변경하지 않는다. 14일이 끝나기 전에는 실제 제품의 `production_policy_threshold`를 확정하지 않는다. 후자는 공식 SLA가 아니라 관찰 표본에 근거한 제품 정책이며 계절·장애·지역 한계를 함께 기록한다.
 
 ## 7. Pass·Block 기준
 
@@ -165,24 +185,37 @@ review:
 - Secret·정확 GPS 누출이 0건이다.
 - Fallback Provider와 사유가 명시되며 조용한 전환이 없다.
 
-### Freshness pass
+### Canary 측정 완료
 
-- 14일 Canary가 중단 없이 완료된다.
-- Age p50·p95·p99, 결측, Coverage, 호출량 Evidence가 있다.
-- 결과를 근거로 Threshold와 Polling 예산을 재심의한다.
+- 14개 연속 달력일을 포함하고 계획 호출의 95% 이상이 실행된다. 계획 점검이나 실행환경 장애는 원인·시간을 기록하며, 설명 없는 6시간 초과 공백이 있으면 측정을 연장한다.
+- Age p50·p95·p99, 성공·유효 빈 결과·결측, 지역 Coverage, 호출량 Evidence가 있다.
+- Secret·정확 GPS 누출은 0건이고 일일 호출량은 승인 상한의 80% 이하를 유지한다.
+
+### Technical provider pass
+
+- Contract pass와 Canary 측정 완료를 모두 충족한다.
+- 필요한 필드·Age·Coverage의 `pre_registered_acceptance_criteria`는 Gate 1에서 우선 활동과 안전 요구를 좁힌 뒤 **Canary 시작 전에** 고정한다. 현재는 `threshold_approval_pending`이다.
+- 사전 기준을 만족하지 못하면 기술 통과로 표시하지 않고 Provider·범위 축소 또는 중단을 Decision Log에 기록한다.
+- 완료 결과로 `production_policy_threshold`를 승인할 수 있지만, 이를 과거 Canary 합격 판정에 소급 적용하지 않는다.
+
+### Gate 2 최종 pass
+
+- Decision Log에서 확정한 최종 Phase 1 필수 Provider가 모두 Technical provider pass를 충족한다. 현재 범위는 KMA와 AirKorea지만, AirKorea 제외 Decision이 먼저 승인되면 축소된 최종 범위를 기준으로 판단한다.
+- AirKorea를 필수 Provider로 유지한다면 제3유형 원본과 파생 설명·Cache·AI 입력, 위치 관련 절차의 적용 범위를 서면 확인 또는 전문 검토로 해소한다.
+- AirKorea 조건을 해소하지 못하면 AirKorea와 대기질 추천을 Phase 1에서 제거하고도 Gate 1 핵심 문제를 해결할 수 있는지 다시 판단한다. 어느 쪽도 근거가 없으면 Gate 2를 통과시키지 않는다.
 
 ### Production block
 
 - KMA도 활용신청 시점 조건 Snapshot과 Attribution 검증 전 Production Release를 통과하지 않는다.
-- AirKorea는 개발 Contract·Freshness가 통과해도 운영계정, 위치 관련 절차, 제3유형 파생·AI·Cache 확인 전 차단한다.
+- AirKorea는 Gate 2에서 권리·위치 적용 범위를 해소해도 실제 운영계정 승인, 발급 시점 조건 Snapshot과 Attribution·원본/파생 분리 Test 전에는 Production을 차단한다.
 - 행정안전부 긴급재난문자는 별도 이용허락 전 호출·구현·활성화 범위가 아니다.
 
 ## 8. 실행 결과표
 
-| Provider | Contract | 오류 분류 | 14일 Canary | License release | 최종 상태 |
-| --- | --- | --- | --- | --- | --- |
-| KMA 단기예보 | `not_run` | `not_run` | `not_run` | `not_verified` | `deferred_manual` |
-| KMA 기상특보 | `not_run` | `not_run` | `not_run` | `not_verified` | `deferred_manual` |
-| AirKorea 측정소·관측·예보 | `not_run` | `not_run` | `not_run` | `conditional_for_production` | `deferred_manual` |
+| Provider | Contract Evidence | 오류 Evidence | 14일 Canary Evidence | License Evidence | License Decision | Workflow |
+| --- | --- | --- | --- | --- | --- | --- |
+| KMA 단기예보 | `not_run` | `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `deferred_manual` |
+| KMA 기상특보 | `not_run` | `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `deferred_manual` |
+| AirKorea 측정소·관측·예보 | `not_run` | `not_run` | `not_run` | `not_verified` | `conditional_for_production` | `deferred_manual` |
 
 결과표는 실제 Evidence가 생긴 항목만 바꾼다. 활용신청이나 키 발급만으로 Contract 또는 Freshness를 통과 처리하지 않는다.

@@ -7,6 +7,7 @@
 - 적용 범위: 제품이 수집·저장·변환·표시하거나 사용자 추천의 근거로 사용하는 공개 데이터와 외부 표준
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
 - 실제 호출 검증: [provider-validation-runbook.md](./provider-validation-runbook.md)
+- 권리·Freshness 차단 정책 초안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 - 주의: 이 문서는 공식 페이지를 바탕으로 한 engineering register이며 법률 자문이 아니다. 실제 활용신청 시 동의한 최신 약관, 데이터셋별 상세 조건, 제공기관의 서면 답변이 우선한다.
 
 ## 1. 판정과 운영 규칙
@@ -45,8 +46,8 @@
 
 | ID | 데이터·표준 | 현재 판정 | 상업 이용 | 변경 | 저장·Cache | 핵심 미해결 사항 |
 | --- | --- | --- | --- | --- | --- | --- |
-| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | 실제 key contract·freshness 미검증 |
-| LIC-KMA-002 | 기상청 기상특보 | `approved_for_dev` | 가능 | 가능하지만 공식 원문 보존 | 활성·해제 추적에 필요한 범위 | 실제 전달 지연·정정 연결 미검증 |
+| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | 실제 key contract·freshness, 활용신청 조건, 제3자 권리 포함 필드·장기 Cache 범위 미검증 |
+| LIC-KMA-002 | 기상청 기상특보 | `approved_for_dev` | 가능 | 가능하지만 공식 원문 보존 | 활성·해제 추적에 필요한 범위 | 실제 전달 지연·정정 연결, 활용신청 시점 조건 미검증 |
 | LIC-AIR-001 | AirKorea 대기오염정보·측정소정보 | `conditional_for_production` | 가능 | 원문 변경 금지 | immutable 원본과 파생층 분리 | 운영 심의, 위치정보 관련 절차, 파생 허용 범위 |
 | LIC-MOIS-001 | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 금지로 판정 | 금지 | 확인 전 금지 | 제3·제4유형 충돌, 현재 coverage·quota, AI 설명 허용 범위 |
 | LIC-KTO-001 | TourAPI 국문 관광정보 | `conditional_for_production` | 본문 후보 가능 | 자산별 상이 | record·자산별 권리와 함께 | 이미지별 유형, 당일 운영·취소 신뢰성 |
@@ -62,7 +63,7 @@
 - 제공기관: 기상청
 - Product use: 날씨 실황·초단기예보·단기예보의 Phase 1 `WeatherProvider`
 - 공식 상세: [공공데이터포털 API 15084084](https://www.data.go.kr/data/15084084/openapi.do)
-- 보조 공식 문서: [기상청 격자 위·경도 API 안내](https://apihub.kma.go.kr/notice.do?seqNotice=39)
+- 보조 공식 문서: [기상청 격자 위·경도 API 안내](https://apihub.kma.go.kr/notice.do?seqNotice=39) — 좌표 변환 공식만 참고하며 API허브의 인증·Quota·약관은 공공데이터포털 Provider에 적용하지 않음
 - 확인일: 2026-08-05
 - 상세 페이지 수정일: 2026-07-09
 - License: 무료, 공공누리 제1유형. 상세 페이지에는 제3자 권리 포함 저작권 표시와 공공저작물 출처표시가 함께 기재됨

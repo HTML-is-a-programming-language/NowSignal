@@ -8,14 +8,15 @@
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
 - 실제 호출 절차와 Evidence 형식: [provider-validation-runbook.md](./provider-validation-runbook.md)
 - 장애·오래된 값·충돌 시 출력 제안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
+- Gate 1·2 비코드 준비 감사: [gate-1-2-readiness-audit.md](./gate-1-2-readiness-audit.md)
 
 ## 1. 결론
 
 | Adapter | 1차 Provider | Gate 2 판정 | 최초 적용 | 핵심 이유와 제한 |
 | --- | --- | --- | --- | --- |
-| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | 전국 5 km 격자, 초단기실황·초단기예보·단기예보, 공공누리 1유형. 개발 10,000회/일 |
+| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | 전국 5 km 격자, 초단기실황·초단기예보·단기예보, 공공누리 1유형. 보수적 실검증 상한 10,000회/일, 승인 quota `not_verified` |
 | `SafetyAlertProvider` | 기상청 기상특보 | `adopt` | Phase 1 | 상용 이용 가능한 날씨 특보 원문. 비기상 재난까지 포괄하지는 않음 |
-| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 개발 500회/일, 공공누리 3유형. 운영 심의와 위치정보사업 관련 안내의 적용 여부 확인 필요 |
+| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 두 API 상세에 각각 500회/일 표시. 공유 범위 확인 전 합산 500회를 보수적 상한으로 사용. 공공누리 3유형과 운영·위치 관련 조건 확인 필요 |
 | `SafetyAlertProvider` | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 비상용 프로토타입 이후 재심의 | 공공데이터포털은 공공누리 4유형. 플랫폼의 일반 안내와도 불일치하며 현재 범위·할당량이 확인되지 않음 |
 | `LocalEventProvider` | 한국관광공사 TourAPI | `conditional_adopt` | Phase 3 | 개발 1,000회/일, 운영 심의. 레코드 메타와 이미지별 라이선스를 분리해야 함 |
 | `GeocodingProvider` | 로컬 좌표 변환 + 행정구역 직접 선택 | `adopt` | Phase 1 | 외부 전송과 정확한 GPS 보관을 최소화. 외부 지오코더는 아래 조건부 후보만 사용 |
@@ -27,7 +28,7 @@
 
 ### 2.1 판정 용어
 
-- `verified`: 2026-08-05에 공식 상세 페이지·공식 약관·표준 본문에서 직접 확인했다.
+- `verified`: 각 항목에 적은 확인일에 공식 상세 페이지·공식 약관·표준 본문에서 직접 확인했다.
 - `not_verified`: 공식 출처에 없거나, 서로 다른 공식 페이지가 충돌하거나, 실제 키로 호출하지 않아 확인할 수 없다.
 - `conditional`: 조건을 충족하고 증거를 보관한 뒤에만 채택한다.
 - `blocked`: 현재 알려진 조건에서는 해당 배포 형태에 사용하지 않는다.
@@ -37,13 +38,24 @@
 ### 2.2 모든 Adapter가 반환할 최소 메타데이터
 
 ```ts
-type ProviderStatus =
+type DataQualityStatus =
   | "fresh"
   | "delayed"
   | "stale"
   | "partial"
-  | "conflicting"
-  | "unavailable";
+  | "conflicting";
+
+type ProviderLicenseStatus =
+  | "usable"
+  | "license_blocked"
+  | "license_review_expired";
+
+type BlockedLicenseStatus = Exclude<ProviderLicenseStatus, "usable">;
+
+type ProviderUsableResult<T> =
+  | { resultKind: "data"; fetchedAt: string; qualityStatus: DataQualityStatus; data: T; errorClass: null }
+  | { resultKind: "valid_empty"; fetchedAt: string; qualityStatus: null; data: null; errorClass: null }
+  | { resultKind: "unavailable"; fetchedAt: string; qualityStatus: null; data: null; errorClass: string };
 
 type SourceReference =
   | { sourceUrl: string; sourceId: string | null }
@@ -51,25 +63,35 @@ type SourceReference =
 
 type ProviderEnvelope<T> = SourceReference & {
   provider: string;
-  fetchedAt: string;
+  evaluatedAt: string;
   observedAt: string | null;
   validFrom: string | null;
   validUntil: string | null;
   region: { code?: string; label: string; grid?: { x: number; y: number } };
-  status: ProviderStatus;
   rawUnit: string | null;
   normalizedUnit: string | null;
-  data: T;
   license: { id: string; termsUrl: string };
   attribution: string;
-};
+} & (
+  | ({ licenseStatus: "usable" } & ProviderUsableResult<T>)
+  | {
+      licenseStatus: BlockedLicenseStatus;
+      resultKind: "not_fetched";
+      fetchedAt: null;
+      qualityStatus: null;
+      data: null;
+      errorClass: BlockedLicenseStatus;
+    }
+);
 ```
+
+위 TypeScript 형태는 문서 계약 초안이며 제품 구현이 아니다. Gate 3·4 승인 전에는 코드로 확정하지 않는다. 결과 존재 여부, 데이터 품질, License 상태를 한 문자열에 섞지 않아 `valid_empty`, 기술 장애와 권리 차단을 구분한다.
 
 규칙은 다음과 같다.
 
-1. `fetchedAt`을 관측·발표시각으로 사용하지 않는다. 제공 필드가 없으면 필드를 생략하지 않고 `observedAt: null`로 반환한다. `validFrom`, `validUntil`, 단위도 같은 원칙을 적용한다.
+1. `evaluatedAt`은 결과·정책 판정 시각이다. `fetchedAt`을 관측·발표시각으로 사용하지 않는다. License 차단으로 호출하지 않은 `not_fetched`는 `fetchedAt: null`이다. 제공 필드가 없으면 필드를 생략하지 않고 `observedAt: null`로 반환한다. `validFrom`, `validUntil`, 단위도 같은 원칙을 적용한다.
 2. `sourceUrl`과 `sourceId` 중 적어도 하나는 반드시 값이 있어야 하며, `attribution`은 License 객체 안에 숨기지 않고 모든 응답의 최상위 필드로 반환한다.
-3. `stale`, `conflicting`, `unavailable`이면 확정적인 행동 추천과 점수 계산을 중단한다. `partial`은 빠진 필드와 영향을 명시한다.
+3. `resultKind=unavailable|not_fetched` 또는 `qualityStatus=stale|conflicting`이면 확정적인 행동 추천과 점수 계산을 중단한다. `delayed`는 기본적으로 추천을 중단하며, `partial`은 빠진 필드가 활동 판정에 영향을 주면 중단한다. `valid_empty`의 영향은 Provider별로 명시한다.
 4. 원시 응답과 NowSignal 정규화·파생값은 필드와 저장소에서 분리한다. 특히 변경금지 자료는 원문을 수정하지 않는다.
 5. 캐시는 마지막 성공 응답의 원래 `observedAt`·`fetchedAt`·Provider를 유지한다. 새 응답처럼 재타임스탬프하지 않는다.
 6. fallback 시 `provider`, `reason`, `fallbackAt`을 사용자와 로그에 남긴다. KMA 특보를 행안부 재난문자의 동등한 대체물로 표시하지 않는다.
@@ -84,7 +106,7 @@ type ProviderEnvelope<T> = SourceReference & {
 | 최종 수정 | `verified`: 2026-07-09 |
 | 기능·범위 | `verified`: 전국, 읍·면·동 중심의 5 km 격자. 초단기실황, 향후 6시간 초단기예보, 시간별 단기예보 제공 |
 | 접근 | `verified`: 공공데이터포털 키, REST, JSON/XML. 개발·운영 모두 자동 승인 |
-| 공식 트래픽 | `verified`: 개발계정 10,000회/일. 운영은 활용사례 등록 후 증량 신청 가능. 증량 승인량과 리셋 시각은 `not_verified` |
+| 공식 트래픽 | `quota_conflicting_not_verified`: 한국어 상세 10,000회/일, 영문 Locale은 더 큰 값 표시. 보수적 실검증 상한은 10,000회/일과 실제 승인 화면 중 더 낮은 값. 운영 승인량·리셋 시각도 `not_verified` |
 | 비용·라이선스 | `verified`: 무료, 공공누리 제1유형(출처표시) |
 | 대표 Endpoint | `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0`; 실황 `/getUltraSrtNcst` |
 | 채택 | `adopt` — `WeatherProvider`의 Phase 1 기본 |
@@ -112,7 +134,7 @@ type ProviderEnvelope<T> = SourceReference & {
 | 공식 근거 | [공공데이터포털 API 15000415](https://www.data.go.kr/data/15000415/openapi.do) |
 | 최종 수정 | `verified`: 2026-06-01 |
 | 기능·범위 | `verified`: 전국 기상특보 목록·전문·현황. 육상 178개 시·군과 44개 해상구역, 12개 기상현상 설명 |
-| 접근·트래픽 | `verified`: REST, 개발·운영 자동 승인, 개발 10,000회/일, 운영 증량 신청 가능 |
+| 접근·트래픽 | REST, 개발·운영 자동 승인. `quota_conflicting_not_verified`: 한국어 상세 10,000회/일과 영문 Locale 표시가 충돌하므로 보수적 실검증 상한은 10,000회/일과 승인 화면 중 더 낮은 값 |
 | 비용·라이선스 | `verified`: 무료, 공공누리 제1유형 |
 | 대표 Endpoint | `https://apis.data.go.kr/1360000/WthrWrnInfoService`; 목록 `/getWthrWrnList` |
 | 채택 | `adopt` — 상용 MVP `SafetyAlertProvider`의 날씨 경보 원천 |
@@ -131,7 +153,7 @@ type ProviderEnvelope<T> = SourceReference & {
 | 최종 수정 | `verified`: 두 API 모두 2026-06-30 |
 | 기능·범위 | 측정소별·시도별 실시간 측정정보, 통합대기환경지수, 대기질 예보, 측정소 목록·근접 측정소·TM 기준좌표 |
 | 접근 | 개발 자동 승인, 운영 심의 승인. REST JSON/XML |
-| 공식 트래픽 | 포털: 개발 500회/일, 운영은 활용사례 등록 후 증량 신청. 기술문서의 운영 신청 기준은 별도로 확인·증빙할 것. 실제 승인량은 `not_verified` |
+| 공식 트래픽 | 두 API 상세에 각각 개발 500회/일 표시. API별인지 계정·신청 전체 공유인지 `not_verified`이므로 실검증은 두 API 합산 500회/일을 보수적 상한으로 사용. 운영 승인량·리셋 시각은 `not_verified` |
 | 비용·라이선스 | 무료, 공공누리 제3유형(출처표시+변경금지) |
 | 대표 Endpoint | `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc`, `https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc` |
 | 채택 | 개발 `adopt`; 상용 `conditional` |
@@ -243,11 +265,13 @@ RFC 8030에 따라 TTL 만료 전에도 Push Service가 저장기간을 줄일 �
 | `GeocodingProvider` | 입력 CRS, 결과 CRS, 행정코드, 경계 후보 | `PERMISSION_DENIED`, `BOUNDARY_AMBIGUOUS`, `CRS_INVALID`, `STORAGE_PROHIBITED`, `RATE_LIMIT` | 행정구역 직접 선택 |
 | `NotificationProvider` | subscription 상태, TTL, event ID | `PERMISSION_DENIED`, `SUBSCRIPTION_EXPIRED`, `RATE_LIMIT`, `TTL_EXPIRED`, `ACCEPTED_NOT_DELIVERED` | 앱 내 최신 Brief; Push 전달을 성공으로 간주하지 않음 |
 
-## 6. Gate 2 이후 필수 확인 작업
+## 6. 단계별 필수 확인 작업
+
+아래 1~2는 Gate 2의 기술 실검증에 필요하다. AirKorea를 Phase 1 필수 Provider로 유지한다면 3의 파생·Cache·AI·위치 관련 적용 범위 확인도 최종 Gate 2 통과 조건이다. 운영계정 자체와 4~7은 Production 또는 해당 후속 Phase의 차단 조건이며 현재 Gate 2 비코드 준비 완료를 막지는 않는다.
 
 1. 공공데이터포털 개발키를 발급해 KMA·AirKorea 각 endpoint의 schema fixture와 오류 fixture를 보관한다.
 2. 14일 canary로 발표/관측시각 대비 수집시각, 결측률, 지역 coverage, quota 사용량을 기록한다. 원 GPS는 기록하지 않는다.
-3. AirKorea 운영계정 심의 전에 위치정보 관련 절차의 NowSignal 적용 여부를 서면 확인한다.
+3. AirKorea 운영계정 심의 전에 위치정보 관련 절차의 NowSignal 적용 여부와 제3유형 원본에서 파생 설명·Cache·AI 입력을 분리하는 범위가 허용되는지 서면 확인 또는 전문 검토로 해소한다.
 4. 행정안전부에 상업 이용, 적용 라이선스, 원문 캐시·AI 분리 설명 허용 여부, 운영 quota와 현재 live coverage를 질의한다. 해소 전 상용 feature flag는 off다.
 5. TourAPI Phase 3 전에 레코드별 `modifiedtime`과 이미지별 공공누리 유형이 실제 응답에서 항상 추적 가능한지 표본 감사한다.
 6. VWorld는 raw 응답·좌표가 DB와 로그에 남지 않는 자동 테스트를 통과한 경우에만 활성화한다. SGIS는 상용 허용과 입력 CRS를 확인한다.

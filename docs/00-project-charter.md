@@ -2,8 +2,8 @@
 
 - 문서 상태: `working_draft`
 - 최초 작성일: 2026-08-05
-- 최종 갱신일: 2026-08-05
-- 현재 Gate: Gate 1 — 문제 검증
+- 최종 갱신일: 2026-08-07
+- 현재 Gate: Gate 1 문제 검증·Gate 2 Public Data Feasibility 병행 (`in_progress`)
 - 근거 원칙: 실제 조사·인터뷰·실험 결과가 없는 항목은 `hypothesis`, `planned`, `not_verified` 중 하나로 표시한다.
 
 ## 1. 프로젝트 정의
@@ -35,7 +35,7 @@ NowSignal AI는 사용자의 현재 위치 또는 직접 선택한 지역과 현
 
 > 오늘 특정 활동을 하려 할 때, 흩어진 최신 정보를 직접 해석하는 부담을 줄이고, 근거를 확인할 수 있는 실행 가능한 시간과 대안을 선택하고 싶다.
 
-대상 사용자 세분화와 우선순위는 [01-target-job-analysis.md](./01-target-job-analysis.md)와 [02-problem-hypotheses.md](./02-problem-hypotheses.md)에서 다루며, 인터뷰 전에는 확정하지 않는다.
+대상 사용자 세분화와 우선순위는 [문제 가설](./02-problem-hypotheses.md)과 [사용자 인터뷰 및 모집 계획](./03-user-interviews.md)에서 다루며, 인터뷰 전에는 확정하지 않는다. [목표 직무 분석](./01-target-job-analysis.md)은 사용자 세분화가 아니라 이 프로젝트가 보여줄 직무 역량의 근거다.
 
 ## 4. 가치 제안
 

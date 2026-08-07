@@ -5,7 +5,7 @@
 - 최종 갱신일: 2026-08-07
 - 연구 Protocol: `v1.1` (`method_decided`, `operation_not_verified`)
 - 개인정보 공식 근거 확인일: 2026-08-05
-- Pilot 실행 상태: `deferred_manual` — 실제 모집을 승인할 때 Google Forms·계정 보호·국외 처리 고지·삭제 모의 실행을 재개하며, 그 전에는 참여자 데이터 수집 금지
+- Pilot 실행 상태: `deferred_manual` — 실제 문제 증거 수집을 승인한 뒤 수동 Checklist의 차단 시점에 따라 단계별로 재개하며, 그 전에는 참여자 데이터 수집 금지
 - 완료한 Interview: 0건
 - 확보한 참여자: 0명
 - 실제 직접 인용: 0건
@@ -94,9 +94,9 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 | 지역 편향 | Provider Coverage 차이를 놓침 | 수도권·비수도권 맥락을 기록하고 결과를 분리 |
 | 디지털 숙련도 편향 | PWA 사용성이 과대평가됨 | 앱 전환·권한 설정 숙련도를 Screening에서 기록하되 배제하지 않음 |
 
-## 5. Screening 문항
+## 5. Form A Screening·운영 문항
 
-모집 시 필요한 최소 정보만 수집한다. 정확한 주소, GPS, 건강정보, 직장명은 요청하지 않는다.
+모집·일정 조율에 필요한 최소 정보와 삭제·철회 안내 확인만 수집한다. 정확한 주소, GPS, 건강정보, 직장명은 요청하지 않는다.
 
 1. 만 18세 이상입니까? (`yes/no`)
 2. 최근 14일 안에 날씨나 대기질을 확인하고 외출·활동·생활 과제의 시간이나 준비를 정한 적이 있습니까? (`yes/no`)
@@ -104,8 +104,9 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 4. 그 결정을 한 지역은 어느 시·도 수준입니까? (`coarse_region`)
 5. 보통 어떤 방식으로 정보를 확인합니까? (`multi_select`: 날씨, 대기질, 공식 경보, 지도·검색, 주변 사람, 확인하지 않음, 기타)
 6. Browser 또는 앱의 위치 권한을 보통 어떻게 설정합니까? (`allow`, `ask_each_time`, `deny`, `unsure`)
-7. Interview 가능한 방식과 시간대는 무엇입니까? (`availability`)
-8. 본인 기기를 직접 조작해 보여주는 화면 관찰은 선택사항이고 거부해도 참여할 수 있습니다. 화면 관찰에 참여할 의향이 있습니까? (`yes/no/unsure`)
+7. Interview 가능한 시간대는 무엇입니까? (`availability`; 넓은 시간대 범주와 짧은 기타만 허용)
+8. 본인 기기를 직접 조작해 보여주는 화면 관찰은 선택사항이고 거부해도 참여할 수 있습니다. 화면 관찰에 동의합니까? (`동의/동의하지 않음`, 선택 문항)
+9. `researchCode` 보관, 철회 Email, 자료별 예정 삭제일과 Google의 삭제 한계를 확인했습니까? (`required_acknowledgement`)
 
 연락처는 일정 조율 목적으로만 전용 Gmail 대화에 두고 Google Forms 응답에는 이름·Email을 수집하지 않는다. 참여자에게 전달한 무작위 철회 Code로 동의 응답과 연구 Note를 연결하며, 실제 Form과 계정 보호 설정을 확인하기 전에는 수집하지 않는다 (`method_decided`, `operation_not_verified`).
 
@@ -147,7 +148,7 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 1. **NowSignal Pilot 동의·Screening Form**
    - 참여자가 작성한다.
    - 수집·이용 동의와 Google을 통한 국외 처리 동의를 분리한다.
-   - 무작위 `researchCode`, 성인 여부, 최근 14일 사례, 시·도, 활동, 정보 확인 방식, 위치 권한 성향, 비녹화 화면 관찰 선택 동의만 받는다.
+   - 무작위 `researchCode`, 성인 여부, 최근 14일 사례, 시·도, 활동, 정보 확인 방식, 위치 권한 성향, 가능한 시간대, 비녹화 화면 관찰 선택 동의와 삭제·철회 안내 확인만 받는다.
    - 이름·Email·전화번호·Google 계정명·파일은 받지 않는다.
 2. **NowSignal Pilot 구조화 Interview Note Form**
    - 연구자만 접근해 대면 Interview 중 직접 작성한다.
@@ -164,8 +165,10 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 
 | 자료 유형 | 최소 항목·목적 | 활성 서비스에서 삭제하는 시점 |
 | --- | --- | --- |
-| 동의하지 않은 제출·불적격·미참여 Screening | 동의 선택과, 동의한 경우의 `researchCode`·성인·최근 사례 여부·시·도·활동; 적격 판단 | 즉시 또는 모집 종료 후 7일 이내 |
-| 적격 Screening·Consent | Protocol version, 제시 시각, 동의 선택, 예정 삭제일; 참여 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
+| 필수 동의를 거부한 제출 | 동의 선택, 제출 시각; 추가 질문 없이 종료됐는지 확인 | 확인 후 즉시 |
+| 부적격 Screening | `researchCode`와 부적격 분기 전까지 실제로 입력된 성인·최근 사례 답변; 적격 판단 | 부적격 판정일 + 7일 이내 |
+| 적격이지만 미선정·미참여 Screening | 전체 Form A 답변; 선정과 일정 조율 | 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내 |
+| Interview 참여자의 Screening·Consent | Protocol version, 제시 시각, 필수·선택 동의, Form A 답변, 예정 삭제일; 참여 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
 | 구조화 Interview Note | `researchCode`, 시·도, 활동, 출처 순서, 결정 과정, Theme와 가설 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
 | 일정·철회 Gmail 대화 | 발신주소, 일정, `researchCode`, 요청 범위; 조율·권리 요청 처리 | Interview·보상 완료 또는 철회 처리 완료 후 14일 이내 |
 | 공개 가능한 종합 결과 | 재식별 위험을 검토한 Theme, 분자·분모, 방법과 한계 | 프로젝트 기록 정책에 따름 |
@@ -191,7 +194,7 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 - 필수 동의를 거부해 `researchCode`를 받기 전에 종료된 Form A 응답은 거부 선택과 제출 시각으로 확인해 즉시 삭제한다.
 - 참여자에게 `researchCode`와 자료별 예정 삭제일을 제공하고 Code를 그때까지 본인이 보관하도록 안내한다. 철회 Email에는 Code와 삭제 범위만 쓰도록 안내하고 추가 신원정보를 요구하지 않는다. 발신주소는 Gmail에 남으며 위 보유기간에 따라 삭제된다고 알린다.
 - 요청 접수는 2영업일 안에 확인하고, 7일 안에 연결 가능한 동의·Screening·Note 응답을 활성 Form에서 삭제하고 Google 삭제 절차를 시작한 뒤 완료 사실을 알린다.
-- 연결 Code를 제거하고 공개 전 재식별 검토를 마친 집계는 특정 참여자를 찾을 수 없으므로 이후 개별 삭제가 제한된다. 그 전에는 Pilot 결과나 직접 인용을 공개하지 않는다.
+- 연결 Code를 제거하고 공개 전 재식별 검토를 마친 집계는 특정 참여자를 찾을 수 없으므로 이후 개별 삭제가 제한된다. 그 전에는 Pilot 집계 결과를 공개하지 않으며, Pilot에서는 직접 인용 후보를 수집·공개하지 않는다.
 - 참여자는 질문을 건너뛰거나 언제든 중단할 수 있다. 보상이 있다면 화면 관찰 거부, 부정적 의견 또는 중단을 이유로 감액하지 않는다.
 
 ### 7.6 참여 동의 안내문 v1.1
@@ -202,13 +205,13 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 >
 > 개인정보 처리 주체는 **NowSignal**이며 문의·열람·정정·철회·삭제 요청은 **html.programming.language@gmail.com**으로 받습니다. 이 연구는 최근 날씨·대기질·주변 상황을 확인해 활동 시각이나 준비를 정한 실제 과정을 이해하기 위한 약 40~50분의 대면 Interview입니다. 제품 구매나 긍정적 평가를 요구하지 않습니다.
 >
-> 일정 조율과 철회 처리를 위해 전용 Gmail에서 발신 Email 주소, 대화 내용, 연구 Code와 가능한 시간대를 처리하며 Interview·보상 또는 철회 처리 완료 후 14일 이내 삭제합니다. Form의 필수 수집 항목은 무작위 연구 Code, 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 구조화 연구 Note와 동의 기록입니다. 이름·Email·전화번호·정확한 주소·GPS·이동 경로·건강정보·계정 Password는 Form에서 요청하지 않습니다. 필수 수집·이용에 동의하지 않으면 이 Interview에는 참여할 수 없지만 그 밖의 불이익은 없습니다.
+> 일정 조율과 철회 처리를 위해 전용 Gmail에서 발신 Email 주소, 대화 내용, 연구 Code와 확정 일정을 처리하며 Interview·보상 또는 철회 처리 완료 후 14일 이내 삭제합니다. Form의 필수 수집 항목은 무작위 연구 Code, 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 위치 권한 성향, 가능한 시간대, 삭제·철회 안내 확인, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 구조화 연구 Note와 동의 기록입니다. 이름·Email·전화번호·정확한 주소·GPS·이동 경로·건강정보·계정 Password는 Form에서 요청하지 않습니다. 필수 수집·이용에 동의하지 않으면 이 Interview에는 참여할 수 없지만 그 밖의 불이익은 없습니다.
 >
 > 일정·철회 Gmail 대화, 동의·Screening 응답과 연구 Note는 Gmail, Google Forms와 Google Drive에서 처리·보관됩니다. Gmail 송수신과 Form 입력·제출 시 Google LLC 및 서비스 운영 계열사에 전송되며 Google은 전 세계의 Server에서 정보를 처리할 수 있다고 밝힙니다. 이전되는 항목, 국가, 시점·방법, 이전받는 자와 연락처, 목적, 보유기간의 최종 고지는 **[국외 처리 고지 검토 완료값]**으로 제시합니다. 국외 처리에 동의하지 않을 수 있으나 이 Google 기반 연구에는 참여할 수 없고 그 밖의 불이익은 없습니다.
 >
 > Pilot은 녹음·녹화·자동 전사 없이 진행합니다. 본인 기기를 직접 조작해 보여주는 비녹화 화면 관찰은 선택사항이며 거부해도 참여와 보상에 영향이 없습니다. 연구자는 로컬 연구 파일을 만들거나 내려받거나 동기화하지 않으며, 승인되지 않은 AI·LLM 처리에 응답을 넣지 않습니다.
 >
-> 적격 Screening·Consent와 연구 Note는 **[참여자별 예정 삭제일]**까지 보관합니다. 철회 시 7일 안에 활성 Google Forms 응답을 삭제하고 Google의 삭제 절차를 시작합니다. Google은 전체 시스템 삭제가 일반적으로 약 2개월 걸리고 암호화된 Backup에는 최대 6개월 남을 수 있으며, 보안·법적 요구 같은 제한된 목적에는 더 오래 보관할 수 있다고 밝힙니다. 연결 Code를 제거하고 재식별 위험 검토를 마친 집계 결과는 특정 참여자를 찾을 수 없어 이후 개별 삭제가 제한됩니다.
+> 필수 동의 거부 응답은 확인 후 즉시, 부적격 Screening은 판정일 +7일 이내, 적격이지만 미선정·미참여한 Screening은 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 +7일 이내 삭제합니다. Interview 참여자의 Screening·Consent와 연구 Note는 **[참여자별 예정 삭제일]**까지 보관합니다. 철회 시 7일 안에 활성 Google Forms 응답을 삭제하고 Google의 삭제 절차를 시작합니다. Google은 전체 시스템 삭제가 일반적으로 약 2개월 걸리고 암호화된 Backup에는 최대 6개월 남을 수 있으며, 보안·법적 요구 같은 제한된 목적에는 더 오래 보관할 수 있다고 밝힙니다. 연결 Code를 제거하고 재식별 위험 검토를 마친 집계 결과는 특정 참여자를 찾을 수 없어 이후 개별 삭제가 제한됩니다.
 >
 > 철회 요청에는 안내받은 연구 Code가 필요합니다. 일정 연락 Gmail 대화가 먼저 삭제된 뒤 Code까지 잃으면 특정 응답을 찾기 어려울 수 있으므로 예정 삭제일까지 Code를 보관해 주세요.
 
@@ -223,21 +226,23 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 
 ### 7.7 실행 전 Privacy Preflight
 
-아래 `blocking_not_verified` 항목을 모두 확인하기 전에는 실제 연락처·Screening 응답·Interview Note를 수집하지 않는다. 상세 절차는 [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md)를 따른다.
+아래 작업은 현재 모두 실행 Trigger 전까지 유예한다. 모든 항목을 한 번에 선행하지 않고 차단 시점별로 완료한다. 모집 안내와 전용 Email 공개 전에는 1단계, Form A Link 전달 전에는 2단계, 첫 Interview 전에는 3단계를 통과해야 한다. 상세 절차는 [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md)와 [사용자 수동 작업 체크리스트](./manual-action-checklist.md)를 따른다.
 
-| 점검 항목 | 현재 상태 | 통과 증거 |
-| --- | --- | --- |
-| 개인정보 처리 주체 | `done` | `NowSignal` (`user_confirmed`) |
-| 비공개 문의·철회 연락처 | `configured_not_tested` | `html.programming.language@gmail.com` 송수신·Spam 점검 |
-| Interview 방식 | `done` | 대면 1:1, 무녹음·무녹화·무전사 |
-| 두 Google Form의 실제 생성·소유권 | `blocking_not_verified` | 전용 계정 소유, 공동편집자 0명, Drive 일반 접근 `제한됨` |
-| Google 계정 보호 | `blocking_not_verified` | 2단계 인증 또는 Passkey와 복구 수단 확인 |
-| Form 수집·공유 설정 | `blocking_not_verified` | Email·파일 수집, 결과 요약, 응답 수정, Draft 자동저장 비활성 |
-| 외부 저장·연동 차단 | `blocking_not_verified` | 연결 Sheet·Add-on·Script·Download·Drive·Gmail Offline·Drive 동기화·Mail client 연결 없음 |
-| Google 국외 처리 고지·별도 동의 | `blocking_not_verified` | 실제 처리 국가 표현을 포함한 최종 문안 검토 |
-| 자료별 예정 삭제일 | `blocking_not_verified` | 가상 참여자의 계산 결과 |
-| 제출·철회·삭제 모의 실행 | `blocking_not_verified` | 가상 Code 응답의 검색·개별 삭제·재조회 결과 |
-| 원자료 Git·LLM 유입 방지 | `done` | 공개 저장소 제외 원칙과 `.gitignore` 방어 규칙 |
+| 점검 항목 | 작업 상태 | 근거 상태 | 차단 시점 | 통과 증거 |
+| --- | --- | --- | --- | --- |
+| 개인정보 처리 주체 | `done` | `user_confirmed` | 모든 단계 | `NowSignal` |
+| 비공개 문의·철회 연락처 | `deferred_manual` | `configured_not_tested` | 1단계: 모집 안내·Email 공개 전 | `html.programming.language@gmail.com` 송수신·Spam 점검 |
+| Interview 방식 | `done` | `user_confirmed` | 3단계: 첫 Interview 전 | 대면 1:1, 무녹음·무녹화·무전사 |
+| Form A 생성·소유권·분기 | `deferred_manual` | `partial_user_verified` | 2단계: Form A Link 전달 전 | 지정 계정 소유, 공동편집자 0명, Drive 제한, 최종 분기·설정 재점검 |
+| Form B 생성·소유권·접근 제한 | `deferred_manual` | `not_verified` | 3단계: 첫 Interview 전 | 지정 계정 소유, 공동편집자 0명, 응답자 소유 계정 제한 |
+| Google 계정 보호 | `deferred_manual` | `not_verified` | 1단계: 모집 안내·Email 공개 전 | 2단계 인증 또는 Passkey와 복구 수단 확인 |
+| Form 수집·공유 설정 | `deferred_manual` | `partial_recheck_required` | Form별 Link 전달·사용 전 | Email·파일 수집, 결과 요약, 응답 수정, Draft 자동저장 설정 확인 |
+| 외부 저장·연동 차단 | `deferred_manual` | `form_a_sheet_absent_others_not_verified` | Form별 Link 전달·사용 전 | 연결 Sheet·Add-on·Script·Download·Drive·Gmail Offline·Drive 동기화·Mail client 연결 없음 |
+| Google 국외 처리 고지·별도 동의 | `deferred_manual` | `specialist_review_required` | 1단계: 모집 안내·Email 공개 전 | 실제 처리 국가 표현을 포함한 최종 문안 검토 |
+| 자료별 예정 삭제일 | `deferred_manual` | `not_verified` | 2단계: Form A Link 전달 전 | 가상 기준일로 동의 거부·부적격·적격 미참여·Interview 참여의 계산 결과 확인 |
+| Form A 제출·분기·삭제 모의 실행 | `deferred_manual` | `not_verified` | 2단계: Form A Link 전달 전 | 거부·부적격·적격 응답의 저장·개별 삭제·재조회 결과 |
+| Form B 제출·삭제 모의 실행 | `deferred_manual` | `not_verified` | 3단계: 첫 Interview 전 | 가상 Note 제출·개별 삭제·재조회 결과 |
+| 원자료 Git·LLM 유입 방지 | `done` | `documented_control` | 모든 단계 | 공개 저장소 제외 원칙과 `.gitignore` 방어 규칙 |
 
 실제 Form URL, 응답 화면이나 Code를 통과 증거로 공개 저장소에 넣지 않는다. 설정명·점검일·통과 여부와 식별정보 없는 건수만 기록한다.
 
@@ -428,10 +433,12 @@ Problem Interview는 제품 만족도나 시장 규모를 측정하지 않는다
 - 비공개 문의·철회 Email: `configured_not_tested`
 - 모집 채널과 게시 승인: `not_verified`
 - 참여 보상과 예산: `not_verified`
-- Google 계정 2단계 인증·소유권·공동편집자 없음: `blocking_not_verified`
-- 두 Form의 수집·공유·연동·로컬 비저장 설정: `blocking_not_verified`
-- Google 국외 처리 고지와 별도 동의 문안의 충분성: `blocking_not_verified`
-- 자료별 예정 삭제일과 가상 응답 삭제·철회 모의 실행: `blocking_not_verified`
+- Form A 최종 설정 재점검: `deferred_manual` (`partial_user_verified`)
+- Form B 생성·소유권·접근 제한: `deferred_manual` (`not_verified`)
+- Google 계정 2단계 인증 또는 Passkey·복구 수단: `deferred_manual` (`not_verified`)
+- 두 Form의 수집·공유·연동·로컬 비저장 설정: `deferred_manual` (Form A 일부만 확인)
+- Google 국외 처리 고지와 별도 동의 문안의 충분성: `deferred_manual` (`specialist_review_required`)
+- 자료별 예정 삭제일과 가상 응답 삭제·철회 모의 실행: `deferred_manual` (`not_verified`)
 - Pilot 일정: `not_verified`
 
-특히 `blocking_not_verified` 항목을 확정하기 전에는 실제 참여자 데이터를 수집하지 않는다.
+각 단계의 차단 항목을 확정하기 전에는 그 단계가 허용하는 실제 연락처·Screening·Interview Note를 수집하지 않는다. 현재는 1단계도 재개하지 않았으므로 실제 모집과 참여자 데이터 수집은 모두 금지한다.

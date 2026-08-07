@@ -3,8 +3,9 @@
 - 문서 상태: `paused_until_pilot_recruitment`
 - 최초 작성일: 2026-08-05
 - 최종 갱신일: 2026-08-07
-- 적용 Protocol: `docs/03-user-interviews.md` v1.1
-- 실제 Form 생성 상태: `form_a_partial_form_b_deferred`
+- 적용 Protocol: [사용자 인터뷰 및 모집 계획](./03-user-interviews.md) v1.1
+- Form A: Workflow `deferred_manual`, Evidence `partial_user_verified`
+- Form B: Workflow `deferred_manual`, Evidence `not_verified`
 - 실제 참여자 데이터: 0건
 
 이 문서는 Google Forms를 이용해 NowSignal Pilot Interview의 동의·Screening과 구조화 Note를 운영하는 Build sheet다. 실제 Form URL, 편집 링크, 응답 링크, `researchCode`와 참여자 응답은 이 문서나 공개 저장소에 기록하지 않는다.
@@ -16,7 +17,7 @@ Google Forms 완성은 NowSignal 제품 정의나 Desk research의 선행조건�
 - 현재 Form A는 부분 설정 상태로 미게시 유지한다.
 - Form B, 계정 보호, 최종 동의 문안, Dry-run과 철회 Email 검증은 `deferred_manual`이다.
 - 이 항목들이 검증되기 전에는 실제 참여자 데이터만 수집하지 않는다. 제품 코드는 별도의 Gate 1·2 승인 조건에 따라 계속 보류한다.
-- 재개 Trigger와 사용자 작업은 `docs/manual-action-checklist.md`를 따른다.
+- 재개 Trigger와 사용자 작업은 [사용자 수동 작업 체크리스트](./manual-action-checklist.md)를 따른다.
 
 ## 1. 확정한 운영 원칙
 
@@ -40,7 +41,7 @@ Browser와 Google이 Cookie·Cache·IP·기기정보를 전혀 처리하지 않�
 
 | 순서 | Section·질문 | 형식 | 필수 | 운영 규칙 |
 | ---: | --- | --- | :---: | --- |
-| 1 | 참여 안내 | 설명 | — | `docs/03-user-interviews.md` 7.6의 최종 승인 문안 사용 |
+| 1 | 참여 안내 | 설명 | — | [사용자 인터뷰 및 모집 계획](./03-user-interviews.md) 7.6의 최종 승인 문안 사용 |
 | 2 | 연구 수집·이용에 동의합니까? | 객관식 `동의/동의하지 않음` | 예 | 동의하지 않으면 종료 Section으로 이동 |
 | 3 | 고지된 Google 국외 처리에 별도로 동의합니까? | 객관식 `동의/동의하지 않음` | 예 | 동의하지 않으면 종료 Section으로 이동 |
 | 4 | `researchCode` | 단답형 | 예 | 정규식 `^NS-[A-HJ-NP-Z2-9]{12}$` |
@@ -140,22 +141,36 @@ Browser와 Google이 Cookie·Cache·IP·기기정보를 전혀 처리하지 않�
 
 ## 5. 실제 수집 전 가상 응답 Dry-run
 
-`NS-TESTTESTTEST`처럼 시험용임이 분명하면서 Form 검증식을 통과하는 가상 Code만 사용한다. 실제 사람의 Email, 이름, 발언이나 위치를 넣지 않는다.
+`NS-TESTTESTTEST`처럼 시험용임이 분명하면서 Form 검증식을 통과하는 가상 Code만 사용한다. 실제 사람의 Email, 이름, 발언이나 위치를 넣지 않는다. 각 단계는 [수동 작업 체크리스트](./manual-action-checklist.md)의 Trigger가 온 뒤에만 따로 수행한다.
 
-1. 다른 Browser session에서 Form A를 열고 거부 분기, 부적격 분기, 적격 제출을 각각 시험한다. 실제 참여자의 동의 거부 응답은 Code가 없으므로 개별 응답의 거부 선택과 제출 시각으로 확인해 즉시 삭제한다.
-2. Form A의 개별 응답 보기에서 세 응답이 예상 Section과 값으로 저장됐는지 확인한다.
-3. Form B에 가상 구조화 Note 한 건을 제출한다.
-4. Drive에서 Form A·B 외에 응답 Sheet가 생성되지 않았는지 확인한다.
-5. Form A와 B의 개별 응답 보기에서 가상 Code를 확인하고 해당 응답을 각각 삭제한다.
-6. Page를 새로 고친 뒤 가상 Code 응답이 활성 응답에 남지 않았는지 다시 확인한다.
-7. 실수로 Sheet를 연결하는 시험은 하지 않는다. Sheet가 이미 존재한다면 Form 연결을 끊고 Sheet 파일과 Drive 휴지통을 삭제한 뒤 원인을 기록한다.
-8. 다른 Email 계정에서 철회 전용 주소로 제목 `[TEST] NowSignal 철회`와 가상 Code를 보낸다.
-9. 수신, Spam 미분류, 2영업일 접수 회신 Template, 보낸편지함을 확인한다.
-10. Test 대화를 받은편지함·보낸편지함·휴지통에서 영구 삭제한다.
+### 5.1 1단계 — 철회 Email 시험
+
+1. 다른 Email 계정에서 철회 전용 주소로 제목 `[TEST] NowSignal 철회`와 가상 Code를 보낸다.
+2. 수신, Spam 미분류, 2영업일 접수 회신 Template, 보낸편지함을 확인한다.
+3. Test 대화를 받은편지함·보낸편지함·휴지통에서 영구 삭제한다.
+
+### 5.2 2단계 — Form A·예정 삭제일
+
+1. 다른 Browser session에서 Form A를 열고 필수 수집 동의 거부, 국외 처리 동의 거부, 미성년, 최근 사례 없음과 적격 제출을 각각 시험한다. 실제 참여자의 필수 동의 거부 응답은 Code가 없으므로 거부 선택과 제출 시각으로 확인해 즉시 삭제한다.
+2. Form A의 개별 응답 보기에서 다섯 응답이 예상 Section과 값으로 저장됐는지 확인한다.
+3. Drive에서 Form A 외에 응답 Sheet가 생성되지 않았는지 확인한다.
+4. 개별 응답 보기에서 가상 응답을 모두 삭제하고 Page를 새로 고친 뒤 활성 응답에 남지 않았는지 확인한다.
+5. 실수로 Sheet를 연결하는 시험은 하지 않는다. Sheet가 이미 존재한다면 Form 연결을 끊고 Sheet 파일과 Drive 휴지통을 삭제한 뒤 원인을 기록한다.
+6. 가상 기준일로 다음 네 보유기간을 검산한다.
+   - 필수 동의 거부: 확인 후 즉시
+   - 부적격 Screening: 부적격 판정일 + 7일 이내
+   - 적격이지만 미선정·미참여: 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내
+   - Interview 참여 Consent·Screening·Note: `min(Interview일 + 90일, Gate 1 결정일 + 30일)`
+
+### 5.3 3단계 — Form B
+
+1. Form B에 가상 구조화 Note 한 건을 제출한다.
+2. Drive에서 Form B 외에 응답 Sheet가 생성되지 않았는지 확인한다.
+3. 개별 응답 보기에서 가상 Code 응답을 삭제하고 Page를 새로 고친 뒤 활성 응답에 남지 않았는지 확인한다.
 
 공개 저장소에는 다음처럼 식별정보 없는 결과만 기록한다.
 
-| 점검일 | Form A 분기 | Form B 제출 | Sheet 없음 | 개별 삭제·재조회 | 철회 Email | 결과 |
+| 점검일 | 1단계 Email | 2단계 Form A 분기·삭제 | 2단계 삭제일 계산 | 3단계 Form B 제출·삭제 | Sheet 없음 | 결과 |
 | --- | --- | --- | --- | --- | --- | --- |
 | — | `not_verified` | `not_verified` | `not_verified` | `not_verified` | `not_verified` | `not_started` |
 
@@ -190,8 +205,10 @@ Network가 끊기면 로컬 메모로 계속 기록하지 않는다. Interview�
 
 ### 예정 삭제일
 
-- 불적격·미참여 Screening: 선정 통지 또는 모집 종료일 + 7일 이내
-- 적격 Consent·Screening·Note: `min(Interview일 + 90일, Gate 1 결정일 + 30일)`
+- 필수 동의 거부: 확인 후 즉시
+- 부적격 Screening: 부적격 판정일 + 7일 이내
+- 적격이지만 미선정·미참여 Screening: 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내
+- Interview 참여자의 Consent·Screening·Note: `min(Interview일 + 90일, Gate 1 결정일 + 30일)`
 - 일정·철회 Gmail 대화: Interview·보상 또는 철회 처리 완료일 + 14일 이내
 - 목적을 더 일찍 달성하면 예정일을 기다리지 않고 삭제
 
@@ -201,17 +218,17 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 
 아래 상태는 실제 계정 화면과 가상 응답으로 확인한 뒤에만 바꾼다.
 
-| 항목 | 상태 | 확인일 |
-| --- | --- | --- |
-| Form A 생성·소유권·분기 | `partial_user_verified` | 2026-08-06 |
-| Form B 생성·소유권·접근 제한 | `deferred_manual` | — |
-| 계정 2단계 인증 또는 Passkey | `deferred_manual_not_verified` | — |
-| 공동편집자 0명·Drive 제한됨 | `form_a_verified_form_b_deferred` | 2026-08-06 |
-| Email·파일·결과 요약·수정·Draft 설정 | `partial_recheck_required` | 2026-08-06 |
-| Sheet·Add-on·Script·Offline·동기화 없음 | `form_a_sheet_absent_others_not_verified` | 2026-08-06 |
-| Google 국외 처리 고지 최종 검토 | `deferred_manual_blocking_before_participants` | — |
-| 가상 응답 제출·개별 삭제·재조회 | `deferred_manual` | — |
-| 철회 Email 송수신·Spam·영구 삭제 | `deferred_manual` | — |
+| 항목 | 작업 상태 | 근거 상태 | 확인일 |
+| --- | --- | --- | --- |
+| Form A 생성·소유권·분기 | `deferred_manual` | `partial_user_verified` | 2026-08-06 |
+| Form B 생성·소유권·접근 제한 | `deferred_manual` | `not_verified` | — |
+| 계정 2단계 인증 또는 Passkey | `deferred_manual` | `not_verified` | — |
+| 공동편집자 0명·Drive 제한됨 | `deferred_manual` | Form A `verified`, Form B `not_verified` | 2026-08-06 |
+| Email·파일·결과 요약·수정·Draft 설정 | `deferred_manual` | `partial_recheck_required` | 2026-08-06 |
+| Sheet·Add-on·Script·Offline·동기화 없음 | `deferred_manual` | Form A Sheet 없음만 확인, 나머지 `not_verified` | 2026-08-06 |
+| Google 국외 처리 고지 최종 검토 | `deferred_manual` | `specialist_review_required` | — |
+| 가상 응답 제출·개별 삭제·재조회·삭제일 계산 | `deferred_manual` | `not_verified` | — |
+| 철회 Email 송수신·Spam·영구 삭제 | `deferred_manual` | `not_verified` | — |
 
 ### 2026-08-06 실행 기록
 
@@ -228,12 +245,13 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 - Google Forms 작성 화면을 열었으며, Form 생성·질문·분기·응답 설정은 아직 검증하지 않았다.
 - 계정 2단계 인증, 복구 수단, Offline·동기화·Mail client 상태도 계정 화면 확인 전까지 `not_verified`로 유지한다.
 
-### 2026-08-07 수동 작업 유예 기록
+### 2026-08-07 수동 작업 유예 결정 기록
 
+- 아래 Form A 확인 사실의 화면 확인일은 2026-08-06이며, 2026-08-07에 남은 작업을 Pilot 모집 Trigger까지 유예하기로 결정했다.
 - Form A의 지정 계정 소유, 공동편집자 0명, 편집자 일반 접근 `제한됨`, 응답자 `링크가 있는 모든 사용자`, 미게시, 응답 0건과 Sheet 미연결을 화면에서 확인했다.
 - 질문 구조와 동의 거부·국외 처리 거부·미성년·최근 사례 없음·적격 Screening의 다섯 분기 미리보기는 사용자가 정상 동작을 확인했다.
 - 설정 화면에서 수정이 필요했던 `다른 응답 제출 Link`와 Draft 자동저장 중지 값은 수정 후 재확인 증거가 없어 `partial_recheck_required`로 둔다.
-- Form B, 계정 보호, Offline·동기화·Mail client, 법적 고지, 제출·삭제와 철회 Email 시험은 실제 Pilot 모집을 승인할 때 재개한다.
+- 계정 보호·법적 고지·철회 Email 시험은 1단계, Form A 재점검·삭제 시험은 2단계, Form B·Note 삭제 시험은 첫 Interview가 확정된 뒤 3단계에서 재개한다.
 - Form A는 게시하지 않고 실제 참여자 데이터 0건을 유지한다.
 
 ## 9. 공식 참고자료
