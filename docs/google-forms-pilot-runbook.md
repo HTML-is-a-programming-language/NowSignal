@@ -1,13 +1,22 @@
 # Google Forms Pilot 운영 설계서
 
-- 문서 상태: `ready_for_setup`
+- 문서 상태: `paused_until_pilot_recruitment`
 - 최초 작성일: 2026-08-05
-- 최종 갱신일: 2026-08-06
+- 최종 갱신일: 2026-08-07
 - 적용 Protocol: `docs/03-user-interviews.md` v1.1
-- 실제 Form 생성 상태: `not_started`
+- 실제 Form 생성 상태: `form_a_partial_form_b_deferred`
 - 실제 참여자 데이터: 0건
 
 이 문서는 Google Forms를 이용해 NowSignal Pilot Interview의 동의·Screening과 구조화 Note를 운영하는 Build sheet다. 실제 Form URL, 편집 링크, 응답 링크, `researchCode`와 참여자 응답은 이 문서나 공개 저장소에 기록하지 않는다.
+
+## 0. 실행 시점
+
+Google Forms 완성은 NowSignal 제품 정의나 Desk research의 선행조건이 아니다. 실제 참여자를 모집하거나 응답을 수집하기 직전에만 이 Runbook을 재개한다.
+
+- 현재 Form A는 부분 설정 상태로 미게시 유지한다.
+- Form B, 계정 보호, 최종 동의 문안, Dry-run과 철회 Email 검증은 `deferred_manual`이다.
+- 이 항목들이 검증되기 전에는 실제 참여자 데이터만 수집하지 않는다. 제품 코드는 별도의 Gate 1·2 승인 조건에 따라 계속 보류한다.
+- 재개 Trigger와 사용자 작업은 `docs/manual-action-checklist.md`를 따른다.
 
 ## 1. 확정한 운영 원칙
 
@@ -194,15 +203,15 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 
 | 항목 | 상태 | 확인일 |
 | --- | --- | --- |
-| Form A 생성·소유권·분기 | `not_started` | — |
-| Form B 생성·소유권·접근 제한 | `not_started` | — |
-| 계정 2단계 인증 또는 Passkey | `not_verified` | — |
-| 공동편집자 0명·Drive 제한됨 | `not_verified` | — |
-| Email·파일·결과 요약·수정·Draft 설정 | `not_verified` | — |
-| Sheet·Add-on·Script·Offline·동기화 없음 | `not_verified` | — |
-| Google 국외 처리 고지 최종 검토 | `blocking_not_verified` | — |
-| 가상 응답 제출·개별 삭제·재조회 | `not_started` | — |
-| 철회 Email 송수신·Spam·영구 삭제 | `not_started` | — |
+| Form A 생성·소유권·분기 | `partial_user_verified` | 2026-08-06 |
+| Form B 생성·소유권·접근 제한 | `deferred_manual` | — |
+| 계정 2단계 인증 또는 Passkey | `deferred_manual_not_verified` | — |
+| 공동편집자 0명·Drive 제한됨 | `form_a_verified_form_b_deferred` | 2026-08-06 |
+| Email·파일·결과 요약·수정·Draft 설정 | `partial_recheck_required` | 2026-08-06 |
+| Sheet·Add-on·Script·Offline·동기화 없음 | `form_a_sheet_absent_others_not_verified` | 2026-08-06 |
+| Google 국외 처리 고지 최종 검토 | `deferred_manual_blocking_before_participants` | — |
+| 가상 응답 제출·개별 삭제·재조회 | `deferred_manual` | — |
+| 철회 Email 송수신·Spam·영구 삭제 | `deferred_manual` | — |
 
 ### 2026-08-06 실행 기록
 
@@ -218,6 +227,14 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 - 지정 계정에서 삭제되지 않은 Google Form이 0개임을 확인했다.
 - Google Forms 작성 화면을 열었으며, Form 생성·질문·분기·응답 설정은 아직 검증하지 않았다.
 - 계정 2단계 인증, 복구 수단, Offline·동기화·Mail client 상태도 계정 화면 확인 전까지 `not_verified`로 유지한다.
+
+### 2026-08-07 수동 작업 유예 기록
+
+- Form A의 지정 계정 소유, 공동편집자 0명, 편집자 일반 접근 `제한됨`, 응답자 `링크가 있는 모든 사용자`, 미게시, 응답 0건과 Sheet 미연결을 화면에서 확인했다.
+- 질문 구조와 동의 거부·국외 처리 거부·미성년·최근 사례 없음·적격 Screening의 다섯 분기 미리보기는 사용자가 정상 동작을 확인했다.
+- 설정 화면에서 수정이 필요했던 `다른 응답 제출 Link`와 Draft 자동저장 중지 값은 수정 후 재확인 증거가 없어 `partial_recheck_required`로 둔다.
+- Form B, 계정 보호, Offline·동기화·Mail client, 법적 고지, 제출·삭제와 철회 Email 시험은 실제 Pilot 모집을 승인할 때 재개한다.
+- Form A는 게시하지 않고 실제 참여자 데이터 0건을 유지한다.
 
 ## 9. 공식 참고자료
 

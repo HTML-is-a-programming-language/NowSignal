@@ -1,17 +1,24 @@
 # NowSignal AI 작업 목록
 
-- 기준일: 2026-08-06 (Asia/Seoul)
+- 기준일: 2026-08-07 (Asia/Seoul)
 - 현재 단계: Gate 0 완료, Gate 1·2 준비 및 검증 진행 중
-- 상태 표기: `done`, `in_progress`, `planned`, `blocked`, `not_verified`
+- 상태 표기: `done`, `in_progress`, `planned`, `deferred_manual`, `blocked`, `not_verified`
 - 근거 원칙: 실행·관찰·인터뷰로 확인하지 않은 결과는 성과로 기록하지 않는다.
+
+## 작업 분리 원칙
+
+- Google Forms, 계정 보안, Email 송수신, 실제 참여자 모집·Interview처럼 사용자 화면·판단이 필요한 작업은 실제 실행 직전까지 `deferred_manual`로 둔다.
+- `deferred_manual`은 완료나 검증을 뜻하지 않으며, 해당 작업이 필요한 Trigger가 오면 `docs/manual-action-checklist.md`를 기준으로 사용자에게 알린다.
+- 이 수동 작업들은 실제 참여자 데이터를 수집하기 전에는 필수지만, Desk research·검증 설계·문서 정합성 작업을 막지는 않는다.
+- Gate 1·2 통과 전 제품 코드는 계속 작성하지 않는다.
 
 ## Gate 현황
 
 | Gate | 상태 | 통과 조건 | 현재 증거 | 다음 판단 |
 | --- | --- | --- | --- | --- |
 | Gate 0 환경 확인 | `done` | 저장소, Git, Node, package manager, 환경변수 이름, 덮어쓰기 위험 확인 | GitHub 공개 저장소·권한 확인, 작업 브랜치 Push와 upstream SHA 일치 검증, Node 및 package manager 버전 확인 | Git·PowerShell의 로컬 제약은 명령별 우회 유지 |
-| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research, 인터뷰 계획, Google Forms 기반 연구 데이터·Consent Protocol v1.1 | Privacy Preflight와 실제 참여자 Interview 전에는 통과 금지 |
-| Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표와 Product License Register | 인증키 기반 smoke test 및 이용조건 재확인 전에는 조건부 |
+| Gate 1 문제 검증 | `in_progress` | 목표 직무 공고, 사용자 가설, 인터뷰, 기존 대안, 성공 지표를 실제 근거로 검토 | Desk research, 인터뷰 계획, Consent Protocol v1.1, Form A 부분 설정 | 실제 참여자 모집 직전에 Privacy Preflight를 재개하고 Interview 전에는 통과 금지 |
+| Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표·License Register·실검증 Runbook·fail-closed 초안 | 인증키 기반 smoke test 및 이용조건 재확인 전에는 조건부 |
 | Gate 3 Product Design | `blocked` | PRD, Journey, MVP, 제외 범위, Wireframe | 없음 | Gate 1 핵심 가설 판단과 Gate 2 필수 Provider 가능성 확인 필요 |
 | Gate 4 Data Foundation | `planned` | Fetch, Validation, Normalization, Cache, Attribution, Freshness | 없음 | Gate 2 통과 후 시작 |
 | Gate 5 Activity Optimizer | `planned` | Score, Best Window, Hard Block, Alternatives, Algorithm Version | 없음 | Gate 4 후 시작 |
@@ -49,18 +56,18 @@
 - [x] `done` 개인정보 처리 주체 `NowSignal`, 철회 Email, 대면 1:1·무녹음 Pilot 방식을 사용자 확인값으로 반영
 - [x] `done` Google Forms Cloud-only 운영 방식과 두 Form의 Build sheet·삭제 Runbook 작성
 
-### 실제 검증 — 아직 수행하지 않음
+### 실제 검증 — Pilot 실행 직전 재개
 
-- [ ] `not_verified` 철회 Email 송수신·Spam 분류 점검
-- [ ] `blocked` 두 Google Form 생성, 전용 계정 소유권·2단계 인증·공동편집자 없음 확인 — 2026-08-06 지정 전용 계정 연결과 기존 Form 0개를 확인했으며, Forms 작성 화면에서 생성·설정 필요
-- [ ] `blocked` Email·파일·결과 요약·응답 수정·Draft 저장을 끄고 Sheet·Add-on·Drive·Gmail Offline·Drive 동기화·Mail client 연결이 없음을 확인
-- [ ] `blocked` Google 국외 처리 고지와 별도 동의 문안의 법적 충분성 확인
-- [ ] `blocked` 가상 `researchCode`로 제출·조회·개별 삭제·재조회와 Gmail 철회 모의 실행
-- [ ] `not_verified` 참여 동의 후 문제 인터뷰 수행
-- [ ] `not_verified` 구조화 Interview Note Form에 실제 관찰을 기록하고 직접 인용을 수집하지 않았는지 확인
-- [ ] `not_verified` Raw Data UI 대 Action Brief UI 비교 과제 수행
-- [ ] `not_verified` 가설별 evidence count와 반증 사례 정리
-- [ ] `not_verified` 문제 지속 여부와 Gate 3 진입 여부 결정
+- [ ] `in_progress` Form A 생성·소유권·공동편집자 0명·Drive 제한·미게시·응답 0건·Sheet 미연결 확인. 질문 구조와 5개 분기 미리보기는 사용자 확인, 최종 문안·설정 재점검은 남음
+- [ ] `deferred_manual` Form B 생성·소유권·접근 제한·구조화 필드 설정 — 실제 Pilot 모집 승인 시 재개
+- [ ] `deferred_manual` 전용 계정 2단계 인증 또는 Passkey와 복구 수단 확인 — 실제 Pilot 모집 전 필수
+- [ ] `deferred_manual` Form A/B의 Email·파일·결과 요약·응답 수정·Draft 저장과 Add-on·Offline·동기화·Mail client 상태 최종 점검
+- [ ] `deferred_manual` Google 국외 처리 고지와 별도 동의 문안의 법적 충분성 검토 — 실제 참여자에게 문안을 제시하기 전 필수
+- [ ] `deferred_manual` 가상 `researchCode`로 제출·조회·개별 삭제·재조회와 철회 Email 송수신·Spam 분류·영구 삭제 모의 실행
+- [ ] `deferred_manual` 참여 동의 후 문제 인터뷰 수행
+- [ ] `deferred_manual` 구조화 Interview Note Form에 실제 관찰을 기록하고 직접 인용을 수집하지 않았는지 확인
+- [ ] `deferred_manual` Raw Data UI 대 Action Brief UI 비교 과제 수행
+- [ ] `deferred_manual` 실제 Interview 근거로 가설별 evidence count·반증 사례와 Gate 3 진입 여부 결정
 
 ## Gate 2 — Public Data Feasibility
 
@@ -74,6 +81,9 @@
 - [x] `done` 각 후보의 License, 공개 Traffic, Freshness, Coverage, Failure mode 기록
 - [x] `done` `WeatherProvider`, `AirQualityProvider`, `SafetyAlertProvider`, `LocalEventProvider`, `GeocodingProvider` 적합성 매핑
 - [x] `done` Product License Register 초안 작성
+- [x] `done` Phase 1 Provider 실검증 Runbook·Evidence 규격·`not_run` 결과표 작성
+- [x] `done` stale·delayed·partial·conflicting·unavailable·License 차단의 fail-closed 판단 초안 작성 — Gate 3 승인 전까지 `draft_not_approved`
+- [x] `done` 2026-08-07 KMA 한국어·영문 Locale 호출량 표시 충돌 확인, 낮은 값 우선 원칙 기록
 
 ### 실제 API·법적 검증 — 아직 수행하지 않음
 
@@ -108,11 +118,11 @@
 
 ## 다음 작업 제안
 
-1. `html.programming.language@gmail.com` 계정으로 동의·Screening Form과 구조화 Interview Note Form을 만들고 Runbook 설정표를 확인한다.
-2. Google 국외 처리 고지 문안을 확정하고 가상 Code로 Form 제출·개별 삭제·재조회와 철회 Email 송수신을 시험한다.
-3. 모집 채널·보상·진행자·Pilot 일정을 승인한 뒤 2명 대면 Pilot을 모집한다.
-4. 실제 Interview의 집계 근거로 Gate 1 가설을 판단한다. 참여자별 Code·응답·직접 인용은 공개 저장소에 기록하지 않는다.
-5. API 활용신청은 별도 사용자 승인을 받은 뒤 진행한다. Gate 1 문제 증거와 Gate 2 필수 Provider 검증 전에는 제품 코드를 작성하지 않는다.
+1. `done` 수동 작업을 `docs/manual-action-checklist.md`로 분리하고 Google Forms를 실제 Pilot 모집 직전까지 유예한다.
+2. `done` 인증키 없이 작성 가능한 Provider 실호출 검증 Runbook·합격 기준·증거 형식을 완성한다.
+3. `done` stale/conflicting/unavailable 상태의 fail-closed 판단 초안을 작성하고 `draft_not_approved`로 둔다.
+4. `planned` Gate 1·2 비코드 준비 상태를 감사해 문서 간 상태·근거·Link 불일치를 정리한다.
+5. 실제 Pilot 모집 또는 API 실호출이 다음 Blocking step이 될 때만 관련 수동 작업을 사용자에게 요청한다.
 
 ## 제안 커밋 분리
 

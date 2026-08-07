@@ -1,1 +1,1 @@
-TASKS.md와 docs/google-forms-pilot-runbook.md를 읽고 현재 상태를 확인한 뒤, Google Forms 실제 생성·설정 검증 단계부터 이어서 진행해줘. 제품 코드는 아직 작성하지 말고 커밋 메시지는 한글로 작성해줘.
+TASKS.md, docs/manual-action-checklist.md, docs/provider-validation-runbook.md, docs/provider-fail-closed-draft.md를 읽고 Gate 1·2의 비코드 준비 상태를 감사해줘. 수동 작업은 Trigger 전까지 유예하고, 문서 간 상태·근거·링크 불일치만 우선 정리해줘. 제품 코드는 작성하지 말고 커밋 메시지는 한글로 작성해줘.

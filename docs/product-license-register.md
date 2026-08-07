@@ -3,8 +3,10 @@
 - 문서 상태: `working_draft`
 - 최초 작성일: 2026-08-05
 - 최종 확인일: 2026-08-05 (Asia/Seoul)
+- Phase 1 호출량 재확인: 2026-08-07. KMA Locale별 표시 충돌은 License 판정과 분리해 실행 Runbook에서 보수적으로 처리
 - 적용 범위: 제품이 수집·저장·변환·표시하거나 사용자 추천의 근거로 사용하는 공개 데이터와 외부 표준
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
+- 실제 호출 검증: [provider-validation-runbook.md](./provider-validation-runbook.md)
 - 주의: 이 문서는 공식 페이지를 바탕으로 한 engineering register이며 법률 자문이 아니다. 실제 활용신청 시 동의한 최신 약관, 데이터셋별 상세 조건, 제공기관의 서면 답변이 우선한다.
 
 ## 1. 판정과 운영 규칙

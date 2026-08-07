@@ -2,9 +2,12 @@
 
 - 문서 상태: `Gate 2 desk research complete`; 인증키 기반 contract·freshness 검증은 `not_verified`
 - 조사 기준일: 2026-08-05 (Asia/Seoul)
+- Phase 1 호출량 재확인: 2026-08-07. KMA 한국어·영문 Locale 표시 충돌로 낮은 값과 실제 승인 화면 중 더 낮은 값 적용
 - 범위: 날씨, 대기질, 안전 알림, 지역 행사, 지오코딩, Web Push
 - 근거 원칙: 제공기관 또는 표준 제정기관의 1차 출처만 확정 근거로 사용한다. 포털의 “실시간”, “최신” 표시는 가용성 SLA가 아니다.
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
+- 실제 호출 절차와 Evidence 형식: [provider-validation-runbook.md](./provider-validation-runbook.md)
+- 장애·오래된 값·충돌 시 출력 제안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 
 ## 1. 결론
 
@@ -88,6 +91,8 @@ type ProviderEnvelope<T> = SourceReference & {
 
 신선도는 `baseDate/baseTime`, `fcstDate/fcstTime`을 기준으로 판정한다. 공식 페이지는 시간 범위를 “현재”로 표시하지만 발표 후 몇 분 내 제공되는지와 가용성 SLA는 명시하지 않는다. 따라서 첫 출시 전 14일 canary로 실제 도착 지연의 p50/p95/p99를 측정하고 기준을 확정한다.
 
+2026-08-07 재확인에서 한국어 상세는 개발 10,000회/일, 영문 Locale 상세는 더 큰 값을 표시했다. 실행 예산은 10,000회/일과 실제 승인 화면 중 더 낮은 값을 사용하며, Locale 충돌이 해소되기 전 호출량은 `quota_conflicting_not_verified`다.
+
 초기 운영 규칙은 Provider 보장이 아닌 제품 가정이다.
 
 - 실황: `observedAt`이 90분 이내면 `fresh`, 90분 초과 3시간 이하면 `delayed`, 3시간 초과면 `stale`.
@@ -113,6 +118,8 @@ type ProviderEnvelope<T> = SourceReference & {
 | 채택 | `adopt` — 상용 MVP `SafetyAlertProvider`의 날씨 경보 원천 |
 
 특보 발효·해제·발표시각과 대상 구역을 그대로 보존한다. 활성 특보는 앱의 AI 설명보다 먼저, 원문 링크·발표기관·발표시각과 함께 표시한다. 공식 메타데이터의 “실시간”은 전달 지연 보장이 아니다. 5분 polling은 quota 검토 후 적용할 **제품 정책**이며, canary에서 실제 갱신 지연을 확인한다.
+
+2026-08-07 재확인에서 이 API도 한국어 상세의 개발 10,000회/일과 영문 Locale의 더 큰 표시가 충돌했다. 실검증은 낮은 값과 승인 화면 중 더 낮은 호출량으로 계획한다.
 
 일반적인 인증·quota·backend 실패 외에 구역 매핑 누락, 해제 전문 지연, 중복/정정 발표를 처리해야 한다. 기상특보가 없다는 응답을 “모든 재난이 안전함”으로 해석하지 않는다.
 

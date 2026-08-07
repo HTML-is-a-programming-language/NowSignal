@@ -2,10 +2,10 @@
 
 - 문서 상태: `planned`
 - 최초 작성일: 2026-08-05
-- 최종 갱신일: 2026-08-05
+- 최종 갱신일: 2026-08-07
 - 연구 Protocol: `v1.1` (`method_decided`, `operation_not_verified`)
 - 개인정보 공식 근거 확인일: 2026-08-05
-- Pilot 실행 상태: `blocked` — Google Forms 실제 생성·계정 보호·국외 처리 고지·삭제 모의 실행 확인 전 수집 금지
+- Pilot 실행 상태: `deferred_manual` — 실제 모집을 승인할 때 Google Forms·계정 보호·국외 처리 고지·삭제 모의 실행을 재개하며, 그 전에는 참여자 데이터 수집 금지
 - 완료한 Interview: 0건
 - 확보한 참여자: 0명
 - 실제 직접 인용: 0건
@@ -29,7 +29,7 @@
 
 | 단계 | 목적 | 계획 표본 | 산출물 | 상태 |
 | --- | --- | --- | --- | --- |
-| Pilot Problem Interview | 질문의 유도성, 시간, 이해도 점검 | 2명 | 수정된 Script와 제외 사유 | `blocked` |
+| Pilot Problem Interview | 질문의 유도성, 시간, 이해도 점검 | 2명 | 수정된 Script와 제외 사유 | `deferred_manual` |
 | Main Problem Interview | 최근 행동, 현재 대안, 문제 빈도·심각도 확인 | 8명 진행 후 검토, 필요 시 최대 12명 | 가명처리 Note, Coding matrix, 가설 상태 | `planned` |
 | Comparative Prototype Test | Raw Data UI와 Action Brief UI의 결정 과정 비교 | 별도 계획 수립 | 과제 완료, 결정 시간, 이해·오류 관찰 | `not_started` |
 | 3주 Beta | 실제 변화·추천·알림의 행동 영향 확인 | Data·Safety Gate 이후 결정 | 실제 사용·오류·알림·피드백 | `not_started` |
