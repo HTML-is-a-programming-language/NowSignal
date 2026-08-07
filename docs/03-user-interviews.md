@@ -1,21 +1,21 @@
 # 사용자 인터뷰 및 모집 계획
 
-- 문서 상태: `planned`
+- 문서 상태: `deferred_until_external_validation`
 - 최초 작성일: 2026-08-05
 - 최종 갱신일: 2026-08-07
 - 연구 Protocol: `v1.1` (`method_decided`, `operation_not_verified`)
 - 개인정보 공식 근거 확인일: 2026-08-05
-- Pilot 실행 상태: `deferred_manual` — 실제 문제 증거 수집을 승인한 뒤 수동 Checklist의 차단 시점에 따라 단계별로 재개하며, 그 전에는 참여자 데이터 수집 금지
+- Pilot 실행 상태: `deferred_manual` — 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 후속 검증을 명시적으로 승인한 뒤 수동 Checklist의 차단 시점에 따라 단계별로 재개
 - 완료한 Interview: 0건
 - 확보한 참여자: 0명
 - 실제 직접 인용: 0건
 - 연구 결과: `not_verified`
 
-이 문서는 실행 계획과 빈 기록 양식이다. 참여자, 발언, 만족도, 행동 결과를 가상으로 채우지 않는다.
+이 문서는 Founder scope를 외부 사용자에게 일반화할 수 있는지 확인하기 위한 후속 실행 계획과 빈 기록 양식이다. 현재 Gate 1이나 Gate 2의 선행 작업이 아니며 참여자, 발언, 만족도, 행동 결과를 가상으로 채우지 않는다.
 
 ## 1. 연구 목적
 
-이번 Problem Interview의 목적은 Solution 선호도를 묻는 것이 아니라 다음을 확인하는 것이다.
+이번 후속 Problem Interview의 목적은 Solution 선호도를 묻는 것이 아니라 [창업자 문제 근거](./founder-problem-evidence.md)의 외부 일반화 가능성과 반증 사례를 확인하는 것이다.
 
 1. 사용자가 최근 실제로 날씨·대기질·주변 상황을 확인해 행동 시각 또는 준비를 바꾼 적이 있는가.
 2. 어떤 출처와 개인 규칙을 어떤 순서로 조합하는가.
@@ -116,7 +116,7 @@ Main 표본에서 다음 맥락을 겹쳐 포함한다 (`planned`).
 
 > 최근 날씨나 대기질을 확인해 외출, 운동, 산책, 빨래, 세차 또는 나들이 시간을 정한 경험에 대해 이야기해 주실 성인 참여자를 찾습니다. 약 40~50분 동안 최근 실제 결정 과정과 사용한 정보에 대해 질문합니다. 특정 제품을 판매하거나 사용을 권하는 자리가 아닙니다. 정확한 주소·GPS·건강정보는 요청하지 않습니다. 기록 방식과 보상은 참여 전에 별도로 안내하고 동의를 받습니다.
 
-실제 모집 글에는 전용 Gmail로 신청·문의할 때 발신주소와 대화 내용이 Google 서비스에서 처리될 수 있다는 사전 고지를 함께 넣는다. Google 국외 처리 고지 검토가 끝나기 전에는 Email 주소나 Form Link를 게시하지 않는다.
+실제 모집 글에는 전용 Gmail로 신청·문의할 때 발신주소와 대화 내용이 Google 서비스에서 처리될 수 있다는 사전 고지를 함께 넣는다. Google 국외 처리 고지 검토가 끝나기 전에는 외부 참여자용 모집글에 Email 주소를 신청·문의 채널로 게시하거나 Form Link를 전달하지 않는다.
 
 보상 금액과 지급 수단은 아직 정해지지 않았다 (`not_verified`). 확정되지 않은 보상을 모집 글에 쓰지 않는다.
 
@@ -163,14 +163,16 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 
 ### 7.3 수집 항목과 보유·삭제
 
+응답 수집 전에 Wave ID와 변경 불가능한 `waveRetentionAnchorDate`(예정 종료일)를 정한다. 기존 참여자에게 안내한 Anchor를 뒤로 미루지 않는다. Wave를 더 일찍 종료·중단하면 실제 종료·중단일 +30일을 추가 상한으로 적용해 삭제일을 앞당긴다.
+
 | 자료 유형 | 최소 항목·목적 | 활성 서비스에서 삭제하는 시점 |
 | --- | --- | --- |
 | 필수 동의를 거부한 제출 | 동의 선택, 제출 시각; 추가 질문 없이 종료됐는지 확인 | 확인 후 즉시 |
 | 부적격 Screening | `researchCode`와 부적격 분기 전까지 실제로 입력된 성인·최근 사례 답변; 적격 판단 | 부적격 판정일 + 7일 이내 |
 | 적격이지만 미선정·미참여 Screening | 전체 Form A 답변; 선정과 일정 조율 | 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내 |
-| Interview 참여자의 Screening·Consent | Protocol version, 제시 시각, 필수·선택 동의, Form A 답변, 예정 삭제일; 참여 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
-| 구조화 Interview Note | `researchCode`, 시·도, 활동, 출처 순서, 결정 과정, Theme와 가설 근거 | Interview 후 90일 또는 Gate 1 결정 후 30일 중 먼저 도래한 때 |
-| 일정·철회 Gmail 대화 | 발신주소, 일정, `researchCode`, 요청 범위; 조율·권리 요청 처리 | Interview·보상 완료 또는 철회 처리 완료 후 14일 이내 |
+| Interview 참여자의 Screening·Consent | Protocol version, 제시 시각, 필수·선택 동의, Form A 답변, 예정 삭제일; 참여 근거 | `min(Interview일 +90일, waveRetentionAnchorDate +30일, 실제 Wave 종료·중단일 +30일(더 이른 경우))` |
+| 구조화 Interview Note | `researchCode`, 시·도, 활동, 출처 순서, 결정 과정, Theme와 가설 근거 | `min(Interview일 +90일, waveRetentionAnchorDate +30일, 실제 Wave 종료·중단일 +30일(더 이른 경우))` |
+| 일정·철회 Gmail 대화 | 발신주소, 일정, `researchCode`, 요청 범위; 조율·권리 요청 처리 | 해당 사람의 연락 목적 종료일(문의 처리 완료, 필수 동의 거부 확인, 부적격 판정, 미선정·미참여 확정, Interview·보상 완료 또는 철회 처리 완료) + 14일 이내 |
 | 공개 가능한 종합 결과 | 재식별 위험을 검토한 Theme, 분자·분모, 방법과 한계 | 프로젝트 기록 정책에 따름 |
 
 - 목적을 먼저 달성하면 표의 최대 기간을 기다리지 않고 삭제한다.
@@ -205,7 +207,7 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 >
 > 개인정보 처리 주체는 **NowSignal**이며 문의·열람·정정·철회·삭제 요청은 **html.programming.language@gmail.com**으로 받습니다. 이 연구는 최근 날씨·대기질·주변 상황을 확인해 활동 시각이나 준비를 정한 실제 과정을 이해하기 위한 약 40~50분의 대면 Interview입니다. 제품 구매나 긍정적 평가를 요구하지 않습니다.
 >
-> 일정 조율과 철회 처리를 위해 전용 Gmail에서 발신 Email 주소, 대화 내용, 연구 Code와 확정 일정을 처리하며 Interview·보상 또는 철회 처리 완료 후 14일 이내 삭제합니다. Form의 필수 수집 항목은 무작위 연구 Code, 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 위치 권한 성향, 가능한 시간대, 삭제·철회 안내 확인, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 구조화 연구 Note와 동의 기록입니다. 이름·Email·전화번호·정확한 주소·GPS·이동 경로·건강정보·계정 Password는 Form에서 요청하지 않습니다. 필수 수집·이용에 동의하지 않으면 이 Interview에는 참여할 수 없지만 그 밖의 불이익은 없습니다.
+> 일정 조율과 철회 처리를 위해 전용 Gmail에서 발신 Email 주소, 대화 내용, 연구 Code와 확정 일정을 처리하며 해당 사람의 연락 목적이 끝난 날(문의 처리 완료, 필수 동의 거부 확인, 부적격 판정, 미선정·미참여 확정, Interview·보상 완료 또는 철회 처리 완료)부터 14일 이내 삭제합니다. Form의 필수 수집 항목은 무작위 연구 Code, 성인·최근 사례 적격 여부, 시·도 수준 지역, 활동 유형, 사용한 정보 출처와 순서, 위치 권한 성향, 가능한 시간대, 삭제·철회 안내 확인, 의사결정 과정, 위치 권한·근거·알림에 대한 의견, 구조화 연구 Note와 동의 기록입니다. 이름·Email·전화번호·정확한 주소·GPS·이동 경로·건강정보·계정 Password는 Form에서 요청하지 않습니다. 필수 수집·이용에 동의하지 않으면 이 Interview에는 참여할 수 없지만 그 밖의 불이익은 없습니다.
 >
 > 일정·철회 Gmail 대화, 동의·Screening 응답과 연구 Note는 Gmail, Google Forms와 Google Drive에서 처리·보관됩니다. Gmail 송수신과 Form 입력·제출 시 Google LLC 및 서비스 운영 계열사에 전송되며 Google은 전 세계의 Server에서 정보를 처리할 수 있다고 밝힙니다. 이전되는 항목, 국가, 시점·방법, 이전받는 자와 연락처, 목적, 보유기간의 최종 고지는 **[국외 처리 고지 검토 완료값]**으로 제시합니다. 국외 처리에 동의하지 않을 수 있으나 이 Google 기반 연구에는 참여할 수 없고 그 밖의 불이익은 없습니다.
 >
@@ -226,19 +228,19 @@ Pilot의 공식 원자료 저장 도구는 다음 두 Google Form과 해당 Goog
 
 ### 7.7 실행 전 Privacy Preflight
 
-아래 작업은 현재 모두 실행 Trigger 전까지 유예한다. 모든 항목을 한 번에 선행하지 않고 차단 시점별로 완료한다. 모집 안내와 전용 Email 공개 전에는 1단계, Form A Link 전달 전에는 2단계, 첫 Interview 전에는 3단계를 통과해야 한다. 상세 절차는 [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md)와 [사용자 수동 작업 체크리스트](./manual-action-checklist.md)를 따른다.
+아래 작업은 현재 모두 실행 Trigger 전까지 유예한다. 모든 항목을 한 번에 선행하지 않고 차단 시점별로 완료한다. 외부 모집 안내에 전용 Email을 게시·사용하기 전에는 1단계, Form A Link 전달 전에는 2단계, 첫 Interview 전에는 3단계를 통과해야 한다. 상세 절차는 [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md)와 [사용자 수동 작업 체크리스트](./manual-action-checklist.md)를 따른다.
 
 | 점검 항목 | 작업 상태 | 근거 상태 | 차단 시점 | 통과 증거 |
 | --- | --- | --- | --- | --- |
 | 개인정보 처리 주체 | `done` | `user_confirmed` | 모든 단계 | `NowSignal` |
-| 비공개 문의·철회 연락처 | `deferred_manual` | `configured_not_tested` | 1단계: 모집 안내·Email 공개 전 | `html.programming.language@gmail.com` 송수신·Spam 점검 |
+| 전용 문의·철회 연락처 | `deferred_manual` | `configured_not_tested` | 1단계: 외부 모집물에 Email 게시·사용 전 | `html.programming.language@gmail.com` 송수신·Spam 점검 |
 | Interview 방식 | `done` | `user_confirmed` | 3단계: 첫 Interview 전 | 대면 1:1, 무녹음·무녹화·무전사 |
 | Form A 생성·소유권·분기 | `deferred_manual` | `partial_user_verified` | 2단계: Form A Link 전달 전 | 지정 계정 소유, 공동편집자 0명, Drive 제한, 최종 분기·설정 재점검 |
 | Form B 생성·소유권·접근 제한 | `deferred_manual` | `not_verified` | 3단계: 첫 Interview 전 | 지정 계정 소유, 공동편집자 0명, 응답자 소유 계정 제한 |
-| Google 계정 보호 | `deferred_manual` | `not_verified` | 1단계: 모집 안내·Email 공개 전 | 2단계 인증 또는 Passkey와 복구 수단 확인 |
+| Google 계정 보호 | `deferred_manual` | `not_verified` | 1단계: 외부 모집물에 Email 게시·사용 전 | 2단계 인증 또는 Passkey와 복구 수단 확인 |
 | Form 수집·공유 설정 | `deferred_manual` | `partial_recheck_required` | Form별 Link 전달·사용 전 | Email·파일 수집, 결과 요약, 응답 수정, Draft 자동저장 설정 확인 |
 | 외부 저장·연동 차단 | `deferred_manual` | `form_a_sheet_absent_others_not_verified` | Form별 Link 전달·사용 전 | 연결 Sheet·Add-on·Script·Download·Drive·Gmail Offline·Drive 동기화·Mail client 연결 없음 |
-| Google 국외 처리 고지·별도 동의 | `deferred_manual` | `specialist_review_required` | 1단계: 모집 안내·Email 공개 전 | 실제 처리 국가 표현을 포함한 최종 문안 검토 |
+| Google 국외 처리 고지·별도 동의 | `deferred_manual` | `specialist_review_required` | 1단계: 외부 모집물에 Email 게시·사용 전 | 실제 처리 국가 표현을 포함한 최종 문안 검토 |
 | 자료별 예정 삭제일 | `deferred_manual` | `not_verified` | 2단계: Form A Link 전달 전 | 가상 기준일로 동의 거부·부적격·적격 미참여·Interview 참여의 계산 결과 확인 |
 | Form A 제출·분기·삭제 모의 실행 | `deferred_manual` | `not_verified` | 2단계: Form A Link 전달 전 | 거부·부적격·적격 응답의 저장·개별 삭제·재조회 결과 |
 | Form B 제출·삭제 모의 실행 | `deferred_manual` | `not_verified` | 3단계: 첫 Interview 전 | 가상 Note 제출·개별 삭제·재조회 결과 |
@@ -409,7 +411,9 @@ Problem Interview는 제품 만족도나 시장 규모를 측정하지 않는다
 
 표본이 작으므로 백분율만으로 일반화하지 않고 분자·분모, 사례 맥락, 직접 근거를 함께 보고한다. “사용자가 좋아했다” 같은 요약은 실제 행동 근거 없이 쓰지 않는다.
 
-## 13. Comparative Prototype Test로 넘길 조건
+## 13. 외부 Comparative Prototype Test로 넘길 조건
+
+이 조건은 외부 참여자를 대상으로 Solution을 비교하기 위한 기준이며 Founder scope의 Gate 3 내부 설계를 막지 않는다.
 
 다음 조건을 충족할 때만 Solution 비교로 진행한다 (`planned_threshold`).
 
@@ -430,7 +434,7 @@ Problem Interview는 제품 만족도나 시장 규모를 측정하지 않는다
 - 참여자 표시 프로젝트명 `NowSignal`: `done`
 - 대면 1:1·무녹음 Pilot 방식: `done`
 - Google Forms 기반 Cloud-only 운영 방식: `done` (`method_decided`)
-- 비공개 문의·철회 Email: `configured_not_tested`
+- 전용 문의·철회 Email: `configured_not_tested`
 - 모집 채널과 게시 승인: `not_verified`
 - 참여 보상과 예산: `not_verified`
 - Form A 최종 설정 재점검: `deferred_manual` (`partial_user_verified`)

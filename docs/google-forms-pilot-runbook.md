@@ -1,6 +1,6 @@
 # Google Forms Pilot 운영 설계서
 
-- 문서 상태: `paused_until_pilot_recruitment`
+- 문서 상태: `deferred_until_external_validation`
 - 최초 작성일: 2026-08-05
 - 최종 갱신일: 2026-08-07
 - 적용 Protocol: [사용자 인터뷰 및 모집 계획](./03-user-interviews.md) v1.1
@@ -12,11 +12,11 @@
 
 ## 0. 실행 시점
 
-Google Forms 완성은 NowSignal 제품 정의나 Desk research의 선행조건이 아니다. 실제 참여자를 모집하거나 응답을 수집하기 직전에만 이 Runbook을 재개한다.
+Google Forms 완성은 Gate 1 Founder scope, Gate 2 또는 Gate 3 내부 설계의 선행조건이 아니다. 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 명시적 승인을 받은 뒤 이 Runbook을 재개한다.
 
 - 현재 Form A는 부분 설정 상태로 미게시 유지한다.
 - Form B, 계정 보호, 최종 동의 문안, Dry-run과 철회 Email 검증은 `deferred_manual`이다.
-- 이 항목들이 검증되기 전에는 실제 참여자 데이터만 수집하지 않는다. 제품 코드는 별도의 Gate 1·2 승인 조건에 따라 계속 보류한다.
+- 이 항목들이 검증되기 전에는 실제 참여자 데이터만 수집하지 않는다. 제품 코드는 별도의 Gate 2 통과·Gate 3 설계 승인 조건에 따라 계속 보류한다.
 - 재개 Trigger와 사용자 작업은 [사용자 수동 작업 체크리스트](./manual-action-checklist.md)를 따른다.
 
 ## 1. 확정한 운영 원칙
@@ -156,11 +156,11 @@ Browser와 Google이 Cookie·Cache·IP·기기정보를 전혀 처리하지 않�
 3. Drive에서 Form A 외에 응답 Sheet가 생성되지 않았는지 확인한다.
 4. 개별 응답 보기에서 가상 응답을 모두 삭제하고 Page를 새로 고친 뒤 활성 응답에 남지 않았는지 확인한다.
 5. 실수로 Sheet를 연결하는 시험은 하지 않는다. Sheet가 이미 존재한다면 Form 연결을 끊고 Sheet 파일과 Drive 휴지통을 삭제한 뒤 원인을 기록한다.
-6. 가상 기준일로 다음 네 보유기간을 검산한다.
+6. 실제 응답 수집 전에 Wave ID와 뒤로 미룰 수 없는 `waveRetentionAnchorDate`를 정하고, 가상 기준일로 다음 네 보유기간을 검산한다.
    - 필수 동의 거부: 확인 후 즉시
    - 부적격 Screening: 부적격 판정일 + 7일 이내
    - 적격이지만 미선정·미참여: 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내
-   - Interview 참여 Consent·Screening·Note: `min(Interview일 + 90일, Gate 1 결정일 + 30일)`
+   - Interview 참여 Consent·Screening·Note: `min(Interview일 +90일, waveRetentionAnchorDate +30일, 실제 Wave 종료·중단일 +30일(더 이른 경우))`
 
 ### 5.3 3단계 — Form B
 
@@ -208,8 +208,8 @@ Network가 끊기면 로컬 메모로 계속 기록하지 않는다. Interview�
 - 필수 동의 거부: 확인 후 즉시
 - 부적격 Screening: 부적격 판정일 + 7일 이내
 - 적격이지만 미선정·미참여 Screening: 미선정·미참여 확정일 또는 모집 종료일 중 먼저 도래한 날 + 7일 이내
-- Interview 참여자의 Consent·Screening·Note: `min(Interview일 + 90일, Gate 1 결정일 + 30일)`
-- 일정·철회 Gmail 대화: Interview·보상 또는 철회 처리 완료일 + 14일 이내
+- Interview 참여자의 Consent·Screening·Note: `min(Interview일 +90일, waveRetentionAnchorDate +30일, 실제 Wave 종료·중단일 +30일(더 이른 경우))`
+- 일정·철회 Gmail 대화: 해당 사람의 연락 목적 종료일(문의 처리 완료, 필수 동의 거부 확인, 부적격 판정, 미선정·미참여 확정, Interview·보상 완료 또는 철회 처리 완료) + 14일 이내
 - 목적을 더 일찍 달성하면 예정일을 기다리지 않고 삭제
 
 Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반적으로 약 2개월이 걸리고 암호화된 Backup에는 최대 6개월 남을 수 있으며, 보안·사기 방지·법적 요구 같은 제한된 목적에는 일부 정보를 더 오래 보관할 수 있다고 공개한다. 참여자에게는 활성 Form에서 삭제한 날과 이 제공자 측 한계를 함께 알린다.
@@ -228,7 +228,7 @@ Google은 계정에서 삭제를 시작한 뒤 전체 시스템 삭제에 일반
 | Sheet·Add-on·Script·Offline·동기화 없음 | `deferred_manual` | Form A Sheet 없음만 확인, 나머지 `not_verified` | 2026-08-06 |
 | Google 국외 처리 고지 최종 검토 | `deferred_manual` | `specialist_review_required` | — |
 | 가상 응답 제출·개별 삭제·재조회·삭제일 계산 | `deferred_manual` | `not_verified` | — |
-| 철회 Email 송수신·Spam·영구 삭제 | `deferred_manual` | `not_verified` | — |
+| 철회 Email 송수신·Spam·영구 삭제 | `deferred_manual` | `configured_not_tested` | — |
 
 ### 2026-08-06 실행 기록
 

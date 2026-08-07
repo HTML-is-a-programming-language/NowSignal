@@ -74,7 +74,7 @@ NowSignal AI와의 연결은 다음과 같다 (`hypothesis`).
 
 NowSignal AI와의 연결은 다음과 같다 (`hypothesis`).
 
-- 문제 Interview에서 시작해 PWA UX, Provider API, PostgreSQL state, Agent workflow, Eval까지 연결하는 end-to-end 범위
+- 창업자 문제 기록에서 시작해 후속 외부 검증, PWA UX, Provider API, PostgreSQL state, Agent workflow, Eval까지 연결하는 end-to-end 범위
 - React·TypeScript 기반 Today Brief와 Evidence Drawer, 일반 코드와 Agent의 명시적 경계
 - Queue의 Retry·idempotency, Trace·observability, human-readable failure state, Alert deduplication
 - AI를 모든 단계에 넣지 않고 데이터 Validation·Score를 deterministic code에 남기는 제품 판단

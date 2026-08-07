@@ -7,7 +7,7 @@
 - 공통 계약: [공공 데이터 카탈로그](./09-public-data-catalog.md) 2.2
 - 실행 검증: [Phase 1 Provider 실검증 Runbook](./provider-validation-runbook.md)
 
-이 문서는 제품 설계를 확정하지 않는다. 실제 Contract·Freshness 결과와 사용자 문제 증거가 생긴 뒤 승인해야 하며, 그 전에는 제품 코드에 반영하지 않는다.
+이 문서는 제품 설계를 확정하지 않는다. [문서화된 Founder scope](./founder-problem-evidence.md)와 실제 Contract·Freshness 결과를 기준으로 Gate 3에서 승인해야 하며, 그 전에는 제품 코드에 반영하지 않는다.
 
 ## 1. 입력 상태 축
 
@@ -82,4 +82,4 @@
 - 사용자에게 Source 충돌·Fallback·마지막 성공시각을 어떤 UI 우선순위로 표시할 것인가?
 - 공식 특보와 일반 Weather가 충돌할 때 UI·알림·기록 우선순위는 무엇인가?
 
-이 질문, Gate 1 실제 문제 증거와 [Provider 실검증](./provider-validation-runbook.md)이 해결되기 전에는 전체 Fail-closed Matrix를 `approved`로 바꾸거나 제품 코드를 작성하지 않는다.
+이 질문과 [Provider 실검증](./provider-validation-runbook.md)이 Founder scope에 맞게 해결되기 전에는 전체 Fail-closed Matrix를 `approved`로 바꾸거나 제품 코드를 작성하지 않는다.

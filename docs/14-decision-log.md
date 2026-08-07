@@ -17,8 +17,8 @@
 - 단점: 여러 Provider의 품질과 License에 의존하며 지역·시간 정규화가 어렵다.
 - 포기한 장점: 계정 연동에서 얻는 높은 개인화와 범용 대화 인터페이스의 넓은 질의 범위.
 - 위험: 사용자가 이미 날씨 앱으로 충분하다고 느낄 수 있다.
-- 검증 방법: 문제 인터뷰, 대안 관찰, Raw Data UI와 Action Brief UI 비교, 역사 데이터 backtest.
-- 재검토 조건: 실제 인터뷰에서 행동 시간 결정 문제가 반복적으로 관찰되지 않거나 공식 데이터로 핵심 결정을 지원할 수 없을 때.
+- 검증 방법: 창업자 문제 기록, Provider 실검증, 후속 문제 인터뷰, Raw Data UI와 Action Brief UI 비교, 역사 데이터 backtest.
+- 재검토 조건: 창업자 경험의 핵심 문제를 공식 데이터로 지원할 수 없거나 후속 외부 검증에서 반복 문제와 제품 가치가 반증될 때.
 - 관련 코드·문서: `docs/00-project-charter.md`, `docs/02-problem-hypotheses.md`
 
 ## DL-002 — 로그인 없는 기본 사용
@@ -161,17 +161,19 @@
 
 ## DL-011 — 외부 수동 작업의 Just-in-time 재개
 
+- 상태: 수동 작업의 Just-in-time 원칙은 유지하며, Gate 1 재개 시점은 DL-013이 대체함
+
 - 날짜: 2026-08-07
 - 상황: Google Forms 완성, 계정 보호, 실제 참여자 모집, API 활용신청·키 발급과 기관 문의는 사용자의 화면 조작·판단·외부 제출이 필요하지만, 제품 정의 전부터 모두 완료할 필요는 없다.
 - 선택지: 모든 외부 수동 작업을 즉시 선행, 작업마다 수시 요청, Codex가 완료 가능한 비코드 준비를 먼저 끝내고 명시적 Trigger에서 최소 수동 작업만 재개.
 - 선택: Form A는 부분 확인 상태로 미게시 유지하고 Form B·계정·법적 검토·Dry-run은 실제 Pilot 증거 수집 승인 시 단계별로 재개한다. API 신청·키 입력·기관 문의는 실호출 또는 Production 판정 Trigger까지 `deferred_manual`로 둔다.
 - 선택 이유: 아직 필요하지 않은 계정·법적·참여자 작업을 강요하지 않으면서도, 실행 직전 차단 조건과 완료 증거를 잃지 않기 위함이다.
 - 장점: 제품 코드 없이 문서·Runbook·Fail-closed 준비를 끝낼 수 있고, 사용자는 필요한 시점에 최소 작업만 수행한다.
-- 단점: Gate 1 실제 문제 증거와 Gate 2 실호출 증거는 계속 `not_verified`이며 두 Gate를 통과할 수 없다.
+- 단점: 외부 사용자 증거와 Gate 2 실호출 증거는 Trigger 전까지 `not_verified` 또는 `not_run`이며 시장 검증과 Gate 2를 통과할 수 없다.
 - 포기한 장점: Form·키·외부 답변을 미리 확보해 실행 전환 시간을 줄이는 것.
 - 위험: `deferred_manual`을 완료로 오해하거나 부분 확인된 Form A를 게시할 수 있다.
 - 검증 방법: Workflow 상태와 근거 상태를 분리하고, 각 Trigger의 차단 시점·완료 증거를 Checklist로 대조한다.
-- 재검토 조건: 사용자가 Pilot 문제 증거 수집 또는 API 실호출을 명시적으로 승인할 때.
+- 재검토 조건: 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전 후속 검증이나 API 실호출을 사용자가 명시적으로 승인할 때.
 - 관련 문서: [사용자 수동 작업 체크리스트](./manual-action-checklist.md), [Google Forms Pilot 운영 설계서](./google-forms-pilot-runbook.md), [Provider 실검증 Runbook](./provider-validation-runbook.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md)
 
 ## DL-012 — Phase 1 Provider 범위 재판정
@@ -185,8 +187,26 @@
 - 포기한 장점: 첫 Phase부터 모든 지역 정보와 재난 알림을 통합하는 넓은 범위.
 - 위험: AirKorea 조건이 해소되지 않으면 필수 대기질 Provider가 없어 Phase 1 범위를 더 줄여야 한다.
 - 검증 방법: 인증키 Contract smoke, 14일 Canary, 발급 시점 약관 Snapshot과 Provider별 서면 확인.
-- 재검토 조건: Gate 1에서 우선 활동이 달라지거나 Provider 이용조건·Coverage·Quota가 바뀔 때.
+- 재검토 조건: Founder scope의 우선 활동이 달라지거나 Provider 이용조건·Coverage·Quota가 바뀔 때.
 - 관련 문서: [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider 실검증 Runbook](./provider-validation-runbook.md)
+
+## DL-013 — 창업자 문제 근거로 Gate 1 범위 전환
+
+- 날짜: 2026-08-07
+- 상황: 제품 책임자가 본인이 겪은 불편에서 NowSignal을 시작했으므로 외부 Interview를 제품 탐색의 즉시 선행조건으로 두지 않고 다음 비코드 작업으로 진행하기로 했다.
+- 선택지: 외부 문제 Interview 전까지 Gate 1 차단 유지, 가상 사용자 증거로 대체, 창업자 자기보고를 범위가 제한된 실제 근거로 기록하고 외부 검증을 후속 단계로 이동.
+- 선택: 창업자 자기보고 7개 패턴을 `founder_lived_experience_n1`로 기록한다. Gate 1은 시장 검증이 아니라 Founder Problem Fit으로 재정의해 `passed_for_founder_scope`로 판단하고, 외부 수요·빈도·심각도·전환 의향은 `not_verified`로 유지한다.
+- 초기 범위: 가까운 외출·산책·러닝의 당일 시각 결정에 필요한 강수·기온·습도·미세먼지·초미세먼지와 준비 정보를 우선한다. 세차·빨래는 후속 활동 규칙, 여행·등산·캠핑·침수·도로·인파·CCTV는 별도 Provider 검토 뒤 확장한다.
+- 선택 이유: 가상의 인터뷰를 만들지 않고 실제 창업자 문제에서 탐색을 시작하면서도 n=1 근거를 시장 수요로 과장하지 않기 위함이다.
+- 장점: Google Forms와 외부 모집을 제품 설계의 즉시 차단 조건에서 제외하고, 실제 불편에 맞춰 Gate 2 Provider 범위를 좁힐 수 있다.
+- 단점: 사용자·연구자·제작자가 같아 확인 편향이 크고 외부 사용자가 같은 문제를 겪는지 알 수 없다.
+- 포기한 장점: 구현 전에 독립 표본으로 문제 빈도·대안·전환 비용을 반증할 기회.
+- 위험: 창업자 취향에 과적합하거나 Founder scope 통과를 시장 검증으로 잘못 표현할 수 있다.
+- 검증 방법: 창업자 기록에는 출처·범위·미확인 필드를 표시하고 외부 지표를 계산하지 않는다. 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 명시적 승인을 받고 기존 Interview Protocol을 재개한다.
+- 연구 보관기한 변경: Gate 1 결정일이 후속 Interview보다 앞서므로 수집 전에 `waveRetentionAnchorDate`를 고정하고, 참여자의 Screening·Consent·Note는 `min(Interview일 +90일, Anchor +30일, 실제 Wave 종료·중단일 +30일(더 이른 경우))`로 계산한다. Gmail 대화는 해당 사람의 연락 목적 종료일(문의 처리 완료, 필수 동의 거부 확인, 부적격 판정, 미선정·미참여 확정, Interview·보상 완료 또는 철회 처리 완료) +14일로 계산한다. DL-008의 `Gate 1 결정일 +30일` 기준은 이 결정이 대체한다.
+- 코드 경계: Gate 1 전환은 제품 코드 승인이 아니다. Gate 2 통과와 Gate 3 설계 승인 전에는 제품 코드를 작성하지 않는다.
+- 재검토 조건: 외부 참여자 모집·연락·응답 수집, 공개 Beta·출시·홍보, 시장 수요 주장, 유료 운영 확대, 창업자 경험에 없는 활동·지역 확장 또는 Provider 조건으로 핵심 범위를 지원할 수 없을 때.
+- 관련 문서: [창업자 문제 근거](./founder-problem-evidence.md), [프로젝트 헌장](./00-project-charter.md), [문제 가설](./02-problem-hypotheses.md), [사용자 인터뷰 및 모집 계획](./03-user-interviews.md), `TASKS.md`
 
 ## 다음 Decision Log 예정 항목
 

@@ -8,6 +8,7 @@
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
 - 실제 호출 절차와 Evidence 형식: [provider-validation-runbook.md](./provider-validation-runbook.md)
 - 장애·오래된 값·충돌 시 출력 제안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
+- Founder scope와 우선 활동: [founder-problem-evidence.md](./founder-problem-evidence.md)
 - Gate 1·2 비코드 준비 감사: [gate-1-2-readiness-audit.md](./gate-1-2-readiness-audit.md)
 
 ## 1. 결론
@@ -267,7 +268,7 @@ RFC 8030에 따라 TTL 만료 전에도 Push Service가 저장기간을 줄일 �
 
 ## 6. 단계별 필수 확인 작업
 
-아래 1~2는 Gate 2의 기술 실검증에 필요하다. AirKorea를 Phase 1 필수 Provider로 유지한다면 3의 파생·Cache·AI·위치 관련 적용 범위 확인도 최종 Gate 2 통과 조건이다. 운영계정 자체와 4~7은 Production 또는 해당 후속 Phase의 차단 조건이며 현재 Gate 2 비코드 준비 완료를 막지는 않는다.
+아래 1~2는 외출·산책·러닝 Founder scope의 Gate 2 기술 실검증에 필요하다. 미세먼지가 핵심 판단 입력으로 보고돼 AirKorea를 Phase 1 필수 Provider로 유지하므로 3의 파생·Cache·AI·위치 관련 적용 범위 확인도 최종 Gate 2 통과 조건이다. 운영계정 자체와 4~7은 Production 또는 해당 후속 Phase의 차단 조건이며 현재 Gate 2 비코드 준비 완료를 막지는 않는다.
 
 1. 공공데이터포털 개발키를 발급해 KMA·AirKorea 각 endpoint의 schema fixture와 오류 fixture를 보관한다.
 2. 14일 canary로 발표/관측시각 대비 수집시각, 결측률, 지역 coverage, quota 사용량을 기록한다. 원 GPS는 기록하지 않는다.

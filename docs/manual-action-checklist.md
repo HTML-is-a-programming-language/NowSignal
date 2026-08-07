@@ -11,11 +11,11 @@
 - 사용자가 수행하기 전에는 완료나 검증으로 기록하지 않는다.
 - 실제 Form URL·ID, `researchCode`, 참여자 응답, 복구 수단 값은 공개 저장소에 기록하지 않는다.
 
-## Gate 1 수동 Trigger
+## 후속 외부 사용자 검증 수동 Trigger
 
-수동 작업을 한 번에 요구하지 않는다. 사용자가 실제 문제 증거 수집을 승인한 뒤 아래 세 단계의 차단 시점에 맞춰 최소 항목만 재개한다.
+Gate 1 Founder scope는 통과했으며 아래 작업은 제품 설계의 현재 선행조건이 아니다. 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 사용자가 외부 검증을 명시적으로 승인한 뒤 세 단계의 차단 시점에 맞춰 최소 항목만 재개한다.
 
-### 1단계 — 모집 안내·전용 Email 공개 전
+### 1단계 — 외부 모집물에 전용 Email 주소 게시·사용 전
 
 | 수동 작업 | 작업 상태 | 근거 상태 | 완료 증거 |
 | --- | --- | --- | --- |
@@ -31,7 +31,7 @@
 | Form A 최종 문안·설정 재점검 | `deferred_manual` | `partial_user_verified` | 소유자 1명, 공동편집자 0명, Drive 제한, 응답 설정 Checklist |
 | Form A의 Sheet·Add-on·Offline·동기화·Mail client 없음 확인 | `deferred_manual` | Sheet 없음만 확인, 나머지 `not_verified` | 항목별 통과 여부 |
 | Form A 가상 응답 Dry-run | `deferred_manual` | `not_verified` | 거부·부적격·적격 분기, 제출·개별 삭제·재조회 결과 |
-| 자료별 예정 삭제일 계산 | `deferred_manual` | `not_verified` | 가상 기준일로 동의 거부 즉시, 부적격 판정 +7일, 적격 미참여 확정/모집 종료 중 이른 날 +7일, Interview 참여 `min(+90일, +30일)` 검산 |
+| Wave ID·보관 Anchor와 자료별 예정 삭제일 계산 | `deferred_manual` | `not_verified` | 수집 전 `waveRetentionAnchorDate` 고정. 동의 거부 즉시, 부적격 판정 +7일, 적격 미참여 확정/모집 종료 중 이른 날 +7일, Interview 참여 `min(Interview일 +90일, Anchor +30일, 실제 조기 종료·중단일 +30일)` 검산 |
 
 ### 3단계 — 첫 Interview 전
 
@@ -45,7 +45,7 @@
 
 | 수동 작업 | 작업 상태 | 재개 조건 | 완료 증거 |
 | --- | --- | --- | --- |
-| 2명 Pilot Interview | `deferred_manual` | 사용자가 Gate 1 실제 문제 증거 수집을 명시적으로 승인하고 1~3단계 통과 | 비식별 집계, Script 문제와 반증 결과 |
+| 2명 Pilot Interview | `deferred_manual` | 사용자가 후속 외부 사용자 검증을 명시적으로 승인하고 1~3단계 통과 | 비식별 집계, Script 문제와 반증 결과 |
 | Main Interview | `planned` | Pilot Script·운영 결과를 검토하고 별도 승인 | 실제 표본 수, 비식별 집계와 가설별 반증 결과 |
 
 Form A는 2026-08-06에 지정 계정 소유, 공동편집자 0명, 편집자 일반 접근 제한, 미게시, 응답 0건, Sheet 미연결 상태를 화면에서 확인했다. 질문 구조와 다섯 분기 미리보기는 사용자가 정상 동작을 확인했다. 최종 문안, 수정 요청한 일부 응답 설정, 계정 보호, Form B와 Dry-run은 검증 완료로 간주하지 않는다.

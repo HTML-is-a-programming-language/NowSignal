@@ -3,14 +3,14 @@
 - 문서 상태: `working_draft`
 - 최초 작성일: 2026-08-05
 - 최종 갱신일: 2026-08-07
-- 현재 Gate: Gate 1 문제 검증·Gate 2 Public Data Feasibility 병행 (`in_progress`)
-- 근거 원칙: 실제 조사·인터뷰·실험 결과가 없는 항목은 `hypothesis`, `planned`, `not_verified` 중 하나로 표시한다.
+- 현재 Gate: Gate 1 Founder Problem Fit `passed_for_founder_scope`, Gate 2 Public Data Feasibility `in_progress`
+- 근거 원칙: 창업자 자기보고, 외부 사용자 조사와 실행 결과를 분리한다. 다른 사용자에게 일반화하지 않은 창업자 근거는 `founder_supported_n1`로 표시한다.
 
 ## 1. 프로젝트 정의
 
 NowSignal AI는 사용자의 현재 위치 또는 직접 선택한 지역과 현재 시간에 맞는 공식 공개 데이터를 결합해, 오늘의 행동 시점·준비물·피해야 할 시간·대안을 근거와 함께 제시하는 Proactive Local Intelligence Agent다.
 
-이 정의는 제품 방향에 대한 `hypothesis`이며 사용자 수요가 검증됐다는 뜻이 아니다. 2026-08-05 현재 실제 사용자 인터뷰, Prototype Usability Test, Beta, 운영 지표는 모두 `not_verified`다.
+이 정의는 [창업자 문제 근거](./founder-problem-evidence.md)에 기록한 7개 불편 패턴을 바탕으로 선택한 제품 방향이다. 창업자 범위에서는 탐색을 계속하기로 결정했지만 외부 사용자 수요, Prototype Usability Test, Beta와 운영 지표는 모두 `not_verified`다.
 
 ## 2. 해결하려는 문제
 
@@ -18,10 +18,10 @@ NowSignal AI는 사용자의 현재 위치 또는 직접 선택한 지역과 현
 
 > 날씨·대기질·공식 안전정보·주변 상황을 여러 화면에서 확인한 뒤 외출, 운동, 산책, 빨래, 세차 또는 나들이 시간을 정하는 사용자는 정보를 행동 결정으로 바꾸는 데 반복적인 비교와 판단을 해야 할 수 있다.
 
-- 상태: `hypothesis`
-- 확인된 사용자 발언: 없음 (`not_verified`)
-- 확인된 문제 빈도·심각도: 없음 (`not_verified`)
-- 확인 방법: 문제 인터뷰, 현재 대안 관찰, Raw Data UI와 Action Brief UI 비교, 실사용 Beta
+- 창업자 근거: 정보 통합과 행동 결정의 어려움 7개 패턴 (`founder_supported_n1`)
+- 외부 사용자 발언: 없음 (`not_verified`)
+- 외부 문제 빈도·심각도: 없음 (`not_verified`)
+- 후속 확인 방법: 문제 인터뷰, 현재 대안 관찰, Raw Data UI와 Action Brief UI 비교, 실사용 Beta
 
 ## 3. 대상 사용자와 Job-to-be-Done
 
@@ -35,7 +35,7 @@ NowSignal AI는 사용자의 현재 위치 또는 직접 선택한 지역과 현
 
 > 오늘 특정 활동을 하려 할 때, 흩어진 최신 정보를 직접 해석하는 부담을 줄이고, 근거를 확인할 수 있는 실행 가능한 시간과 대안을 선택하고 싶다.
 
-대상 사용자 세분화와 우선순위는 [문제 가설](./02-problem-hypotheses.md)과 [사용자 인터뷰 및 모집 계획](./03-user-interviews.md)에서 다루며, 인터뷰 전에는 확정하지 않는다. [목표 직무 분석](./01-target-job-analysis.md)은 사용자 세분화가 아니라 이 프로젝트가 보여줄 직무 역량의 근거다.
+초기 Founder scope는 가까운 외출·산책·러닝의 당일 시각 결정으로 제한한다. 외부 대상 사용자 세분화와 우선순위는 아직 확정하지 않으며 [문제 가설](./02-problem-hypotheses.md)과 후속 [사용자 인터뷰 및 모집 계획](./03-user-interviews.md)에서 검증한다. [목표 직무 분석](./01-target-job-analysis.md)은 사용자 세분화가 아니라 이 프로젝트가 보여줄 직무 역량의 근거다.
 
 ## 4. 가치 제안
 
@@ -135,18 +135,18 @@ RAG·Vector DB·Durable Workflow Framework는 실제 요구가 관찰되고 ADR�
 - Analytics에는 정확한 위도·경도, 이동 경로, 자유서술 원문을 보내지 않는다.
 - 실행하지 않은 측정은 `not_verified`로 유지한다.
 
-## 8. 검증 단계와 Gate 1 종료 조건
+## 8. Gate 1 Founder Problem Fit 결정
 
-Gate 1 문서 작업은 다음 조건을 충족하면 완료 후보가 된다. 이는 제품 문제의 검증 완료가 아니라 검증 준비 완료를 뜻한다.
+Gate 1은 시장 수요 검증이 아니라 창업자 본인의 실제 불편을 초기 문제 선택 근거로 삼는 단계다. 다음 조건을 충족해 `passed_for_founder_scope`로 판단했다.
 
-- 목표 직무 공고의 1차 출처, 확인일, 요구 역량, 프로젝트 연결과 Gap이 기록돼 있다.
-- 사용자·문제·가치 가설이 반증 가능한 형태로 기록돼 있다.
-- 현재 대안과 전환 비용을 확인할 질문이 준비돼 있다.
-- 참여자 모집 기준, 동의 방식, 인터뷰 Script, 기록 Schema가 준비돼 있다.
-- 성공 지표의 분자·분모 또는 계산 방식, 데이터 출처, 해석 한계가 정의돼 있다.
-- 실제 인터뷰 수, 사용자 반응, 만족도, 제품 성과는 아직 `not_verified`로 표시돼 있다.
+- 창업자 자기보고라는 출처와 기록일이 명시돼 있다.
+- 보고된 활동·판단 어려움·대응 결과를 창작하지 않고 구조화했다.
+- Gate 판단은 H-P01·H-P02의 `founder_supported_n1`에만 의존하고 다른 사용자에게 일반화하지 않는다.
+- 초기 범위를 가까운 외출·산책·러닝의 당일 시각 결정으로 제한했다.
+- 외부 수요·빈도·심각도·전환 의향·제품 효과는 `not_verified`로 유지한다.
+- 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 명시적 승인을 받고 후속 사용자 검증을 재개한다.
 
-인터뷰 실행 전에는 Gate 1을 “문제 검증 완료”라고 부르지 않는다.
+따라서 Gate 1 통과는 “시장 문제 검증 완료”가 아니라 Founder scope의 Gate 2·3 탐색을 진행하기로 한 제품 결정이다.
 
 ## 9. 중단·축소·전환 조건
 
@@ -167,6 +167,7 @@ Gate 1 문서 작업은 다음 조건을 충족하면 완료 후보가 된다. �
 - `not_verified`: 아직 증거가 없는 상태
 - `insufficient_evidence`: 일부 자료는 있으나 결론을 내리기 부족함
 - `validated`: 사전 정의한 방법과 기준을 충족한 실제 증거가 있음
+- `founder_supported_n1`: 창업자 1인의 실제 경험에는 근거가 있지만 외부 일반화는 하지 않음
 - `rejected`: 실제 증거가 가설을 지지하지 않음
 
 `validated` 또는 `rejected`로 변경할 때는 날짜, 표본, 방법, 원자료 위치, 분석 한계, 변경한 제품 결정을 함께 기록한다.
