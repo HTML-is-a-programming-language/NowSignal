@@ -9,6 +9,7 @@
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
 - 실제 호출 절차와 Evidence 형식: [provider-validation-runbook.md](./provider-validation-runbook.md)
 - Provider·Case별 현재 Evidence와 재개 권한: [gate-2-evidence-matrix.md](./gate-2-evidence-matrix.md)
+- C-11 Source·License·Attribution 사전등록: [provider-c11-envelope-evidence-spec.md](./provider-c11-envelope-evidence-spec.md)
 - 장애·오래된 값·충돌 시 출력 제안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 - Founder scope와 우선 활동: [founder-problem-evidence.md](./founder-problem-evidence.md)
 - Gate 1·2 비코드 준비 감사: [gate-1-2-readiness-audit.md](./gate-1-2-readiness-audit.md)
@@ -64,15 +65,24 @@ type SourceReference =
   | { sourceUrl: string; sourceId: string | null }
   | { sourceUrl: string | null; sourceId: string };
 
+type ProviderUnit = {
+  field: string;
+  rawUnit: string | null;
+  normalizedUnit: string | null;
+  unitStatus: "observed" | "not_observed";
+  normalizationStatus: "approved" | "not_approved";
+};
+
 type ProviderEnvelope<T> = SourceReference & {
   provider: string;
   evaluatedAt: string;
   observedAt: string | null;
+  issuedAt: string | null;
   validFrom: string | null;
   validUntil: string | null;
-  region: { code?: string; label: string; grid?: { x: number; y: number } };
-  rawUnit: string | null;
-  normalizedUnit: string | null;
+  region: { code: string | null; label: string | null; grid: { x: number; y: number } | null };
+  unitApplicability: "field_level" | "not_applicable_by_payload_kind";
+  units: ProviderUnit[];
   license: { id: string; termsUrl: string };
   attribution: string;
 } & (
@@ -92,7 +102,7 @@ type ProviderEnvelope<T> = SourceReference & {
 
 규칙은 다음과 같다.
 
-1. `evaluatedAt`은 결과·정책 판정 시각이다. `fetchedAt`을 관측·발표시각으로 사용하지 않는다. License 차단으로 호출하지 않은 `not_fetched`는 `fetchedAt: null`이다. 제공 필드가 없으면 필드를 생략하지 않고 `observedAt: null`로 반환한다. `validFrom`, `validUntil`, 단위도 같은 원칙을 적용한다.
+1. `evaluatedAt`은 결과·정책 판정 시각이다. `fetchedAt`을 관측·발표시각으로 사용하지 않는다. License 차단으로 호출하지 않은 `not_fetched`는 `fetchedAt: null`이다. 제공 필드가 없으면 필드를 생략하지 않고 `observedAt: null`로 반환한다. `issuedAt`, `validFrom`, `validUntil`, Field별 단위도 같은 원칙을 적용한다.
 2. `sourceUrl`과 `sourceId` 중 적어도 하나는 반드시 값이 있어야 하며, `attribution`은 License 객체 안에 숨기지 않고 모든 응답의 최상위 필드로 반환한다.
 3. `resultKind=unavailable|not_fetched` 또는 `qualityStatus=stale|conflicting`이면 확정적인 행동 추천과 점수 계산을 중단한다. `delayed`는 기본적으로 추천을 중단하며, `partial`은 빠진 필드가 활동 판정에 영향을 주면 중단한다. `valid_empty`의 영향은 Provider별로 명시한다.
 4. 원시 응답과 NowSignal 정규화·파생값은 필드와 저장소에서 분리한다. 특히 변경금지 자료는 원문을 수정하지 않는다.

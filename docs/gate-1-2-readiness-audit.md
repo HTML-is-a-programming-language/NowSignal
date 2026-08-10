@@ -55,6 +55,7 @@
 | A-14 | 후속 결정에서 외부 Interview를 Gate 1 선행조건에서 제외하면 Gate 상태와 연구 보관기한 기준이 과거 시점에 묶임 | DL-013으로 Founder scope 통과와 외부 일반화 `not_verified`를 분리하고, 수집 전 고정하는 `waveRetentionAnchorDate`와 실제 조기 종료일을 보관 상한으로 사용 |
 | A-15 | AirKorea Live 응답표·공식 Sample은 `stationName`을 응답에서 생략하지만 같은 첨부 v1.4 필드표는 필수로 표시 | Run 9 원본 C-01 실패를 보존하고, 핵심 Field 관찰 성공과 `conflicting_official_schema`를 분리. 같은 요청을 반복하지 않고 기관 확인과 다음 Contract 범위를 별도 결정 |
 | A-16 | 기관 답변 대기가 Gate 2 전체 작업 중단처럼 읽힐 수 있음 | [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md)에서 Network·Canary·제품 권한과 Offline 문서·Fixture 권한을 분리. C-09·C-10 Client Synthetic 16/16과 Run 6~9 Evidence Hash Chain은 Network 0으로 완료하되 Provider 실제 행동은 `not_run` 유지 |
+| A-17 | 정적 License·Attribution 초안이 실제 C-11 결합 통과처럼 읽힐 수 있음 | [C-11 ProviderEnvelope Evidence 명세](./provider-c11-envelope-evidence-spec.md)를 `offline_spec_ready`로 분리하고 Runtime Source·Terms·Null Binding은 `not_verified`, 네 Provider 실제 C-11은 `not_run`으로 유지 |
 
 ## 4. Link 감사
 

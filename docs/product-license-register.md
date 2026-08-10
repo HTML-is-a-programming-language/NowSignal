@@ -9,6 +9,7 @@
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
 - Founder scope: [founder-problem-evidence.md](./founder-problem-evidence.md)
 - 실제 호출 검증: [provider-validation-runbook.md](./provider-validation-runbook.md)
+- C-11 ProviderEnvelope Evidence 명세: [provider-c11-envelope-evidence-spec.md](./provider-c11-envelope-evidence-spec.md)
 - Provider·Case별 Evidence와 재개 권한: [gate-2-evidence-matrix.md](./gate-2-evidence-matrix.md)
 - 권리·Freshness 차단 정책 초안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 - 주의: 이 문서는 공식 페이지를 바탕으로 한 engineering register이며 법률 자문이 아니다. 실제 활용신청 시 동의한 최신 약관, 데이터셋별 상세 조건, 제공기관의 서면 답변이 우선한다.
@@ -84,7 +85,7 @@
 - 상업 이용: `allowed_by_listed_license`
 - 변경·파생: `allowed_by_listed_license`; 원시값과 단위변환·Score를 분리
 - 저장·Cache: 명시적 장기 재배포 권리는 이 조사에서 확인하지 않음. 데이터 유효기간과 quota 보호에 필요한 TTL cache만 설계 후보로 두고 활용신청 약관을 재확인
-- 출처표시 초안: `출처: 기상청 단기예보 조회서비스 · 발표 {baseDate/baseTime} KST · 확인 {fetchedAt} · 원문 링크`
+- 출처표시 초안: `출처: 기상청 단기예보 조회서비스 · 발표 {baseDate/baseTime} KST · 확인 {fetchedAt} · 원문 {sourceReference}`
 - 금지·통제: 공공데이터포털 key를 client에 노출하지 않음. API허브의 별도 quota·약관을 같은 Provider 계약으로 혼합하지 않음
 - 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getUltraSrtNcst` C-01 `pass`. 다른 정상 Endpoint·오류 Contract·Freshness는 `not_run`
 - Release evidence: 활용신청 시점 상세/약관 snapshot, contract fixture, attribution UI, 14일 freshness canary
@@ -102,7 +103,7 @@
 - 상업 이용: `allowed_by_listed_license`
 - 변경·파생: License상 가능하더라도 안전 원칙상 공식 원문·기관·발표·발효·해제·지역은 변경하지 않음. AI 설명은 별도 영역
 - 저장·Cache: 활성 상태·정정·해제 연결에 필요한 최소 범위만 보존하고 원 발표시각을 유지
-- 출처표시 초안: `출처: 기상청 기상특보 조회서비스 · 발표기관 {office} · 발표 {issuedAt} KST · 원문 링크`
+- 출처표시 초안: `출처: 기상청 기상특보 조회서비스 · 발표기관 {office} · 발표 {issuedAt} KST · 확인 {fetchedAt} · 원문 {sourceReference}`
 - 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getWthrWrnList` C-01 `pass`. 통보문·현황·오류 Contract·Freshness는 `not_run`; 비기상 재난을 포괄하는 것처럼 표시 금지
 - Release evidence: 원문 보존 fixture, 정정·해제 연결 test, official-alert-first 화면 test, freshness canary
 - Owner: NowSignal Safety/Data
@@ -120,7 +121,7 @@
 - 상업 이용: `allowed_by_listed_license`
 - 변경·파생: 원 응답, 수치, 등급, 측정소, 공식 문장은 immutable. 단위변환·거리·활동 Score·NowSignal 설명은 별도 파생 레이어에 두되, 이것이 허용되는 “이용”인지 제공기관 확인 전 production에서 원문 요약을 모델에 보내지 않음
 - 저장·Cache: 원 관측시각과 License를 유지하는 TTL cache 후보. 장기 archive·학습용 재사용은 승인 범위 확인 전 금지
-- 출처표시 초안: `출처: 한국환경공단 AirKorea · 측정소 {stationName/id} · 관측 {observedAt} KST · 확인 {fetchedAt} · 원문 링크`
+- 출처표시 초안: [C-11 명세](./provider-c11-envelope-evidence-spec.md)에서 측정소정보와 대기오염을 분리한다. 측정소 Metadata에는 공식 근거 없는 관측시각을 만들지 않으며, 실제 렌더링은 아직 `not_run`
 - 추가 조건: 기술문서의 위치 포함 서비스 관련 위치정보사업 절차 안내가 NowSignal에 적용되는지는 `not_verified`
 - 현재 판정: 개발 `approved_for_dev`, 운영 `conditional_for_production`. 개발 활용신청 두 건은 2026-08-10~2028-08-10이며 측정소 `/getMsrstnList` C-01 `pass`; 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`, 문의 `submitted_pending_response`
 - Production 해제 조건: Schema 충돌의 공식 판정, 운영계정 승인, 위치 관련 적용 여부의 서면 확인, 변경금지 자료의 파생·AI 입력·Cache 범위 확인, attribution UI·contract test. Schema 답변만으로 나머지 권리 조건을 해소하지 않음

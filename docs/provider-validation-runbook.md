@@ -7,7 +7,7 @@
 - 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·실호출과 AirKorea Schema 충돌 문의 제출. 운영계정·Traffic 상향·제품 코드는 비범위
 - 범위: 기상청 단기예보, 기상청 기상특보, AirKorea 대기오염정보·측정소정보
 - 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push. 로컬 좌표→KMA 격자 변환과 측정소 선택 알고리즘은 Gate 4 설계·테스트 대상이며 이 Provider 실호출 Runbook이 검증 완료로 대신하지 않는다.
-- 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
+- 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [C-11 ProviderEnvelope Evidence 명세](./provider-c11-envelope-evidence-spec.md), [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
 
 이 Runbook은 인증키를 받은 뒤 동일한 방법으로 Contract·오류·Freshness를 검증하기 위한 실행 명세다. 2026-08-10까지 아홉 Run ID를 사용했고 실제 호출은 보수적으로 10회 계상했다. KMA 단기예보·특보와 AirKorea 측정소 Sentinel은 통과했다. AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개와 핵심 응답 필드 3개를 관찰했다. 원본 Manifest의 C-01은 `stationName` 응답 필수 조건 때문에 `fail`로 보존한다. 포털 Live 응답표·공식 Sample은 이 Field를 생략하지만 같은 첨부 v1.4 필드표는 필수로 명시하므로 Provider 응답 Contract는 `conflicting_official_schema`다. Freshness·품질과 나머지 오류 Contract·Canary는 미평가다. 아래에서 명시적으로 실행 결과라고 표시하지 않은 수치는 계속 계획이다.
 
@@ -51,7 +51,7 @@ endpoint: getUltraSrtNcst
 evaluatedAt: null
 fetchedAt: null
 request:
-  secretRemoved: true
+  secretRemoved: null
   publicParameters: {}
 response:
   httpStatus: null
@@ -70,11 +70,11 @@ result:
   kind: null
   qualityStatus: null
   errorClass: null
-  missingRequiredFields: []
+  missingRequiredFields: null
 license:
   registerId: null
   status: null
-  attributionPresent: false
+  attributionPresent: null
 review:
   verdict: not_run
   reviewedAt: null
@@ -105,10 +105,12 @@ review:
 | `C-08` | 정상 빈 결과 | `valid_empty`와 장애를 구분 |
 | `C-09` | Timeout·기관 Backend 실패 | 제한된 Backoff 후 `unavailable` |
 | `C-10` | 초당·일일 호출량 초과 | 실제 Quota를 고의 소진하지 않고 관찰 또는 Sanitized fixture로 검증 |
-| `C-11` | 필수 Source·License·Attribution 추출 | 하나라도 없으면 Contract fail |
+| `C-11` | [사전등록 명세](./provider-c11-envelope-evidence-spec.md)에 따른 필수 Source·시각·지역·단위·License·Attribution 추출 | 하나라도 없거나 Binding이 미검증이면 Contract fail |
 | `C-12` | Secret Redaction 검사 | URL·stdout·fixture·Git diff에 key 흔적 0건 |
 
 공공데이터포털의 Provider error code와 HTTP status는 서로 대체하지 않는다. HTTP 200 안의 오류 payload도 실패로 분류한다.
+
+C-11의 문서·Manifest·Assertion 형식은 `offline_spec_ready`지만 Runtime `sourceUrl`·`sourceId`·`license.termsUrl`과 Endpoint별 Null 규칙은 `not_verified`다. 네 Provider의 실제 C-11은 모두 `not_run`이며, 정적 License·공식 Sample·C-01 성공을 실제 결합 `pass`로 대체하지 않는다.
 
 ## 5. Provider별 의미 검증
 
