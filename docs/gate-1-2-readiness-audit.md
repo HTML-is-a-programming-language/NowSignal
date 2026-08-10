@@ -14,7 +14,7 @@
 | Gate | Gate Workflow | 비코드 준비 | 실행 Evidence | 현재 판단 |
 | --- | --- | --- | --- | --- |
 | Gate 1 Founder Problem Fit | `done` | `complete_for_founder_scope` | 창업자 자기보고 7개 패턴 `founder_lived_experience_n1`; 외부 Interview 0건 | DL-013에 따라 `passed_for_founder_scope`. 시장 수요는 `not_verified` |
-| Gate 2 Public Data Feasibility | `in_progress` | `blocked_pending_official_schema_conflict_resolution_and_next_network_scope_decision` | DPAPI Import·C-12 `pass`; KMA 두 Provider·AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개 관찰, 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 v1.4 필드표의 `stationName` 계약 충돌, Freshness `not_evaluated`; 누적 10회, Offline Validator 25/25 통과, 나머지 오류 Contract·Canary `not_run` | Run 6의 504·Run 7의 Local Validator 오류·Run 9 원본 실패를 보존하고 문서 충돌을 Provider 위반이나 통과로 단정하지 않음. 전체 Contract·권리 조건·Canary 확인 전 최종 통과 불가 |
+| Gate 2 Public Data Feasibility | `in_progress` | `blocked_pending_official_schema_response_and_next_network_scope_decision` | DPAPI Import·C-12 `pass`; KMA 두 Provider·AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개 관찰, 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 v1.4 필드표의 `stationName` 계약 충돌, Freshness `not_evaluated`; 누적 10회, Offline Validator 25/25 통과, 2026-08-10 한국환경공단 대상 Schema 문의 `접수`, 나머지 오류 Contract·Canary `not_run` | Run 6의 504·Run 7의 Local Validator 오류·Run 9 원본 실패를 보존하고 문서 충돌을 Provider 위반이나 통과로 단정하지 않음. 기관 답변·전체 Contract·권리 조건·Canary 확인 전 최종 통과 불가 |
 | Gate 3 Product Design | `blocked` | 해당 없음 | 없음 | Gate 2 필수 Provider 가능성 확인과 Gate 3 설계 승인 전 진입 금지 |
 
 초기 감사 당시 Gate 1은 외부 Interview 전 통과 불가였으나, 사용자의 후속 결정으로 [창업자 문제 근거](./founder-problem-evidence.md)를 별도 기록해 Founder scope에서만 통과했다. 이는 시장 수요 검증이나 제품 가능성 검증을 뜻하지 않는다. 지금 사용자에게 요구할 Google Forms 작업은 없다.
@@ -74,11 +74,11 @@
 
 ### Gate 2
 
-사용자는 2026-08-10 Phase 1 개발 활용신청과 제한된 Contract 실호출을 승인했고 Run 9까지의 실행을 완료했다. 키 값은 Chat·문서·Screenshot·Git에 남기지 않는다. AirKorea 대기오염은 HTTP 200·Provider `00`·핵심 Field를 관찰했지만 `stationName`에 관한 공식 자료가 충돌한다. 같은 이유로 재호출하지 않고 기관 확인 여부와 다음 Contract 범위·Plan·Hash·실호출을 별도로 결정한다. Contract 전체와 Canary가 실제 Evidence를 만들기 전에는 Gate 2를 통과시키지 않는다.
+사용자는 2026-08-10 Phase 1 개발 활용신청과 제한된 Contract 실호출을 승인했고 Run 9까지의 실행을 완료했다. 키 값은 Chat·문서·Screenshot·Git에 남기지 않는다. AirKorea 대기오염은 HTTP 200·Provider `00`·핵심 Field를 관찰했지만 `stationName`에 관한 공식 자료가 충돌한다. Schema 충돌 문의는 같은 날 공공데이터포털에서 한국환경공단 대상으로 제출돼 처리상태 `접수`다. 같은 이유로 재호출·중복 문의하지 않고 서면 답변과 다음 Contract 범위·Plan·Hash·실호출을 별도로 결정한다. Contract 전체와 Canary가 실제 Evidence를 만들기 전에는 Gate 2를 통과시키지 않는다.
 
 ### Trigger가 없을 때
 
 - Google Forms를 게시하거나 Form B를 만들지 않는다.
 - 참여자를 모집·연락하거나 응답을 수집하지 않는다.
-- API를 신청·호출하거나 외부 기관에 문의하지 않는다.
+- API를 추가 신청·호출하거나 외부 기관에 추가 문의하지 않는다.
 - Gate 2 통과와 Gate 3 설계 승인 전에는 제품 코드를 작성하지 않는다.

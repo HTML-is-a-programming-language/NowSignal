@@ -163,6 +163,8 @@ type ProviderEnvelope<T> = SourceReference & {
 
 2026-08-10 `/getMsrstnAcctoRltmMesureDnsty` Run 9는 HTTP 200·Provider `00`·Item 1개와 `dataTime`·`pm10Value`·`pm25Value`를 관찰했다. 다만 Live 상세 응답표와 첨부 v1.4의 공식 XML Sample에는 `stationName`·`stationCode`가 없고, 같은 첨부의 응답 필드표는 두 값을 필수로 표시한다. 따라서 핵심 실데이터 도달은 확인했지만 응답 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`로 유지한다. 동일 요청 반복 대신 Production 채택 전에 제공기관 확인으로 문서 충돌을 해소한다.
 
+같은 날 공공데이터포털 `오류신고 및 문의`에서 한국환경공단 대상으로 Schema 확인을 제출했고 포털 처리상태는 `접수`다. 답변 전에는 같은 문의를 중복 제출하거나 Live 동작만으로 문서 충돌을 해소한 것으로 보지 않는다.
+
 예보는 공식 페이지 기준 매일 05·11·17·23시 발표한다. 오존 예보는 4월 1일~10월 31일이며 당일 등급의 세부 발표 조건도 시각별로 다르다. 관측값의 공식 가용성 SLA는 찾지 못했다. 초기 제품 가정은 관측 `observedAt` 2시간 이내 `fresh`, 2~4시간 `delayed`, 4시간 초과 `stale`이고, 14일 canary 후 조정한다. 예보는 공식 발표주기와 유효일을 사용한다.
 
 AirKorea 기술문서는 위치를 포함한 공공데이터 활용 사업자에게 위치정보 서비스 허가 또는 위치기반서비스 신고 증명서를 요구할 수 있다고 안내한다. NowSignal의 좌표 축소 방식과 구체적 서비스가 이 절차에 해당하는지는 `not_verified`다. 운영계정 신청 전 한국환경공단과 담당 규제기관에 적용 여부를 확인하고 답변을 증거로 보관한다.

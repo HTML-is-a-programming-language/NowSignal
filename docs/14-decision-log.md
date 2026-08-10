@@ -230,6 +230,7 @@
 - 선택: 원본 Run 9 Manifest와 C-01 실패를 수정하지 않는다. 핵심 Field 관찰 형태는 `core_observation_consistent_with_live_portal_response_table_and_official_sample`로만 기록하고 전체 응답표 통과로 확대하지 않는다. 전체 응답 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`로 분리한다. 다음 검증에서는 요청 측정소를 Context로 보존하되 응답 Echo를 C-01 필수로 강제하지 않고 문서 충돌을 별도 Fail-closed 상태로 유지한다.
 - 선택 이유: 실동작에 맞춰 실패를 성공으로 덮어쓰거나, 반대로 충돌하는 문서 하나만 근거로 Provider 위반을 확정하지 않기 위함이다.
 - 범위 제한: 이 판정은 해당 Endpoint의 해당 시점 개발 호출에만 적용한다. 다른 Endpoint, 오류 Contract, Freshness, 14일 Canary, Production 권리·운영 적합성을 통과시키지 않는다.
+- 후속 실행: 2026-08-10 공공데이터포털 `오류신고 및 문의`에서 한국환경공단 대상으로 Schema 확인 문의를 제출했고 처리상태 `접수`를 확인했다. 답변 전에는 중복 제출하지 않는다.
 - 재검토 조건: 제공기관이 `stationName`·`stationCode` 응답 계약을 서면으로 확인하거나 공식 상세·첨부 기술문서가 일치하도록 개정될 때.
 - 관련 문서: [Provider 실검증 Runbook](./provider-validation-runbook.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md), [기관 문의 초안](./airkorea-schema-inquiry-draft.md), `TASKS.md`
 

@@ -1,10 +1,21 @@
-# AirKorea 응답 Schema 확인 문의 초안
+# AirKorea 응답 Schema 확인 문의 기록
 
 - 작성일: 2026-08-10
-- 상태: `draft_not_sent`
+- 상태: `submitted_pending_response`
 - 대상: 공공데이터포털 API `15073861` 오류신고·문의 또는 한국환경공단 AirKorea OpenAPI 담당부서
 - 비밀정보: 인증키·신청번호·계정정보·전체 요청 URL·원 응답·측정 수치 포함 금지
 - 관련 실행 근거: [Phase 1 Provider 실검증 Runbook](./provider-validation-runbook.md) Run 9
+
+## 제출 상태
+
+- 제출 채널: 공공데이터포털 API `15073861` `오류신고 및 문의`
+- 데이터유형: OpenAPI
+- 기관명: 한국환경공단
+- 등록일: 2026-08-10
+- 포털 처리상태: `접수`
+- 접수번호: `not_provided`
+- 공개 Evidence: 사용자 제공 화면에서 위 비식별 상태만 확인. Screenshot 원본은 Repository에 저장하지 않음
+- 다음 상태 변경: 제공기관 또는 공공데이터포털의 서면 답변을 확인한 뒤 `answered` 또는 후속 상태로 갱신
 
 ## 제목
 
@@ -34,11 +45,11 @@
 
 ## 제출 전 점검
 
-- [ ] 사용자가 외부 문의 제출을 명시적으로 승인함
-- [ ] 인증키 원문·일부·길이·Hash가 없음
-- [ ] 신청번호·Email·전화번호·계정명 등 식별정보가 없음
-- [ ] 전체 요청 URL·Query·Header·원 응답·Exception 원문·Screenshot이 없음
-- [ ] API ID·Endpoint 이름·공개 Parameter·Sanitized 상태만 포함함
+- [x] 사용자가 외부 문의 제출을 명시적으로 승인함
+- [x] 인증키 원문·일부·길이·Hash가 없음
+- [x] 신청번호·Email·전화번호·계정명 등 식별정보가 없음
+- [x] 전체 요청 URL·Query·Header·원 응답·Exception 원문·Screenshot이 없음
+- [x] API ID·Endpoint 이름·공개 Parameter·Sanitized 상태만 포함함
 - [ ] 답변 수신 뒤 원문은 비공개 보관하고 Repository에는 판정·날짜·공식 근거만 기록함
 
-승인 전에는 이 초안을 제출하거나 외부 담당자에게 전송하지 않는다.
+2026-08-10 제출을 완료했다. 답변 전에는 같은 내용을 중복 제출하지 않는다.

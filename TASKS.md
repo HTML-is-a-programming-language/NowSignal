@@ -100,10 +100,10 @@
 | --- | --- | --- | --- |
 | API 개발 활용신청 | `done` | `applications_4_of_4_approved`; 모두 2026-08-10~2028-08-10, 실제 승인 Traffic `not_verified` | 완료 |
 | 인증키 안전 저장·로드 | `done` | Decoding 형태 정규화·DPAPI Import 확인, C-12 원문·encoded 흔적 각 0건 | 완료 |
-| 정상·오류·Rate Limit Contract 검증 | `blocked` | KMA 단기예보·특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개를 관찰했지만 원본 C-01 `fail`. 포털 Live 응답표·공식 Sample은 `stationName`을 생략하고 첨부 v1.4 필드표는 필수로 명시해 `conflicting_official_schema`; Network 1, Retry 0, Plan·Security·C-12 `pass`, 누적 10회 | 같은 이유의 재호출 금지. 공식 Schema 충돌 처리·기관 문의 여부와 다음 Contract 범위·Plan·Hash·실호출 결정을 먼저 고정 |
+| 정상·오류·Rate Limit Contract 검증 | `blocked` | KMA 단기예보·특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개를 관찰했지만 원본 C-01 `fail`. 포털 Live 응답표·공식 Sample은 `stationName`을 생략하고 첨부 v1.4 필드표는 필수로 명시해 `conflicting_official_schema`; Network 1, Retry 0, Plan·Security·C-12 `pass`, 누적 10회 | 같은 이유의 재호출 금지. 기관 답변 또는 다음 Contract 범위·Plan·Hash·실호출 결정을 먼저 고정 |
 | 14일 관측·발표 지연·Coverage 측정 | `deferred_manual` | `not_run` | 사전 합격 기준·호출 예산·실행환경 승인 뒤 |
 | AirKorea 제3유형 파생 설명·Cache·표시 및 위치 관련 조건 확인 | `deferred_manual` | `not_verified` | Gate 2 최종 판정 전 서면 확인 또는 전문 검토 |
-| AirKorea 응답 Schema 충돌 문의 | `deferred_manual` | [비밀정보 없는 문의 초안](./docs/airkorea-schema-inquiry-draft.md) `draft_not_sent` | 사용자가 외부 제출을 명시적으로 승인한 뒤 포털 또는 제공기관에 제출 |
+| AirKorea 응답 Schema 충돌 문의 | `in_progress` | [문의 기록](./docs/airkorea-schema-inquiry-draft.md) `submitted_pending_response`; 2026-08-10, 한국환경공단, 포털 처리상태 `접수` | 제공기관 또는 공공데이터포털의 서면 답변 확인 |
 | Provider별 장애·누락·시간대·중복 fixture 확보 | `in_progress` | Run 6 Sanitized HTTP 504 Envelope 1건과 Offline Classifier `pass`; 발생 주체 `unclassified`, Body fixture 없음, 계획 C-09·C-10 `not_run` | 실제 오류 Case 별도 사전등록 |
 | Local Validator Offline fixture | `done` | PS 5.1 StrictMode Cardinality 오류 재현 뒤 확장 Validator 25/25 기대 판정·미처리 예외 0·결정론적 반복 `pass`, 외부 호출 0 | 완료 |
 | 위치기반서비스 신고 안내의 NowSignal 적용 여부 확인 | `deferred_manual` | `application_notice_observed_2026-08-10`, `not_verified` | 실제 사용자 위치 기능 설계·운영·배포 전 기관 확인 또는 전문 검토 |

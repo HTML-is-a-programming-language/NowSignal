@@ -3,8 +3,8 @@
 - 최초 작성일: 2026-08-07
 - 문서 상태: `execution_in_progress`
 - 실행 이력: `attempted_nine_runs`
-- 현재 진행 상태: `blocked_pending_official_schema_conflict_resolution_and_next_network_scope_decision` — Run 9는 정확히 1회 호출을 종료했고 핵심 응답 필드를 관찰했으나, 포털 Live 응답표·공식 Sample과 첨부 v1.4 필드표의 `stationName` 계약이 충돌해 다음 판정·호출 범위를 결정해야 함
-- 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·실호출. 운영계정·Traffic 상향·제품 코드는 비범위
+- 현재 진행 상태: `blocked_pending_official_schema_response_and_next_network_scope_decision` — Run 9는 정확히 1회 호출을 종료했고 핵심 응답 필드를 관찰했으나 공식 `stationName` 계약이 충돌함. 2026-08-10 한국환경공단 대상 포털 문의가 `접수`돼 답변과 다음 호출 범위 결정을 기다림
+- 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·실호출과 AirKorea Schema 충돌 문의 제출. 운영계정·Traffic 상향·제품 코드는 비범위
 - 범위: 기상청 단기예보, 기상청 기상특보, AirKorea 대기오염정보·측정소정보
 - 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push. 로컬 좌표→KMA 격자 변환과 측정소 선택 알고리즘은 Gate 4 설계·테스트 대상이며 이 Provider 실호출 Runbook이 검증 완료로 대신하지 않는다.
 - 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
@@ -486,7 +486,7 @@ Run 9 Sanitized Manifest Canonical JSON(UTF-8, 줄바꿈 없음):
 - 공식 명세 사후대조: [API 15073861](https://www.data.go.kr/data/15073861/openapi.do)의 Live `측정소별 실시간 측정정보 조회`에서 `stationName`은 요청 필수 Parameter이고 응답 Item 목록에는 없다. 같은 페이지의 첨부 `한국환경공단 에어코리아 OpenAPI 기술문서_20260630.zip` 안 v1.4 응답 필드표는 반대로 `stationName`·`stationCode`를 필수로 적지만, 바로 뒤 공식 XML Sample에는 두 Field가 없다.
 - 사후판정: 원본 Run 9 Plan·Manifest의 C-01 `fail`은 보존한다. HTTP 200·Provider `00`·Item 1개와 `dataTime`·`pm10Value`·`pm25Value` 관찰 형태는 `core_observation_consistent_with_live_portal_response_table_and_official_sample`이지만 전체 응답표를 검증한 것은 아니며, 첨부 필드표 충돌이 남아 전체 Provider 응답 Contract는 `conflicting_official_schema`다. 테스트 Assertion을 단순 오류로 소급 변경하거나 Provider 위반으로 단정하지 않는다.
 - 미평가 범위: `stationName` 누락에서 품질 단계를 중단했으므로 측정시각 Age·Freshness·실제 값 유효성은 `not_evaluated`다. Run 6의 504와 Run 7의 로컬 Validator 실패도 유지하며, 안정성·14일 Canary·나머지 Endpoint·오류 Case 통과로 확대하지 않는다.
-- 후속 규칙: 다음 Plan에서는 측정소를 사전등록한 요청 Context로 보존하되 응답 Echo를 C-01 필수로 강제하지 않고, 공식 문서 충돌을 별도 `contract_conflict`로 Fail-closed 처리한다. Run 9를 같은 이유로 재호출하지 않으며, 충돌 해소를 위한 기관 문의와 다음 실제 호출은 각각 별도 사용자 결정이 필요하다.
+- 후속 규칙: 다음 Plan에서는 측정소를 사전등록한 요청 Context로 보존하되 응답 Echo를 C-01 필수로 강제하지 않고, 공식 문서 충돌을 별도 `contract_conflict`로 Fail-closed 처리한다. Run 9를 같은 이유로 재호출하지 않는다. Schema 충돌 문의는 2026-08-10 공공데이터포털에서 한국환경공단 대상으로 제출돼 처리상태 `접수`이며, 답변 전에는 중복 제출하지 않는다. 다음 실제 호출은 별도 사용자 결정이 필요하다.
 
 ### 6.2 수집 항목
 
@@ -602,8 +602,8 @@ AirKorea 관측은 현재 상태, 예보는 지역·일 단위 배경으로만 �
 | KMA 단기예보 | `/getUltraSrtNcst` C-01 `pass`; 나머지 `not_run` | `observed_http_403_and_401_unclassified`; 계획 오류 Case `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `in_progress` |
 | KMA 기상특보 | `/getWthrWrnList` C-01 `pass`; 나머지 `not_run` | `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `in_progress` |
 | AirKorea 측정소 | `/getMsrstnList` C-01 `pass`; 근접 측정소 `not_run` | `not_run` | `not_run` | `not_verified` | `conditional_for_production` | `in_progress` |
-| AirKorea 대기오염 | Run 5 전송 결과 미관찰, Run 6 HTTP 504, Run 7 Local Validator 실패, Run 8 사전검사 중단·Network 0. Run 9는 HTTP 200·Provider `00`·핵심 Field를 관찰했으나 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 필드표가 충돌해 Contract `conflicting_official_schema`, Freshness `not_evaluated`, 나머지 Endpoint `not_run` | Sanitized HTTP 504 Envelope·Offline 504 Classifier 각 1건; 계획 C-09·C-10 `not_run`. Local Fixture와 공식 문서 충돌은 Provider 오류 Evidence와 분리 | `not_run` | `not_verified` | `conditional_for_production` | `blocked_pending_official_schema_conflict_resolution_and_next_network_scope_decision` |
+| AirKorea 대기오염 | Run 5 전송 결과 미관찰, Run 6 HTTP 504, Run 7 Local Validator 실패, Run 8 사전검사 중단·Network 0. Run 9는 HTTP 200·Provider `00`·핵심 Field를 관찰했으나 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 필드표가 충돌해 Contract `conflicting_official_schema`, Freshness `not_evaluated`, 나머지 Endpoint `not_run`. 2026-08-10 Schema 문의 `접수` | Sanitized HTTP 504 Envelope·Offline 504 Classifier 각 1건; 계획 C-09·C-10 `not_run`. Local Fixture와 공식 문서 충돌은 Provider 오류 Evidence와 분리 | `not_run` | `not_verified` | `conditional_for_production` | `blocked_pending_official_schema_response_and_next_network_scope_decision` |
 
 결과표는 실제 Evidence가 생긴 항목만 바꾼다. 활용신청이나 키 발급만으로 Contract 또는 Freshness를 통과 처리하지 않는다.
 
-위 표의 Workflow는 Provider 실호출 상태다. 과거 HTTP 403·401과 Run 6의 HTTP 504는 활용신청 승인이나 License 판정을 취소하는 근거가 아니다. Run 9의 원본 C-01 실패와 공식 문서 충돌을 함께 보존하고, Live 동작만으로 첨부 필드표를 무시하거나 계획된 오류 Case·Canary 성공으로 소급하지 않는다. 기관 문의 또는 다음 호출을 재개하기로 결정하면 각각 범위와 별도 증거 계획을 먼저 고정한다.
+위 표의 Workflow는 Provider 실호출 상태다. 과거 HTTP 403·401과 Run 6의 HTTP 504는 활용신청 승인이나 License 판정을 취소하는 근거가 아니다. Run 9의 원본 C-01 실패와 공식 문서 충돌을 함께 보존하고, Live 동작만으로 첨부 필드표를 무시하거나 계획된 오류 Case·Canary 성공으로 소급하지 않는다. 제출한 문의의 서면 답변을 기다리며, 다음 호출을 재개하려면 범위와 별도 증거 계획을 먼저 고정한다.
