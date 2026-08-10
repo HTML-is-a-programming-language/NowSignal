@@ -78,6 +78,7 @@
 - 제공기관: 기상청
 - Product use: 날씨 실황·초단기예보·단기예보의 Phase 1 `WeatherProvider`
 - 공식 상세: [공공데이터포털 API 15084084](https://www.data.go.kr/data/15084084/openapi.do)
+- 공식 일반증서: [공공누리 제1유형](https://www.kogl.or.kr/info/licenseType1.do). Runtime C-11의 `termsUrl` 역할이며 활용신청 개별 조건·제3자 권리 범위는 별도 Evidence로 유지
 - 보조 공식 문서: [기상청 격자 위·경도 API 안내](https://apihub.kma.go.kr/notice.do?seqNotice=39) — 좌표 변환 공식만 참고하며 API허브의 인증·Quota·약관은 공공데이터포털 Provider에 적용하지 않음
 - 확인일: 2026-08-10
 - 상세 페이지 수정일: 2026-07-09
