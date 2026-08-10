@@ -14,7 +14,7 @@
 | Gate | Gate Workflow | 비코드 준비 | 실행 Evidence | 현재 판단 |
 | --- | --- | --- | --- | --- |
 | Gate 1 Founder Problem Fit | `done` | `complete_for_founder_scope` | 창업자 자기보고 7개 패턴 `founder_lived_experience_n1`; 외부 Interview 0건 | DL-013에 따라 `passed_for_founder_scope`. 시장 수요는 `not_verified` |
-| Gate 2 Public Data Feasibility | `in_progress` | `blocked_pending_official_schema_response_and_next_network_scope_decision` | DPAPI Import·C-12 `pass`; KMA 두 Provider·AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개 관찰, 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 v1.4 필드표의 `stationName` 계약 충돌, Freshness `not_evaluated`; 누적 10회, Offline Validator 25/25 통과, 2026-08-10 한국환경공단 대상 Schema 문의 `접수`, 나머지 오류 Contract·Canary `not_run` | Run 6의 504·Run 7의 Local Validator 오류·Run 9 원본 실패를 보존하고 문서 충돌을 Provider 위반이나 통과로 단정하지 않음. 기관 답변·전체 Contract·권리 조건·Canary 확인 전 최종 통과 불가 |
+| Gate 2 Public Data Feasibility | `in_progress` | Network는 `blocked_pending_official_schema_response_and_next_network_scope_decision`, Offline 준비는 `active` | DPAPI Import·C-12 `pass`; KMA 두 Provider·AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개 관찰, 원본 C-01 `fail`; 공식 `stationName` 계약 충돌, Freshness `not_evaluated`; 누적 10회, Offline Validator 25/25와 C-09·C-10 Client Synthetic 16/16·Run 6~9 Hash Chain 통과, 2026-08-10 한국환경공단 대상 문의 `접수`, Provider별 오류 Contract·Canary `not_run` | Run 6·7·9 실패를 보존하고 Offline Fixture를 Provider 행동으로 확대하지 않음. 기관 답변·전체 Contract·권리 조건·Canary 확인 전 최종 통과 불가 |
 | Gate 3 Product Design | `blocked` | 해당 없음 | 없음 | Gate 2 필수 Provider 가능성 확인과 Gate 3 설계 승인 전 진입 금지 |
 
 초기 감사 당시 Gate 1은 외부 Interview 전 통과 불가였으나, 사용자의 후속 결정으로 [창업자 문제 근거](./founder-problem-evidence.md)를 별도 기록해 Founder scope에서만 통과했다. 이는 시장 수요 검증이나 제품 가능성 검증을 뜻하지 않는다. 지금 사용자에게 요구할 Google Forms 작업은 없다.
@@ -54,6 +54,7 @@
 | A-13 | Contract·Canary 기술 통과와 AirKorea 권리 조건을 포함한 최종 Gate 2 통과가 섞임 | Technical provider pass와 최종 Gate 2 pass를 분리하고 AirKorea 유지·제외 분기 명시 |
 | A-14 | 후속 결정에서 외부 Interview를 Gate 1 선행조건에서 제외하면 Gate 상태와 연구 보관기한 기준이 과거 시점에 묶임 | DL-013으로 Founder scope 통과와 외부 일반화 `not_verified`를 분리하고, 수집 전 고정하는 `waveRetentionAnchorDate`와 실제 조기 종료일을 보관 상한으로 사용 |
 | A-15 | AirKorea Live 응답표·공식 Sample은 `stationName`을 응답에서 생략하지만 같은 첨부 v1.4 필드표는 필수로 표시 | Run 9 원본 C-01 실패를 보존하고, 핵심 Field 관찰 성공과 `conflicting_official_schema`를 분리. 같은 요청을 반복하지 않고 기관 확인과 다음 Contract 범위를 별도 결정 |
+| A-16 | 기관 답변 대기가 Gate 2 전체 작업 중단처럼 읽힐 수 있음 | [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md)에서 Network·Canary·제품 권한과 Offline 문서·Fixture 권한을 분리. C-09·C-10 Client Synthetic 16/16과 Run 6~9 Evidence Hash Chain은 Network 0으로 완료하되 Provider 실제 행동은 `not_run` 유지 |
 
 ## 4. Link 감사
 
@@ -74,7 +75,7 @@
 
 ### Gate 2
 
-사용자는 2026-08-10 Phase 1 개발 활용신청과 제한된 Contract 실호출을 승인했고 Run 9까지의 실행을 완료했다. 키 값은 Chat·문서·Screenshot·Git에 남기지 않는다. AirKorea 대기오염은 HTTP 200·Provider `00`·핵심 Field를 관찰했지만 `stationName`에 관한 공식 자료가 충돌한다. Schema 충돌 문의는 같은 날 공공데이터포털에서 한국환경공단 대상으로 제출돼 처리상태 `접수`다. 같은 이유로 재호출·중복 문의하지 않고 서면 답변과 다음 Contract 범위·Plan·Hash·실호출을 별도로 결정한다. Contract 전체와 Canary가 실제 Evidence를 만들기 전에는 Gate 2를 통과시키지 않는다.
+사용자는 2026-08-10 Phase 1 개발 활용신청과 제한된 Contract 실호출을 승인했고 Run 9까지의 실행을 완료했다. 키 값은 Chat·문서·Screenshot·Git에 남기지 않는다. AirKorea 대기오염은 HTTP 200·Provider `00`·핵심 Field를 관찰했지만 `stationName`에 관한 공식 자료가 충돌한다. Schema 충돌 문의는 같은 날 공공데이터포털에서 한국환경공단 대상으로 제출돼 처리상태 `접수`다. 같은 이유로 재호출·중복 문의하지 않되, 답변과 무관한 Evidence 정규화·권리 통제표·무호출 Fixture는 계속 진행한다. C-09·C-10 Client Synthetic 16/16과 Run 6~9 Hash Chain 검증은 Network 0으로 통과했지만 Provider별 오류 Contract를 통과시킨 것은 아니다. Contract 전체와 Canary가 실제 Evidence를 만들기 전에는 Gate 2를 통과시키지 않는다.
 
 ### Trigger가 없을 때
 

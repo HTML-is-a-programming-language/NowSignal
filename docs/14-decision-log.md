@@ -232,7 +232,17 @@
 - 범위 제한: 이 판정은 해당 Endpoint의 해당 시점 개발 호출에만 적용한다. 다른 Endpoint, 오류 Contract, Freshness, 14일 Canary, Production 권리·운영 적합성을 통과시키지 않는다.
 - 후속 실행: 2026-08-10 공공데이터포털 `오류신고 및 문의`에서 한국환경공단 대상으로 Schema 확인 문의를 제출했고 처리상태 `접수`를 확인했다. 답변 전에는 중복 제출하지 않는다.
 - 재검토 조건: 제공기관이 `stationName`·`stationCode` 응답 계약을 서면으로 확인하거나 공식 상세·첨부 기술문서가 일치하도록 개정될 때.
-- 관련 문서: [Provider 실검증 Runbook](./provider-validation-runbook.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md), [기관 문의 초안](./airkorea-schema-inquiry-draft.md), `TASKS.md`
+- 관련 문서: [Provider 실검증 Runbook](./provider-validation-runbook.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md), [기관 문의 기록](./airkorea-schema-inquiry-draft.md), `TASKS.md`
+
+## DL-014B — 기관 답변 대기 중 Gate 2 Offline 작업 병행
+
+- 날짜: 2026-08-10
+- 상황: AirKorea Schema 문의는 `접수`됐지만 답변 시점을 확정할 수 없다. 이 답변은 해당 Endpoint의 Schema 분기를 결정하는 Trigger이지 Gate 2의 모든 문서·무호출 검증을 막는 조건은 아니다.
+- 선택: 실제 Provider 호출·추가 문의·Canary·제품 코드는 계속 별도 승인 범위로 두되, 상태 정합화, [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), Phase 1 권리 연산표, C-09·C-10 `synthetic_classifier_fixture`, Run 6~9 Canonical Evidence Hash Chain 검증을 병행한다.
+- 검증 결과: C-09·C-10·모호한 오류 16개 Fixture가 Windows PowerShell 5.1의 두 새 Process에서 같은 판정을 냈고, Network·Retry·Sleep·Redirect 0, 미처리 예외 0, 출력 Marker 0으로 통과했다. Run 6~9 Plan·Manifest 8개의 기록 SHA·부모 연결·Frozen Run 9 Script SHA와 기존 Validator 25/25도 재확인했다.
+- 제한: Synthetic 결과는 Client Fail-closed 분기만 검증하며 `providerBehaviorVerified=false`다. Provider별 C-03~C-10 실제 행동, Freshness·Coverage·Canary, AirKorea Schema·권리·위치 조건과 Gate 2 최종 판정은 바꾸지 않는다.
+- 재검토 조건: 기관 서면 답변 수신, 새 실제 호출·Canary·전문 검토가 필요할 때, Fixture·Script·Canonical Evidence가 변경될 때.
+- 관련 문서: [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), [Provider 실검증 Runbook](./provider-validation-runbook.md), [Product License Register](./product-license-register.md), `TASKS.md`
 
 ## 다음 Decision Log 예정 항목
 

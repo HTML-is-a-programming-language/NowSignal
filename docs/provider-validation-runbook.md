@@ -7,7 +7,7 @@
 - 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·실호출과 AirKorea Schema 충돌 문의 제출. 운영계정·Traffic 상향·제품 코드는 비범위
 - 범위: 기상청 단기예보, 기상청 기상특보, AirKorea 대기오염정보·측정소정보
 - 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push. 로컬 좌표→KMA 격자 변환과 측정소 선택 알고리즘은 Gate 4 설계·테스트 대상이며 이 Provider 실호출 Runbook이 검증 완료로 대신하지 않는다.
-- 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
+- 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
 
 이 Runbook은 인증키를 받은 뒤 동일한 방법으로 Contract·오류·Freshness를 검증하기 위한 실행 명세다. 2026-08-10까지 아홉 Run ID를 사용했고 실제 호출은 보수적으로 10회 계상했다. KMA 단기예보·특보와 AirKorea 측정소 Sentinel은 통과했다. AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개와 핵심 응답 필드 3개를 관찰했다. 원본 Manifest의 C-01은 `stationName` 응답 필수 조건 때문에 `fail`로 보존한다. 포털 Live 응답표·공식 Sample은 이 Field를 생략하지만 같은 첨부 v1.4 필드표는 필수로 명시하므로 Provider 응답 Contract는 `conflicting_official_schema`다. Freshness·품질과 나머지 오류 Contract·Canary는 미평가다. 아래에서 명시적으로 실행 결과라고 표시하지 않은 수치는 계속 계획이다.
 
@@ -488,6 +488,26 @@ Run 9 Sanitized Manifest Canonical JSON(UTF-8, 줄바꿈 없음):
 - 미평가 범위: `stationName` 누락에서 품질 단계를 중단했으므로 측정시각 Age·Freshness·실제 값 유효성은 `not_evaluated`다. Run 6의 504와 Run 7의 로컬 Validator 실패도 유지하며, 안정성·14일 Canary·나머지 Endpoint·오류 Case 통과로 확대하지 않는다.
 - 후속 규칙: 다음 Plan에서는 측정소를 사전등록한 요청 Context로 보존하되 응답 Echo를 C-01 필수로 강제하지 않고, 공식 문서 충돌을 별도 `contract_conflict`로 Fail-closed 처리한다. Run 9를 같은 이유로 재호출하지 않는다. Schema 충돌 문의는 2026-08-10 공공데이터포털에서 한국환경공단 대상으로 제출돼 처리상태 `접수`이며, 답변 전에는 중복 제출하지 않는다. 다음 실제 호출은 별도 사용자 결정이 필요하다.
 
+#### 6.1.20 C-09·C-10 Offline Synthetic Client Classifier
+
+기관 답변과 실제 Provider 호출을 기다리는 동안 Client의 Fail-closed 분기만 무호출로 검증했다. 기존 Run 9 Script와 Plan·Manifest는 과거 Evidence이므로 수정하지 않고, 별도 공개 검증 도구를 추가했다.
+
+- 오류 분류기: [`scripts/validation/provider-error-contract-self-test.ps1`](../scripts/validation/provider-error-contract-self-test.ps1)
+- 통합 검증기: [`scripts/validation/gate2-offline-verify.ps1`](../scripts/validation/gate2-offline-verify.ps1)
+- Fixture 출처: `synthetic_classifier_fixture`; `providerBehaviorVerified=false`
+- errorClassifierSha256: `7e22b789df47f699492ab4aa7d4d0771f677ca3175f80b4efa5e7e833f991c24`
+- offlineVerifierSha256: `04ff589d2fded19fbae75c9da0457f66924f4670509b73707f1b9cae211f74ce`
+- C-09·C-10·모호한 오류 Fail-closed Fixture: 16/16 기대 판정, 미처리 예외 0, Synthetic Marker·URI 출력 0, 두 개의 새 Windows PowerShell 5.1 Process에서 Capture한 원본 stdout이 정확히 일치
+- Fixture Descriptor SHA-256: `633ece25bc6ad528db967a2f3d35a86c8402562df5cd8a9eb7d7b62486a050f4`
+- Result Projection SHA-256: `0a396ff4d4c68397f9a499a8c207c7649bf54d7fab81cf48b51fbddfa23677b2`
+- Frozen Validator stdout SHA-256: `4cf5822012d75bdde6a375af53e61eba93ae42bb1b1f211b39995f1da98012a5`; 오류 Classifier stdout SHA-256: `858cc61cfc80fc0ec0746d1eb5905131cf1f967685dae0875e4d38bca1e65e84`
+- 통합 검증기 stdout SHA-256: `49f42ba2e1d9d2657e597b7fbf6509e1fdccab0aa5a639418e8b3e87338d0710`; 고정된 System32 Windows PowerShell `powershell.exe`가 5.1 Desktop인지 별도 Child Probe로 확인했고, 두 개의 새 검증기 Process에서 Exit 0·stderr 0·대소문자를 포함한 원본 stdout Byte가 정확히 일치
+- 실행 통제: Network 0, Retry 실행 0, 같은 Run Retry 허용 `false`, Retry 정책 실행 검증 `false`, Sleep 0, Redirect 0. HTTP status·Provider code·WebExceptionStatus를 분리하고, 403·깨지거나 빈 Payload의 원인·잘린 예외 Chain·C-09/C-10 동시 Signal은 추정하지 않고 `*_unclassified`로 닫음. `Retry-After`는 존재 여부만 Synthetic 입력으로 다루며 값 Parse·상한 적용을 검증한 것으로 보지 않음
+- 정적 감사: 두 Script 모두 Windows PowerShell 5.1 Parser 오류 0. 새 오류 분류기는 Network Member·DPAPI·파일 쓰기 0이며, Frozen Run 9 Script는 기존 `GetResponse` 호출 지점 정확히 1개·Loop 밖임을 재확인
+- Evidence 연결: Run 6~9의 Canonical Plan·Manifest 8개가 모두 한 줄 JSON으로 Parse되고 기록 SHA·부모 연결·Run 9 Script SHA와 일치. Frozen Validator 25/25와 새 오류 Fixture 16/16을 각각 새 Process에서 2회 실행해 동일 결과를 확인
+
+이 결과는 C-09·C-10 **Client 분류기**의 Offline Evidence다. Provider가 실제로 Timeout·Backend·Quota 오류를 어떤 HTTP status·code·body로 반환하는지는 계속 `not_run` 또는 기존 관찰 범위로 유지하며, 실제 Quota 소진이나 Provider Contract 통과로 승격하지 않는다.
+
 ### 6.2 수집 항목
 
 매 호출에서 다음 값을 분리 기록한다.
@@ -534,11 +554,11 @@ Contract smoke는 실제 Category code·Schema 매핑과 위 잠금값을 채우
 | KMA 초단기실황 | 고정 격자별 계획 Poll | 관측시각, 격자, 강수 형태·1시간 강수량, 기온, 습도, 풍속, Source·단위 | 계획 Poll 중 `data`이고 필수 필드가 모두 있으며 관측 Age가 90분 이내인 **사용 가능 표본 비율** 95% 이상 |
 | KMA 초단기예보 | 고정 격자별 계획 Poll과 고유 발표 회차 | 발표·유효시각, 격자, 강수 형태·양, 기온, 습도, 풍속, Source·단위 | 계획 Poll 중 최신 `data`이고 필수 필드가 모두 있으며 첫 6시간 예상 Cell Coverage가 100%인 사용 가능 표본 비율 95% 이상. 고유 발표 회차 중 그 최신본이 잠금된 허용 지연 안에 도착한 비율 95% 이상 |
 | KMA 단기예보 | 고정 격자별 계획 Poll과 고유 발표 회차 | 발표·유효시각, 격자, 강수 형태·양·확률, 기온, 습도, 풍속, Source·단위 | 계획 Poll 중 최신 `data`이고 필수 필드가 모두 있으며 첫 12시간 예상 Cell Coverage가 100%인 사용 가능 표본 비율 95% 이상. 고유 발표 회차 중 그 최신본이 잠금된 허용 지연 안에 도착한 비율 95% 이상 |
-| KMA 기상특보 | 계획 Poll과 관찰된 고유 발표 | 발표기관, 발표·발효·해제시각, 대상지역, 원문, 활성·해제·정정 연결, `valid_empty` | 계획 Poll 중 `data|valid_empty`인 비율 95% 이상이며 오류는 성공으로 세지 않음. 출처가 확인된 실제 Sanitized 응답 또는 공식 Sample로 활성·해제·정정 Contract가 모두 pass. 실제 발표가 있으면 필수 필드 완전성 100%, 없으면 Live event latency는 `not_observed`이고 제한부 판정만 허용. 비기상 재난 안전으로 오해시키는 변환 0건 |
+| KMA 기상특보 | 계획 Poll과 관찰된 고유 발표 | 발표기관, 발표·발효·해제시각, 대상지역, 원문, 활성·해제·정정 연결, `valid_empty` | 계획 Poll 중 `data` 또는 `valid_empty`인 비율 95% 이상이며 오류는 성공으로 세지 않음. 출처가 확인된 실제 Sanitized 응답 또는 공식 Sample로 활성·해제·정정 Contract가 모두 pass. 실제 발표가 있으면 필수 필드 완전성 100%, 없으면 Live event latency는 `not_observed`이고 제한부 판정만 허용. 비기상 재난 안전으로 오해시키는 변환 0건 |
 | AirKorea 측정소 | 두 고정 지역에 수동으로 미리 지정한 공개 측정소 | 측정소 식별자·명칭, 시·도 수준 지역, 공개 좌표 기반 거리 | `stationMaxDistanceKm` 이내 Pair의 Contract 연결 100%, 거리 초과·다른 측정소 보간 0건. 기준 안의 측정소가 없으면 지역 Coverage fail. Gate 2는 수동 연결만 검증하며 자동 측정소 선택 정확도는 Gate 4 범위 |
 | AirKorea 관측 | 공개 측정소별 계획 Poll | 관측시각, PM10·PM2.5 원 수치·등급·단위, 측정소와 Fallback 사유 | 계획 Poll 중 `data`이고 PM10·PM2.5 필드가 모두 있으며 관측 Age가 2시간 이내인 사용 가능 표본 비율 90% 이상. 결측을 0으로 변환한 사례 0건 |
 | AirKorea 예보 | 대상 지역별 고유 05·11·17·23시 발표 회차 | 발표시각, 유효일·지역, PM10·PM2.5 예보와 Source | 고유 발표 회차 중 최신 `data`가 잠금된 허용 지연 안에 도착하고 모든 예상 Cell과 필수 필드를 갖춘 사용 가능 회차 비율 90% 이상 |
-| 공통 Contract·보안 | C-01~C-12의 사전 고정 Case와 전체 계획 호출 | 예상 Verdict, 실제 호출 또는 허용된 Fixture 근거, Source·License·Attribution, Secret Redaction | 아래 필수 Case가 모두 `pass`이고 미해결 `fail|not_observed` 0건. 계획 호출 실행률 95% 이상, Source·License·Attribution 유실·API key·정확 GPS 누출·설명 없는 자동 Provider 전환 각각 0건 |
+| 공통 Contract·보안 | C-01~C-12의 사전 고정 Case와 전체 계획 호출 | 예상 Verdict, 실제 호출 또는 허용된 Fixture 근거, Source·License·Attribution, Secret Redaction | 아래 필수 Case가 모두 `pass`이고 미해결 `fail` 또는 `not_observed`가 0건. 계획 호출 실행률 95% 이상, Source·License·Attribution 유실·API key·정확 GPS 누출·설명 없는 자동 Provider 전환 각각 0건 |
 
 개별 `data` 성공률·완전성·Age·Coverage도 진단 지표로 각각 보고하되, 서로 다른 표본의 독립 비율을 조합해 합격시키지 않는다. 위 **사용 가능 표본·회차 비율**의 분자는 같은 표본이 성공, 필수 필드, Age 또는 허용 지연, Coverage 조건을 동시에 만족한 경우만 센다. `valid_empty`가 허용되지 않는 대상의 빈 결과, `partial`, `delayed|stale`, 인증·권한·Timeout·Backend 오류와 계획 누락 호출은 모두 해당 고정 분모의 실패다.
 

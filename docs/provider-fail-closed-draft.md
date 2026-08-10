@@ -1,7 +1,7 @@
 # Provider Fail-closed 판단 초안
 
 - 최초 작성일: 2026-08-07
-- 문서 상태: `draft_not_approved`
+- 문서 상태: `draft_ready_for_gate_3_review_not_approved`
 - 구현 상태: `not_started`
 - 목적: Provider 데이터가 오래됐거나 불완전·충돌·차단됐을 때 확정적 행동 추천을 만들지 않는 공통 판단안을 Gate 3 합의 전에 준비한다.
 - 공통 계약: [공공 데이터 카탈로그](./09-public-data-catalog.md) 2.2
@@ -38,6 +38,21 @@
 
 `fetchedAt`은 관측·발표시각을 대체하지 않는다. Provider 시각이 없으면 Fresh로 추정하지 않고 `partial` 또는 `unavailable` 후보로 둔다.
 
+### 1.1 결정 우선순위
+
+아래 순서는 Gate 3 검토용 고정 초안이다. 한 단계가 차단이면 뒤 단계의 점수·Fallback으로 이를 해제하지 않는다. 정의되지 않은 상태의 기본값은 허용이 아니라 `block`이다.
+
+| 순서 | 검사 | 통과 조건 | 실패·미확인 시 결과 |
+| ---: | --- | --- | --- |
+| 1 | License | `licenseStatus=usable`, 검토기한 유효, 해당 연산이 Product License Register에서 허용됨 | `resultKind=not_fetched`, 표시·Score·LLM 입력·Cache 차단 |
+| 2 | Contract | 적용 공식 계약이 단일하고 `contractStatus=verified` | `conflicting_official_schema` 또는 `not_verified`; Score·Best Window 차단, 개발 Evidence만 분리 표시 |
+| 3 | Result | `resultKind=data` 또는 `resultKind=valid_empty`이고 오류 Class가 없음 | `unavailable` 또는 `not_fetched`; Score 차단, 조용한 Provider 전환 금지 |
+| 4 | Quality | `fresh`, 또는 Gate 3에서 명시적으로 허용한 제한적 `delayed` 또는 `partial` | `stale` 또는 `conflicting`은 차단. 미승인 `delayed`·`partial`도 차단 |
+| 5 | Activity field role | 해당 활동의 모든 `hard_block`·`score_required` 입력이 존재하고 승인된 Threshold·단위를 사용 | 활동별 Score·Best Window 차단; 누락을 0 또는 중립값으로 보정 금지 |
+| 6 | Recommendation | Hard block이 없고 근거 Provider·시각·지역·License·Algorithm version을 표시 가능 | 설명 또는 수동 확인 행동만 제공; 확정 추천 금지 |
+
+`valid_empty`는 순서 3을 통과할 수 있지만 Provider별 의미를 먼저 적용한다. KMA 날씨 특보의 `valid_empty`는 날씨 특보 없음일 뿐 전체 재난 안전이 아니며, AirKorea 필수 관측의 `valid_empty`는 대기질 근거 부재이므로 순서 5에서 차단한다.
+
 ## 2. 제안 출력 정책
 
 | 입력 | 정보 표시 | 활동 Score·Best Window | 사용자 행동 문구 | Cache 사용 |
@@ -62,6 +77,21 @@
 5. 특보 없음이나 대기질 결측을 0점 위험으로 변환하지 않는다.
 6. KMA 기상특보의 `valid_empty`는 날씨·대기질 활동 판정 자체를 막지 않지만 “모든 재난 안전”으로 확대하지 않는다.
 7. 필수 AirKorea 측정값의 `valid_empty`는 대기질 근거 부재이므로 통합 Score와 Best Window를 막는다.
+
+### 3.1 Founder 활동별 입력 역할 검토표
+
+이 표는 Threshold나 점수 공식을 정하지 않는다. Gate 3에서 각 `candidate`를 승인·제외하고 단위·임계값·우선순위를 고정하기 전에는 모두 추천 생성에 사용할 수 없다.
+
+| Provider 입력 | 외출 | 산책 | 러닝 | 현재 역할 상태 | 미확인·누락 처리 |
+| --- | --- | --- | --- | --- | --- |
+| KMA 활성 기상특보·대상지역·발효시각 | `hard_block_candidate` | `hard_block_candidate` | `hard_block_candidate` | 경보 종류별 차단 범위·강도 `not_approved` | 공식 특보가 활성인데 의미 매핑이 없으면 추천 차단. 특보 없음은 비기상 재난 안전으로 확대 금지 |
+| KMA 강수 형태·강수량·강수확률 | `score_required_candidate` | `hard_block_or_score_candidate` | `hard_block_or_score_candidate` | 시간 Horizon·Threshold `not_approved` | 필수 Category 누락·단위 불명·Stale이면 추천 차단 |
+| KMA 기온·습도·풍속 | `score_required_candidate` | `score_required_candidate` | `hard_block_or_score_candidate` | 체감·위험 Threshold와 활동별 가중치 `not_approved` | 값 누락을 쾌적 또는 0 위험으로 보정 금지 |
+| AirKorea PM10·PM2.5 원 수치·등급·관측시각 | `hard_block_or_score_candidate` | `hard_block_or_score_candidate` | `hard_block_or_score_candidate` | 제3유형 파생 허용·Schema·Threshold `not_verified` | 둘 중 하나라도 결측이거나 관측 Age·측정소 Context가 미확인이면 추천 차단 |
+| AirKorea O3 | `informational_candidate` | `informational_candidate` | `informational_candidate` | Founder 핵심 범위 밖, 별도 기준 전 Score 사용 금지 | 값은 원형 보존 가능하지만 추천 결론에 사용 금지 |
+| AirKorea 지역·일 단위 예보 | `informational_candidate` | `informational_candidate` | `informational_candidate` | 시간대별 관측 대체 금지 | 시간대별 Best Window 근거로 사용 금지 |
+
+Gate 3 승인 항목은 활동별로 `hard_block`, `score_required`, `informational`, `excluded` 중 정확히 하나가 되어야 한다. `candidate` 또는 `not_approved`가 하나라도 남아 있으면 해당 활동의 제품 Score는 비활성이다.
 
 ## 4. Fallback 제안
 

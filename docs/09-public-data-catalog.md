@@ -1,12 +1,14 @@
 # NowSignal AI 공공 데이터 카탈로그
 
-- 문서 상태: `Gate 2 desk research complete`; 인증키 기반 contract·freshness 검증은 `not_verified`
+- 문서 상태: `Gate 2 provider validation in_progress`; Desk research 완료, Contract는 Endpoint별 부분 검증, Freshness·Canary는 `not_run`
 - 조사 기준일: 2026-08-05 (Asia/Seoul)
+- 실행 근거 갱신일: 2026-08-10 — KMA 단기예보·기상특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`
 - Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌을 보수적으로 기록. 2026-08-09 Live 상세에서는 KMA·AirKorea 한·영문 개발 호출량이 일치해 KMA 충돌은 해소됐으며, 실제 승인량·Reset 시각은 승인 화면 확인 전 `not_verified`. AirKorea 영문 운영 승인 표기는 페이지 내부 충돌
 - 범위: 날씨, 대기질, 안전 알림, 지역 행사, 지오코딩, Web Push
 - 근거 원칙: 제공기관 또는 표준 제정기관의 1차 출처만 확정 근거로 사용한다. 포털의 “실시간”, “최신” 표시는 가용성 SLA가 아니다.
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
 - 실제 호출 절차와 Evidence 형식: [provider-validation-runbook.md](./provider-validation-runbook.md)
+- Provider·Case별 현재 Evidence와 재개 권한: [gate-2-evidence-matrix.md](./gate-2-evidence-matrix.md)
 - 장애·오래된 값·충돌 시 출력 제안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 - Founder scope와 우선 활동: [founder-problem-evidence.md](./founder-problem-evidence.md)
 - Gate 1·2 비코드 준비 감사: [gate-1-2-readiness-audit.md](./gate-1-2-readiness-audit.md)
@@ -15,9 +17,9 @@
 
 | Adapter | 1차 Provider | Gate 2 판정 | 최초 적용 | 핵심 이유와 제한 |
 | --- | --- | --- | --- | --- |
-| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | 전국 5 km 격자, 초단기실황·초단기예보·단기예보, 공공누리 1유형. 보수적 실검증 상한 10,000회/일, 승인 quota `not_verified` |
-| `SafetyAlertProvider` | 기상청 기상특보 | `adopt` | Phase 1 | 상용 이용 가능한 날씨 특보 원문. 비기상 재난까지 포괄하지는 않음 |
-| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 두 API 상세는 각각 개발계정 500회/일, 사용자 지원 API는 계정별 일 500건을 표시하므로 합산 500회를 보수적 상한으로 사용. 실제 승인량·공공누리 3유형·운영·위치 관련 조건 확인 필요 |
+| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | `/getUltraSrtNcst` C-01 `pass`; 다른 정상 Endpoint와 Freshness는 `not_run`. 전국 5 km 격자, 공공누리 1유형. 승인 quota `not_verified` |
+| `SafetyAlertProvider` | 기상청 기상특보 | `adopt` | Phase 1 | `/getWthrWrnList` C-01 `pass`; 통보문·현황·Freshness는 `not_run`. 상용 이용 가능한 날씨 특보 원문이며 비기상 재난까지 포괄하지 않음 |
+| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 측정소 목록 C-01 `pass`; 대기오염 Run 9 원본 C-01 `fail`과 공식 Schema 충돌은 미해소이며 문의 `접수`. 두 API 합산 500회를 보수적 상한으로 사용하고 실제 승인량·공공누리 3유형 파생·운영·위치 관련 조건을 별도 확인 |
 | `SafetyAlertProvider` | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 비상용 프로토타입 이후 재심의 | 공공데이터포털은 공공누리 4유형. 플랫폼의 일반 안내와도 불일치하며 현재 범위·할당량이 확인되지 않음 |
 | `LocalEventProvider` | 한국관광공사 TourAPI | `conditional_adopt` | Phase 3 | 개발 1,000회/일, 운영 심의. 레코드 메타와 이미지별 라이선스를 분리해야 함 |
 | `GeocodingProvider` | 로컬 좌표 변환 + 행정구역 직접 선택 | `adopt` | Phase 1 | 외부 전송과 정확한 GPS 보관을 최소화. 외부 지오코더는 아래 조건부 후보만 사용 |

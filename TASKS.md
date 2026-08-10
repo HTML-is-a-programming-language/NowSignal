@@ -20,7 +20,7 @@
 | --- | --- | --- | --- | --- |
 | Gate 0 환경 확인 | `done` | 저장소, Git, Node, package manager, 환경변수 이름, 덮어쓰기 위험 확인 | GitHub 공개 저장소·권한 확인, 작업 브랜치 Push와 upstream SHA 일치 검증, Node 및 package manager 버전 확인 | Git·PowerShell의 로컬 제약은 명령별 우회 유지 |
 | Gate 1 Founder Problem Fit | `passed_for_founder_scope` | 창업자 본인의 실제 불편, 문제 패턴, 초기 활동 범위와 일반화 한계를 기록 | [창업자 문제 근거](./docs/founder-problem-evidence.md) 7개 패턴, Desk research, 외부 검증 계획 | 외부 시장 수요는 `not_verified`. 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전 후속 검증 재개 |
-| Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표·License Register·실검증 Runbook·fail-closed 초안·[비코드 준비 감사](./docs/gate-1-2-readiness-audit.md) | 비코드 실행 명세는 준비됨. 인증키 Contract·Canary와 이용조건 확인 전에는 Gate 통과 금지 |
+| Gate 2 Public Data Feasibility | `in_progress` | API, License, Traffic, Freshness, Coverage, Failure mode, Adapter 적합성 검증 | 공식 문서 기반 조사표·License Register·실검증 Runbook·fail-closed 초안·[Evidence Matrix](./docs/gate-2-evidence-matrix.md)·[비코드 준비 감사](./docs/gate-1-2-readiness-audit.md) | Provider Network 검증 일부는 차단됐지만 문서·무호출 Fixture 작업은 계속 진행. 전체 Contract·Canary와 이용조건 확인 전 Gate 통과 금지 |
 | Gate 3 Product Design | `blocked` | PRD, Journey, MVP, 제외 범위, Wireframe | 없음 | Gate 2 필수 Provider 가능성 확인 후 Founder scope로 설계 승인 필요 |
 | Gate 4 Data Foundation | `planned` | Fetch, Validation, Normalization, Cache, Attribution, Freshness | 없음 | Gate 2 통과 후 시작 |
 | Gate 5 Activity Optimizer | `planned` | Score, Best Window, Hard Block, Alternatives, Algorithm Version | 없음 | Gate 4 후 시작 |
@@ -89,12 +89,12 @@
 - [x] `done` `WeatherProvider`, `AirQualityProvider`, `SafetyAlertProvider`, `LocalEventProvider`, `GeocodingProvider` 적합성 매핑
 - [x] `done` Product License Register 초안 작성
 - [x] `done` Phase 1 Provider 실검증 Runbook·Evidence 규격·`not_run` 결과표 작성
-- [x] `done` stale·delayed·partial·conflicting·unavailable·License 차단의 fail-closed 판단 초안 작성 — Gate 3 승인 전까지 `draft_not_approved`
+- [x] `done` stale·delayed·partial·conflicting·unavailable·License 차단의 fail-closed 판단 초안과 License→Contract→Result→Quality 우선순위·활동별 입력 역할 검토표 작성 — `draft_ready_for_gate_3_review_not_approved`
 - [x] `done` 2026-08-07 KMA 한국어·영문 Locale 호출량 표시 충돌 확인, 낮은 값 우선 원칙 기록
 - [x] `done` 2026-08-09 Phase 1 한·영문 Live 상세 재확인 — KMA Locale 충돌 해소, KMA·AirKorea 개발 호출량 표시 일치, AirKorea 영문 운영 승인 표기 내부 충돌은 승인 화면·기관 확인 항목으로 유지
 - [x] `done` Founder scope에 필요한 강수·기온·습도·풍속·대기질·기상특보 의미 필드와 14일 Canary 사전 합격 기준 초안 v1·Contract 후 잠금 절차 작성
 
-### Phase 1 실제 API·법적 검증 — Contract smoke Run 9 종료·공식 Schema 충돌 검토
+### Phase 1 실제 API·법적 검증 — Run 9 종료·Schema 답변 대기와 Offline 준비 병행
 
 | 작업 | Workflow | Evidence | 재개 조건 |
 | --- | --- | --- | --- |
@@ -104,8 +104,9 @@
 | 14일 관측·발표 지연·Coverage 측정 | `deferred_manual` | `not_run` | 사전 합격 기준·호출 예산·실행환경 승인 뒤 |
 | AirKorea 제3유형 파생 설명·Cache·표시 및 위치 관련 조건 확인 | `deferred_manual` | `not_verified` | Gate 2 최종 판정 전 서면 확인 또는 전문 검토 |
 | AirKorea 응답 Schema 충돌 문의 | `in_progress` | [문의 기록](./docs/airkorea-schema-inquiry-draft.md) `submitted_pending_response`; 2026-08-10, 한국환경공단, 포털 처리상태 `접수` | 제공기관 또는 공공데이터포털의 서면 답변 확인 |
-| Provider별 장애·누락·시간대·중복 fixture 확보 | `in_progress` | Run 6 Sanitized HTTP 504 Envelope 1건과 Offline Classifier `pass`; 발생 주체 `unclassified`, Body fixture 없음, 계획 C-09·C-10 `not_run` | 실제 오류 Case 별도 사전등록 |
+| Provider별 장애·누락·시간대·중복 fixture 확보 | `in_progress` | Run 6 Sanitized HTTP 504 Envelope 1건은 발생 주체 `unclassified`; 공통 C-09·C-10 Client Synthetic Classifier 16/16·미처리 예외 0·두 새 Process 결정론·Network/Retry 0 `pass`. `providerBehaviorVerified=false`, Provider별 실제 C-09·C-10은 `not_run` | 실제 오류 Case는 별도 Plan·Hash·사용자 결정. 누락·시간대·중복 Fixture는 계속 준비 |
 | Local Validator Offline fixture | `done` | PS 5.1 StrictMode Cardinality 오류 재현 뒤 확장 Validator 25/25 기대 판정·미처리 예외 0·결정론적 반복 `pass`, 외부 호출 0 | 완료 |
+| Gate 2 Offline Evidence 무결성 검증 | `done` | Run 6~9 Canonical Plan·Manifest 8개 Hash·부모 연결·Run 9 Script SHA 일치, Frozen Validator 25/25와 오류 Classifier 16/16을 각각 새 Process 2회 반복해 동일 결과, Network 0 | [Evidence Matrix](./docs/gate-2-evidence-matrix.md)와 검증 Script Hash가 바뀌면 재실행 |
 | 위치기반서비스 신고 안내의 NowSignal 적용 여부 확인 | `deferred_manual` | `application_notice_observed_2026-08-10`, `not_verified` | 실제 사용자 위치 기능 설계·운영·배포 전 기관 확인 또는 전문 검토 |
 
 ### Production·후속 Phase 검증
@@ -138,7 +139,7 @@
 
 1. `done` 수동 작업을 [사용자 수동 작업 체크리스트](./docs/manual-action-checklist.md)로 분리하고 Google Forms를 후속 외부 사용자 검증 Trigger까지 유예했다.
 2. `done` 인증키 없이 작성 가능한 [Provider 실호출 검증 Runbook](./docs/provider-validation-runbook.md), 증거 형식과 보수적 Canary 호출 예산을 준비했다.
-3. `done` 전체 Provider 상태 축과 [Fail-closed 판단 초안](./docs/provider-fail-closed-draft.md)을 맞추고 `draft_not_approved`로 유지했다.
+3. `done` 전체 Provider 상태 축과 [Fail-closed 판단 초안](./docs/provider-fail-closed-draft.md)을 맞추고 `draft_ready_for_gate_3_review_not_approved`로 유지했다.
 4. `done` [Gate 1·2 비코드 준비 감사](./docs/gate-1-2-readiness-audit.md)에서 상태·근거·Link·단계 경계를 대조했다.
 
 ## 현재 다음 Trigger
@@ -150,5 +151,6 @@
 - 네 개발 활용신청이 모두 승인됐고 활용기간은 2026-08-10~2028-08-10이다. 결과 화면에 일일 Traffic이 없어 실제 승인량은 `not_verified`다.
 - 일반 인증키 Decoding 값은 OneDrive·Git 밖의 Windows 사용자 범위 DPAPI CLIXML로 저장했고, 같은 사용자 컨텍스트의 복호화 가능 여부만 확인했다. 키 값은 출력하지 않았다.
 - KMA 단기예보·특보와 AirKorea 측정소 C-01은 HTTP 200·Provider `00`으로 통과했다. AirKorea 대기오염 Run 9는 정확히 1회 호출에서 HTTP 200·Provider `00`·Item 1개와 `dataTime`·`pm10Value`·`pm25Value`를 관찰했다. 원본 C-01 실패는 보존한다. 포털 Live 응답표·공식 Sample과 첨부 v1.4 필드표가 `stationName` 포함 여부에서 충돌하므로 전체 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`다. Retry 0, 호출 전후 C-12 `pass`, 당일 보수적 누적 10회이며 같은 이유로 재호출하지 않는다.
+- 기관 답변은 Network 검증 한 분기의 Trigger일 뿐 프로젝트 전체 정지 조건이 아니다. 답변 대기 중 [Gate 2 Evidence Matrix](./docs/gate-2-evidence-matrix.md), Phase 1 권리 연산표와 C-09·C-10 무호출 Classifier를 준비했고, 실제 Provider 행동·Canary·제품 구현으로 확대하지 않는다.
 - Google Forms와 Interview는 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 명시적 승인을 받고 재개한다.
 - Gate 2 통과와 Gate 3 설계 승인 전에는 제품 코드를 작성하지 않는다.

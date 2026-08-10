@@ -1,13 +1,15 @@
 # NowSignal AI Product License Register
 
-- 문서 상태: `working_draft`
+- 문서 상태: `working_draft_updated_after_run_9`
 - 최초 작성일: 2026-08-05
-- 최종 확인일: 2026-08-05 (Asia/Seoul)
+- 최종 확인일: 2026-08-10 (Asia/Seoul)
 - Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌 기록. 2026-08-09 Live 상세에서 KMA·AirKorea 한·영문 개발 호출량은 일치해 KMA 충돌 해소. AirKorea 영문 운영 승인 표기 내부 충돌은 License 판정과 분리해 Production 차단 조건으로 유지
+- Phase 1 실행 근거: 개발 활용신청 4건 승인·활용기간 2026-08-10~2028-08-10. KMA 단기예보·기상특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`; Freshness·Canary `not_run`
 - 적용 범위: 제품이 수집·저장·변환·표시하거나 사용자 추천의 근거로 사용하는 공개 데이터와 외부 표준
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
 - Founder scope: [founder-problem-evidence.md](./founder-problem-evidence.md)
 - 실제 호출 검증: [provider-validation-runbook.md](./provider-validation-runbook.md)
+- Provider·Case별 Evidence와 재개 권한: [gate-2-evidence-matrix.md](./gate-2-evidence-matrix.md)
 - 권리·Freshness 차단 정책 초안: [provider-fail-closed-draft.md](./provider-fail-closed-draft.md)
 - 주의: 이 문서는 공식 페이지를 바탕으로 한 engineering register이며 법률 자문이 아니다. 실제 활용신청 시 동의한 최신 약관, 데이터셋별 상세 조건, 제공기관의 서면 답변이 우선한다.
 
@@ -15,7 +17,7 @@
 
 ### 판정 상태
 
-- `approved_for_dev`: 공식 문서상 개발용 구현 후보로 사용할 수 있다. 실제 API 응답이나 운영 승인을 검증했다는 뜻은 아니다.
+- `approved_for_dev`: 개발 활용신청과 공식 문서 기준으로 개발 검증 범위에 사용할 수 있다. 이 상태 자체만으로 개별 Endpoint Contract·Freshness·운영 승인을 통과했다는 뜻은 아니다.
 - `conditional_for_production`: 표시된 조건을 충족하고 증거를 보관하기 전에는 production에서 활성화하지 않는다.
 - `blocked_for_commercial`: 현재 확인한 조건상 상업 배포에 사용하지 않는다.
 - `candidate_not_verified`: 용도·권리·기술 조건 중 하나 이상을 확인하지 못해 기본 경로로 선택하지 않는다.
@@ -47,15 +49,26 @@
 
 | ID | 데이터·표준 | 현재 판정 | 상업 이용 | 변경 | 저장·Cache | 핵심 미해결 사항 |
 | --- | --- | --- | --- | --- | --- | --- |
-| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | 실제 key contract·freshness, 활용신청 조건, 제3자 권리 포함 필드·장기 Cache 범위 미검증 |
-| LIC-KMA-002 | 기상청 기상특보 | `approved_for_dev` | 가능 | 가능하지만 공식 원문 보존 | 활성·해제 추적에 필요한 범위 | 실제 전달 지연·정정 연결, 활용신청 시점 조건 미검증 |
-| LIC-AIR-001 | AirKorea 대기오염정보·측정소정보 | `conditional_for_production` | 가능 | 원문 변경 금지 | immutable 원본과 파생층 분리 | 운영 심의, 위치정보 관련 절차, 파생 허용 범위 |
+| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | `/getUltraSrtNcst` C-01만 `pass`; 다른 Endpoint·Freshness, 제3자 권리 포함 필드·장기 Cache 범위 미검증 |
+| LIC-KMA-002 | 기상청 기상특보 | `approved_for_dev` | 가능 | 가능하지만 공식 원문 보존 | 활성·해제 추적에 필요한 범위 | `/getWthrWrnList` C-01만 `pass`; 실제 전달 지연·정정 연결·통보문·현황 미검증 |
+| LIC-AIR-001 | AirKorea 대기오염정보·측정소정보 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | 가능 | 원문 변경 금지 | immutable 원본과 파생층 분리 | 측정소 C-01 `pass`; 대기오염 Schema 충돌·운영 심의·위치 절차·파생 허용 범위 미해소 |
 | LIC-MOIS-001 | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 금지로 판정 | 금지 | 확인 전 금지 | 제3·제4유형 충돌, 현재 coverage·quota, AI 설명 허용 범위 |
 | LIC-KTO-001 | TourAPI 국문 관광정보 | `conditional_for_production` | 본문 후보 가능 | 자산별 상이 | record·자산별 권리와 함께 | 이미지별 유형, 당일 운영·취소 신뢰성 |
 | LIC-VWORLD-001 | VWorld 지오코더 | `candidate_not_verified` | 메타상 제한 없음 | `not_verified` | 별도 저장·DB 저장 금지 | reverse geocoding 용도와 파생·로그 범위 |
 | LIC-JUSO-001 | 도로명주소 검색·좌표 API | `candidate_not_verified` | `not_verified` | `not_verified` | `not_verified` | 상세 License, 좌표 보존, GPS reverse 용도 아님 |
 | LIC-SGIS-001 | SGIS reverse geocoding | `candidate_not_verified` | 상용 key 승인 필요 | 약관 재검토 필요 | 약관 재검토 필요 | 입력 CRS, 상용 허용 범위, 결과 보존 |
 | STD-PUSH-001 | Push API, Web Push, VAPID | `not_product_data` | 해당 없음 | 해당 없음 | subscription 최소 보존 | Browser/Push Service별 약관·quota·SLA |
+
+### 2.1 Phase 1 연산별 운영 판정
+
+이 표는 법률 결론이 아니라 현재 근거에서 기능을 보수적으로 여닫는 Engineering 통제다. `allow_dev`는 승인된 개발 검증에 적용하고, `allow_dev_for_validation_only`는 Contract Evidence 수집 외 사용을 금지한다. `conditional`은 표시된 Evidence 전까지 Production 기능을 끄며, `deny_pending_evidence`는 서면 확인 또는 전문 검토 전 입력·저장·재배포를 하지 않는다는 뜻이다. `not_applicable`은 그 Provider 정보가 해당 연산의 직접 입력이 아님을 뜻한다. AirKorea Schema 답변은 응답 필드 계약만 다루며 제3유형 파생·AI·Cache 또는 위치 관련 절차를 자동으로 해소하지 않는다.
+
+| Phase 1 Provider | 개발 Fetch | 원문 표시 | 정규화·단위변환 | 활동 Score | LLM 입력 | TTL Cache | 장기보관·재배포 | Owner·다음 검토 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| KMA 단기예보 | `allow_dev` | `conditional` — C-11·Attribution UI | `conditional` — 원값·단위·파생층 분리 | `conditional` — Gate 3·4 기준과 Freshness 통과 | `deny_pending_evidence` — 제3자 권리 포함 필드와 입력 범위 확인 | `conditional` — 원 발표·관측시각 유지, TTL 고정 | `deny_pending_evidence` | NowSignal Data/Privacy · Gate 3 전 또는 2026-09-10 중 빠른 날 |
+| KMA 기상특보 | `allow_dev` | `conditional` — 공식 원문·기관·발표·발효·해제 우선 | `conditional` — 공식 필드 불변, 설명 분리 | `conditional` — 날씨 Hard block 범위와 `valid_empty` 의미 승인 | `deny_pending_evidence` — 공식 원문과 생성 설명 분리 기준 확인 | `conditional` — 활성·정정·해제 연결 최소 범위 | `deny_pending_evidence` | NowSignal Safety/Data · Gate 3 전 또는 2026-09-10 중 빠른 날 |
+| AirKorea 측정소 | `allow_dev` | `conditional` — 제3유형 출처표시·C-11 | `conditional` — 원 측정소 정보와 거리 계산 분리 | `not_applicable` — 단독 Score 입력 아님 | `deny_pending_evidence` | `conditional` — 관측 연결용 최소 TTL | `deny_pending_evidence` | NowSignal Data/Privacy · Schema 답변 또는 2026-09-10 중 빠른 날 |
+| AirKorea 대기오염 | `allow_dev_for_validation_only` | `conditional` — Schema·출처표시·단위 검증 | `deny_pending_evidence` — 제3유형 변경금지 범위 확인 | `deny_pending_evidence` | `deny_pending_evidence` | `deny_pending_evidence` | `deny_pending_evidence` | NowSignal Data/Privacy/Legal · Schema 답변 또는 2026-09-10 중 빠른 날 |
 
 ## 3. 상세 등록
 
@@ -65,7 +78,7 @@
 - Product use: 날씨 실황·초단기예보·단기예보의 Phase 1 `WeatherProvider`
 - 공식 상세: [공공데이터포털 API 15084084](https://www.data.go.kr/data/15084084/openapi.do)
 - 보조 공식 문서: [기상청 격자 위·경도 API 안내](https://apihub.kma.go.kr/notice.do?seqNotice=39) — 좌표 변환 공식만 참고하며 API허브의 인증·Quota·약관은 공공데이터포털 Provider에 적용하지 않음
-- 확인일: 2026-08-05
+- 확인일: 2026-08-10
 - 상세 페이지 수정일: 2026-07-09
 - License: 무료, 공공누리 제1유형. 상세 페이지에는 제3자 권리 포함 저작권 표시와 공공저작물 출처표시가 함께 기재됨
 - 상업 이용: `allowed_by_listed_license`
@@ -73,27 +86,27 @@
 - 저장·Cache: 명시적 장기 재배포 권리는 이 조사에서 확인하지 않음. 데이터 유효기간과 quota 보호에 필요한 TTL cache만 설계 후보로 두고 활용신청 약관을 재확인
 - 출처표시 초안: `출처: 기상청 단기예보 조회서비스 · 발표 {baseDate/baseTime} KST · 확인 {fetchedAt} · 원문 링크`
 - 금지·통제: 공공데이터포털 key를 client에 노출하지 않음. API허브의 별도 quota·약관을 같은 Provider 계약으로 혼합하지 않음
-- 현재 판정: `approved_for_dev`; API key를 발급하거나 endpoint를 실제 호출하지 않았으므로 contract와 freshness는 `not_verified`
+- 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getUltraSrtNcst` C-01 `pass`. 다른 정상 Endpoint·오류 Contract·Freshness는 `not_run`
 - Release evidence: 활용신청 시점 상세/약관 snapshot, contract fixture, attribution UI, 14일 freshness canary
-- Owner: Data/Privacy (`unassigned`)
-- 재검토: key 발급 전, production 전, 상세 페이지 변경 감지 시, 그 외 월 1회
+- Owner: NowSignal Data/Privacy
+- 재검토: Gate 3 진입 전, 상세 페이지 변경 감지 시 또는 2026-09-10 중 빠른 날
 
 ### LIC-KMA-002 — 기상청 기상특보 조회서비스
 
 - 제공기관: 기상청
 - Product use: 상용 MVP의 날씨 범위 `SafetyAlertProvider`
 - 공식 상세: [공공데이터포털 API 15000415](https://www.data.go.kr/data/15000415/openapi.do)
-- 확인일: 2026-08-05
+- 확인일: 2026-08-10
 - 상세 페이지 수정일: 2026-06-01
 - License: 무료, 공공누리 제1유형
 - 상업 이용: `allowed_by_listed_license`
 - 변경·파생: License상 가능하더라도 안전 원칙상 공식 원문·기관·발표·발효·해제·지역은 변경하지 않음. AI 설명은 별도 영역
 - 저장·Cache: 활성 상태·정정·해제 연결에 필요한 최소 범위만 보존하고 원 발표시각을 유지
 - 출처표시 초안: `출처: 기상청 기상특보 조회서비스 · 발표기관 {office} · 발표 {issuedAt} KST · 원문 링크`
-- 현재 판정: `approved_for_dev`; 비기상 재난을 포괄하는 것처럼 표시 금지
+- 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getWthrWrnList` C-01 `pass`. 통보문·현황·오류 Contract·Freshness는 `not_run`; 비기상 재난을 포괄하는 것처럼 표시 금지
 - Release evidence: 원문 보존 fixture, 정정·해제 연결 test, official-alert-first 화면 test, freshness canary
-- Owner: Safety/Data (`unassigned`)
-- 재검토: LIC-KMA-001과 동일
+- Owner: NowSignal Safety/Data
+- 재검토: Gate 3 진입 전, 상세 페이지 변경 감지 시 또는 2026-09-10 중 빠른 날
 
 ### LIC-AIR-001 — AirKorea 대기오염정보·측정소정보
 
@@ -101,7 +114,7 @@
 - Product use: 외출·산책·러닝 판단의 PM10·PM2.5, 지역·일 단위 대기질 예보와 측정소 연결을 위한 Phase 1 `AirQualityProvider`. O3는 원값 보존 검증 후보지만 별도 기준 전에는 제품 결론에 사용하지 않음
 - 공식 상세: [대기오염정보 API 15073861](https://www.data.go.kr/data/15073861/openapi.do), [측정소정보 API 15073877](https://www.data.go.kr/data/15073877/openapi.do)
 - 기술문서: [AirKorea OpenAPI 기술문서](https://apiweb.airkorea.or.kr/common/upload.pdf)
-- 확인일: 2026-08-05
+- 확인일: 2026-08-10
 - 상세 페이지 수정일: 2026-06-30
 - License: 무료, 공공누리 제3유형(출처표시+변경금지)
 - 상업 이용: `allowed_by_listed_license`
@@ -109,10 +122,10 @@
 - 저장·Cache: 원 관측시각과 License를 유지하는 TTL cache 후보. 장기 archive·학습용 재사용은 승인 범위 확인 전 금지
 - 출처표시 초안: `출처: 한국환경공단 AirKorea · 측정소 {stationName/id} · 관측 {observedAt} KST · 확인 {fetchedAt} · 원문 링크`
 - 추가 조건: 기술문서의 위치 포함 서비스 관련 위치정보사업 절차 안내가 NowSignal에 적용되는지는 `not_verified`
-- 현재 판정: 개발 `approved_for_dev`, 운영 `conditional_for_production`
-- Production 해제 조건: 운영계정 승인, 위치 관련 적용 여부의 서면 확인, 변경금지 자료의 파생·AI 입력·Cache 범위 확인, attribution UI·contract test
-- Owner: Data/Privacy/Legal (`unassigned`)
-- 재검토: 활용신청 전, 제공기관 답변 수령 시, production 전, 월 1회
+- 현재 판정: 개발 `approved_for_dev`, 운영 `conditional_for_production`. 개발 활용신청 두 건은 2026-08-10~2028-08-10이며 측정소 `/getMsrstnList` C-01 `pass`; 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`, 문의 `submitted_pending_response`
+- Production 해제 조건: Schema 충돌의 공식 판정, 운영계정 승인, 위치 관련 적용 여부의 서면 확인, 변경금지 자료의 파생·AI 입력·Cache 범위 확인, attribution UI·contract test. Schema 답변만으로 나머지 권리 조건을 해소하지 않음
+- Owner: NowSignal Data/Privacy/Legal
+- 재검토: 제공기관 답변 수령 시, Gate 3 진입 전 또는 2026-09-10 중 빠른 날
 
 ### LIC-MOIS-001 — 행정안전부 긴급재난문자
 
