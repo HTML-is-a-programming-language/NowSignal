@@ -3,7 +3,7 @@
 - 문서 상태: `working_draft`
 - 최초 작성일: 2026-08-05
 - 최종 확인일: 2026-08-05 (Asia/Seoul)
-- Phase 1 호출량 재확인: 2026-08-07. KMA Locale별 표시 충돌은 License 판정과 분리해 실행 Runbook에서 보수적으로 처리
+- Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌 기록. 2026-08-09 Live 상세에서 KMA·AirKorea 한·영문 개발 호출량은 일치해 KMA 충돌 해소. AirKorea 영문 운영 승인 표기 내부 충돌은 License 판정과 분리해 Production 차단 조건으로 유지
 - 적용 범위: 제품이 수집·저장·변환·표시하거나 사용자 추천의 근거로 사용하는 공개 데이터와 외부 표준
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
 - Founder scope: [founder-problem-evidence.md](./founder-problem-evidence.md)

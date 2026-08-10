@@ -52,13 +52,19 @@ Form A는 2026-08-06에 지정 계정 소유, 공동편집자 0명, 편집자 �
 
 ## Gate 2 실호출 Trigger
 
+2026-08-10 사용자가 Phase 1 개발용 API 4건의 활용신청, Secret 비노출 로드와 Contract smoke를 승인했다. [활용신청 가이드](./provider-application-guide.md)에 따라 신청하되, 14일 Canary 실행환경·예산과 운영계정·Traffic 상향·기관 문의·제품 코드는 별도 승인 전 진행하지 않는다.
+
 | 수동 작업 | 작업 상태 | 근거 상태 | 완료가 필요한 시점 | 완료 증거 |
 | --- | --- | --- | --- | --- |
-| 공공데이터 API 활용신청 | `deferred_manual` | `approval_not_requested` | 인증키 기반 smoke test 전 | 신청 대상·용도·승인일 |
-| 인증키 발급·비밀 저장 | `deferred_manual` | `secret_not_issued` | 최초 실호출 전 | 환경변수 이름과 로드 성공 여부만 기록, 값은 기록 금지 |
+| 공공데이터 API 활용신청 | `done` | `applications_4_of_4_approved`; 모두 2026-08-10~2028-08-10, 실제 승인 Traffic `not_verified` | 완료 | 신청 대상·용도·승인일 |
+| 인증키 발급·비밀 저장 | `done` | Decoding 형태 정규화·DPAPI Import·C-12 `pass` | 완료 | 값 비출력 |
+| 첫 Contract smoke | `blocked` | 세 Sentinel C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개 관찰, 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 v1.4 필드표의 `stationName` 계약 충돌, Freshness `not_evaluated`; Retry 0, C-12·Plan·Security `pass`, 누적 10회 | 같은 이유의 재호출 없이 Schema 충돌 처리·기관 문의 여부와 다음 Contract 범위·Plan·Hash·실호출 결정을 먼저 고정 | Sanitized Manifest·Canonical Plan Hash·C-12·공식 문서 대조 결과만 기록 |
 | 운영계정·Traffic 상향 신청 | `deferred_manual` | `approval_not_requested` | 실제 배포 필요량이 근거로 확인된 뒤 | 승인량·조건·유효기간 |
 | AirKorea 위치 관련 절차 적용 여부 문의 | `deferred_manual` | `external_answer_required` | AirKorea를 Production Provider로 확정하기 전 | 기관 서면 답변 또는 전문 검토 |
+| AirKorea 응답 Schema 충돌 문의 | `deferred_manual` | [문의 초안](./airkorea-schema-inquiry-draft.md) `draft_not_sent` | 사용자가 외부 제출을 명시적으로 승인한 뒤 | 답변일·답변기관·공식 판정만 공개 기록 |
 | License 불명확 항목의 제공기관·전문가 확인 | `deferred_manual` | `external_answer_required` | 해당 Provider를 제품 기본 경로로 채택하기 전 | 답변 원문 보관 위치와 판정만 공개 기록 |
+
+인증키 저장 완료 상태는 현재 작업 PC에만 적용된다. 다른 PC에서는 DPAPI CLIXML을 복사하지 말고, 그 PC의 안전한 Prompt로 다시 입력한 뒤 Import와 C-12를 확인한다.
 
 ## 별도 승인 없이는 계속 하지 않는 작업
 

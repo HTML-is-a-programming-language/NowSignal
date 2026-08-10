@@ -208,6 +208,31 @@
 - 재검토 조건: 외부 참여자 모집·연락·응답 수집, 공개 Beta·출시·홍보, 시장 수요 주장, 유료 운영 확대, 창업자 경험에 없는 활동·지역 확장 또는 Provider 조건으로 핵심 범위를 지원할 수 없을 때.
 - 관련 문서: [창업자 문제 근거](./founder-problem-evidence.md), [프로젝트 헌장](./00-project-charter.md), [문제 가설](./02-problem-hypotheses.md), [사용자 인터뷰 및 모집 계획](./03-user-interviews.md), `TASKS.md`
 
+## DL-014 — Gate 2 개발용 Provider 실검증 재개
+
+- 날짜: 2026-08-10
+- 상황: Phase 1 Provider의 공식 문서 조사, License Register, Contract·Canary Runbook과 보수적 호출 예산은 준비됐지만 인증키 기반 Evidence는 `not_run`이었다. 다음 단계에는 공공데이터포털 개발 활용신청과 실제 Endpoint 호출에 대한 사용자 승인이 필요했다.
+- 선택지: 인증키 없이 Desk research만 계속, 운영계정까지 함께 신청, Phase 1 개발용 4개 API의 활용신청·Contract 실호출만 재개.
+- 선택: 사용자가 기상청 단기예보·기상특보와 AirKorea 대기오염정보·측정소정보의 개발 활용신청, 키 값을 노출하지 않는 Secret 로드와 보수적 Contract smoke를 명시적으로 승인했다. 14일 상시 Canary의 실행환경·예산, 운영계정·Traffic 상향, 기관·전문가 문의, 제품 코드·외부 배포와 Google Forms·Interview는 승인 범위에서 제외한다.
+- 선택 이유: Gate 2를 통과하려면 실제 Schema·오류·Freshness·Coverage 근거가 필요하며, 개발계정의 제한된 호출로 먼저 검증하면 운영 변경 없이 불확실성을 줄일 수 있다.
+- 장점: 실제 Contract와 승인량을 확인하고 14일 Canary의 시작 가능 여부를 Evidence로 판단할 수 있다.
+- 단점: 사용자의 공공데이터포털 로그인·활용신청과 안전한 Secret 입력이 필요하며, 14일 관측 전에는 Gate 2 결론을 낼 수 없다.
+- 포기한 장점: 운영계정과 Traffic을 동시에 확보해 전환 시간을 줄이는 것, 제품 코드로 곧바로 통합하는 것.
+- 위험: 인증키가 Chat·Screenshot·Shell history·Git에 노출되거나, 신청 화면의 실제 승인량과 공개 상세의 호출량을 혼동하거나, 개발 Contract 통과를 Production 적합성으로 과장할 수 있다.
+- 검증 방법: 4개 개발 활용신청 승인 상태와 실제 승인량을 식별정보 없이 기록하고, Secret Redaction을 확인한 뒤 Runbook의 보수적 Contract smoke를 수행한다. 14일 Canary는 실행환경·예산을 별도로 승인받은 뒤에만 시작한다.
+- 재검토 조건: 신청이 심의·반려되거나 실제 승인량이 예산보다 낮을 때, API 이용조건·Endpoint가 바뀔 때, 운영계정·Traffic 상향 또는 제품 코드 시작이 필요할 때.
+- 관련 문서: [사용자 수동 작업 체크리스트](./manual-action-checklist.md), [Provider 실검증 Runbook](./provider-validation-runbook.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), `TASKS.md`
+
+## DL-014A — AirKorea 공식 응답 Schema 충돌의 분리 판정
+
+- 날짜: 2026-08-10
+- 상황: `/getMsrstnAcctoRltmMesureDnsty` Run 9에서 HTTP 200·Provider `00`·Item 1개와 핵심 대기질 Field를 관찰했지만 사전등록한 `stationName` 응답 Field가 없어 원본 C-01이 실패했다. 이후 공식 자료를 교차대조하니 포털 Live 응답표와 첨부 v1.4 XML Sample에는 이 Field가 없고, 같은 첨부의 응답 필드표에는 `stationName`·`stationCode`가 필수로 표시돼 있었다.
+- 선택: 원본 Run 9 Manifest와 C-01 실패를 수정하지 않는다. 핵심 Field 관찰 형태는 `core_observation_consistent_with_live_portal_response_table_and_official_sample`로만 기록하고 전체 응답표 통과로 확대하지 않는다. 전체 응답 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`로 분리한다. 다음 검증에서는 요청 측정소를 Context로 보존하되 응답 Echo를 C-01 필수로 강제하지 않고 문서 충돌을 별도 Fail-closed 상태로 유지한다.
+- 선택 이유: 실동작에 맞춰 실패를 성공으로 덮어쓰거나, 반대로 충돌하는 문서 하나만 근거로 Provider 위반을 확정하지 않기 위함이다.
+- 범위 제한: 이 판정은 해당 Endpoint의 해당 시점 개발 호출에만 적용한다. 다른 Endpoint, 오류 Contract, Freshness, 14일 Canary, Production 권리·운영 적합성을 통과시키지 않는다.
+- 재검토 조건: 제공기관이 `stationName`·`stationCode` 응답 계약을 서면으로 확인하거나 공식 상세·첨부 기술문서가 일치하도록 개정될 때.
+- 관련 문서: [Provider 실검증 Runbook](./provider-validation-runbook.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Gate 1·2 비코드 준비 감사](./gate-1-2-readiness-audit.md), [기관 문의 초안](./airkorea-schema-inquiry-draft.md), `TASKS.md`
+
 ## 다음 Decision Log 예정 항목
 
 - 활동별 score 공식과 algorithm version

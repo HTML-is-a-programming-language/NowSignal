@@ -2,7 +2,7 @@
 
 - 문서 상태: `Gate 2 desk research complete`; 인증키 기반 contract·freshness 검증은 `not_verified`
 - 조사 기준일: 2026-08-05 (Asia/Seoul)
-- Phase 1 호출량 재확인: 2026-08-07. KMA 한국어·영문 Locale 표시 충돌로 낮은 값과 실제 승인 화면 중 더 낮은 값 적용
+- Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌을 보수적으로 기록. 2026-08-09 Live 상세에서는 KMA·AirKorea 한·영문 개발 호출량이 일치해 KMA 충돌은 해소됐으며, 실제 승인량·Reset 시각은 승인 화면 확인 전 `not_verified`. AirKorea 영문 운영 승인 표기는 페이지 내부 충돌
 - 범위: 날씨, 대기질, 안전 알림, 지역 행사, 지오코딩, Web Push
 - 근거 원칙: 제공기관 또는 표준 제정기관의 1차 출처만 확정 근거로 사용한다. 포털의 “실시간”, “최신” 표시는 가용성 SLA가 아니다.
 - 라이선스 의무와 상용화 판정: [product-license-register.md](./product-license-register.md)
@@ -17,7 +17,7 @@
 | --- | --- | --- | --- | --- |
 | `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | 전국 5 km 격자, 초단기실황·초단기예보·단기예보, 공공누리 1유형. 보수적 실검증 상한 10,000회/일, 승인 quota `not_verified` |
 | `SafetyAlertProvider` | 기상청 기상특보 | `adopt` | Phase 1 | 상용 이용 가능한 날씨 특보 원문. 비기상 재난까지 포괄하지는 않음 |
-| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 두 API 상세에 각각 500회/일 표시. 공유 범위 확인 전 합산 500회를 보수적 상한으로 사용. 공공누리 3유형과 운영·위치 관련 조건 확인 필요 |
+| `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 두 API 상세는 각각 개발계정 500회/일, 사용자 지원 API는 계정별 일 500건을 표시하므로 합산 500회를 보수적 상한으로 사용. 실제 승인량·공공누리 3유형·운영·위치 관련 조건 확인 필요 |
 | `SafetyAlertProvider` | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 비상용 프로토타입 이후 재심의 | 공공데이터포털은 공공누리 4유형. 플랫폼의 일반 안내와도 불일치하며 현재 범위·할당량이 확인되지 않음 |
 | `LocalEventProvider` | 한국관광공사 TourAPI | `conditional_adopt` | Phase 3 | 개발 1,000회/일, 운영 심의. 레코드 메타와 이미지별 라이선스를 분리해야 함 |
 | `GeocodingProvider` | 로컬 좌표 변환 + 행정구역 직접 선택 | `adopt` | Phase 1 | 외부 전송과 정확한 GPS 보관을 최소화. 외부 지오코더는 아래 조건부 후보만 사용 |
@@ -107,14 +107,14 @@ type ProviderEnvelope<T> = SourceReference & {
 | 최종 수정 | `verified`: 2026-07-09 |
 | 기능·범위 | `verified`: 전국, 읍·면·동 중심의 5 km 격자. 초단기실황, 향후 6시간 초단기예보, 시간별 단기예보 제공 |
 | 접근 | `verified`: 공공데이터포털 키, REST, JSON/XML. 개발·운영 모두 자동 승인 |
-| 공식 트래픽 | `quota_conflicting_not_verified`: 한국어 상세 10,000회/일, 영문 Locale은 더 큰 값 표시. 보수적 실검증 상한은 10,000회/일과 실제 승인 화면 중 더 낮은 값. 운영 승인량·리셋 시각도 `not_verified` |
+| 공식 트래픽 | `verified`: 한·영문 Live 상세 모두 개발 10,000회/일. 보수적 실검증 상한은 10,000회/일과 실제 승인 화면 중 더 낮은 값. 실제 승인량·Reset 시각은 `not_verified` |
 | 비용·라이선스 | `verified`: 무료, 공공누리 제1유형(출처표시) |
 | 대표 Endpoint | `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0`; 실황 `/getUltraSrtNcst` |
 | 채택 | `adopt` — `WeatherProvider`의 Phase 1 기본 |
 
 신선도는 `baseDate/baseTime`, `fcstDate/fcstTime`을 기준으로 판정한다. 공식 페이지는 시간 범위를 “현재”로 표시하지만 발표 후 몇 분 내 제공되는지와 가용성 SLA는 명시하지 않는다. 따라서 첫 출시 전 14일 canary로 실제 도착 지연의 p50/p95/p99를 측정하고 기준을 확정한다.
 
-2026-08-07 재확인에서 한국어 상세는 개발 10,000회/일, 영문 Locale 상세는 더 큰 값을 표시했다. 실행 예산은 10,000회/일과 실제 승인 화면 중 더 낮은 값을 사용하며, Locale 충돌이 해소되기 전 호출량은 `quota_conflicting_not_verified`다.
+2026-08-09 재확인에서 [한국어](https://www.data.go.kr/data/15084084/openapi.do)와 [영문](https://www.data.go.kr/en/data/15084084/openapi.do) Live 상세 모두 개발 10,000회/일을 표시해 과거 Locale 충돌은 해소됐다. 다만 실제 발급 화면의 승인량과 Reset 시각은 확인하지 않았으므로 실행 예산은 10,000회/일과 승인 화면 중 더 낮은 값을 사용한다.
 
 초기 운영 규칙은 Provider 보장이 아닌 제품 가정이다.
 
@@ -135,14 +135,14 @@ type ProviderEnvelope<T> = SourceReference & {
 | 공식 근거 | [공공데이터포털 API 15000415](https://www.data.go.kr/data/15000415/openapi.do) |
 | 최종 수정 | `verified`: 2026-06-01 |
 | 기능·범위 | `verified`: 전국 기상특보 목록·전문·현황. 육상 178개 시·군과 44개 해상구역, 12개 기상현상 설명 |
-| 접근·트래픽 | REST, 개발·운영 자동 승인. `quota_conflicting_not_verified`: 한국어 상세 10,000회/일과 영문 Locale 표시가 충돌하므로 보수적 실검증 상한은 10,000회/일과 승인 화면 중 더 낮은 값 |
+| 접근·트래픽 | REST, 개발·운영 자동 승인. 한·영문 Live 상세 모두 개발 10,000회/일이며, 보수적 실검증 상한은 10,000회/일과 실제 승인 화면 중 더 낮은 값. 승인량·Reset 시각은 `not_verified` |
 | 비용·라이선스 | `verified`: 무료, 공공누리 제1유형 |
 | 대표 Endpoint | `https://apis.data.go.kr/1360000/WthrWrnInfoService`; 목록 `/getWthrWrnList` |
 | 채택 | `adopt` — 상용 MVP `SafetyAlertProvider`의 날씨 경보 원천 |
 
 특보 발효·해제·발표시각과 대상 구역을 그대로 보존한다. 활성 특보는 앱의 AI 설명보다 먼저, 원문 링크·발표기관·발표시각과 함께 표시한다. 공식 메타데이터의 “실시간”은 전달 지연 보장이 아니다. 5분 polling은 quota 검토 후 적용할 **제품 정책**이며, canary에서 실제 갱신 지연을 확인한다.
 
-2026-08-07 재확인에서 이 API도 한국어 상세의 개발 10,000회/일과 영문 Locale의 더 큰 표시가 충돌했다. 실검증은 낮은 값과 승인 화면 중 더 낮은 호출량으로 계획한다.
+2026-08-09 재확인에서 [한국어](https://www.data.go.kr/data/15000415/openapi.do)와 [영문](https://www.data.go.kr/en/data/15000415/openapi.do) Live 상세 모두 개발 10,000회/일을 표시해 과거 Locale 충돌은 해소됐다. 실검증은 10,000회/일과 실제 승인 화면 중 더 낮은 호출량으로 계획한다.
 
 일반적인 인증·quota·backend 실패 외에 구역 매핑 누락, 해제 전문 지연, 중복/정정 발표를 처리해야 한다. 기상특보가 없다는 응답을 “모든 재난이 안전함”으로 해석하지 않는다.
 
@@ -153,11 +153,15 @@ type ProviderEnvelope<T> = SourceReference & {
 | 공식 근거 | [대기오염정보 API 15073861](https://www.data.go.kr/data/15073861/openapi.do), [측정소정보 API 15073877](https://www.data.go.kr/data/15073877/openapi.do), [AirKorea OpenAPI 기술문서](https://apiweb.airkorea.or.kr/common/upload.pdf), [공식 대기질 예보 페이지](https://www.airkorea.or.kr/web/dustForecast?pMENU_NO=113) |
 | 최종 수정 | `verified`: 두 API 모두 2026-06-30 |
 | 기능·범위 | 측정소별·시도별 실시간 측정정보, 통합대기환경지수, 대기질 예보, 측정소 목록·근접 측정소·TM 기준좌표 |
-| 접근 | 개발 자동 승인, 운영 심의 승인. REST JSON/XML |
-| 공식 트래픽 | 두 API 상세에 각각 개발 500회/일 표시. API별인지 계정·신청 전체 공유인지 `not_verified`이므로 실검증은 두 API 합산 500회/일을 보수적 상한으로 사용. 운영 승인량·리셋 시각은 `not_verified` |
+| 접근 | 개발 자동 승인. 한국어 상세는 운영 심의 승인이나 영문 상세는 상단의 운영 수동 심의와 선택 상세기능의 운영 불가 표시가 내부에서 충돌해 Production 접근은 `not_verified`. REST JSON/XML |
+| 공식 트래픽 | 두 API 한·영문 상세에 각각 개발 500회/일 표시. [공공데이터포털 사용자 지원 API](https://www.data.go.kr/data/15075624/openapi.do)는 계정별 개발 500회/일을 명시하므로 실검증은 두 API 합산 500회/일을 보수적 상한으로 사용. 실제 승인량·Reset 시각은 `not_verified` |
 | 비용·라이선스 | 무료, 공공누리 제3유형(출처표시+변경금지) |
 | 대표 Endpoint | `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc`, `https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc` |
 | 채택 | 개발 `adopt`; 상용 `conditional` |
+
+2026-08-09 Live 상세 재확인에서 대기오염정보 [한국어](https://www.data.go.kr/data/15073861/openapi.do)·[영문](https://www.data.go.kr/en/data/15073861/openapi.do), 측정소정보 [한국어](https://www.data.go.kr/data/15073877/openapi.do)·[영문](https://www.data.go.kr/en/data/15073877/openapi.do)는 개발 500회/일로 일치했다. 다만 두 영문 페이지에서 상단 운영 수동 심의와 선택된 상세기능의 운영 불가 표시가 충돌한다. 한국어 페이지와 [AirKorea 공식 이용 절차](https://www.airkorea.or.kr/web/board/5/329/?pMENU_NO=144)는 운영계정 전환·심의를 안내한다. 개발 Contract 검증은 보수적 합산 500회/일 안에서 진행할 수 있지만, Production Provider 확정 전에는 실제 승인 화면과 제공기관 답변으로 운영 가능 여부를 해소해야 한다.
+
+2026-08-10 `/getMsrstnAcctoRltmMesureDnsty` Run 9는 HTTP 200·Provider `00`·Item 1개와 `dataTime`·`pm10Value`·`pm25Value`를 관찰했다. 다만 Live 상세 응답표와 첨부 v1.4의 공식 XML Sample에는 `stationName`·`stationCode`가 없고, 같은 첨부의 응답 필드표는 두 값을 필수로 표시한다. 따라서 핵심 실데이터 도달은 확인했지만 응답 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`로 유지한다. 동일 요청 반복 대신 Production 채택 전에 제공기관 확인으로 문서 충돌을 해소한다.
 
 예보는 공식 페이지 기준 매일 05·11·17·23시 발표한다. 오존 예보는 4월 1일~10월 31일이며 당일 등급의 세부 발표 조건도 시각별로 다르다. 관측값의 공식 가용성 SLA는 찾지 못했다. 초기 제품 가정은 관측 `observedAt` 2시간 이내 `fresh`, 2~4시간 `delayed`, 4시간 초과 `stale`이고, 14일 canary 후 조정한다. 예보는 공식 발표주기와 유효일을 사용한다.
 

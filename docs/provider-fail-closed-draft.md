@@ -11,7 +11,7 @@
 
 ## 1. 입력 상태 축
 
-결과 존재 여부, 데이터 품질과 License 판정을 한 문자열로 합치지 않는다.
+결과 존재 여부, 데이터 품질, 응답 Contract와 License 판정을 한 문자열로 합치지 않는다.
 
 ### 데이터 품질 (`qualityStatus`)
 
@@ -23,13 +23,16 @@
 | `partial` | 응답은 있으나 추천에 필요한 필드 일부가 누락됨 |
 | `conflicting` | 같은 지역·유효시각의 공식 값이 충돌함 |
 
-### 결과 종류·License
+### 결과 종류·Contract·License
 
 | 축·상태 | 의미 |
 | --- | --- |
 | `resultKind=data` | 데이터가 있으며 `qualityStatus`를 함께 판정함 |
 | `resultKind=valid_empty` | 성공 응답이며 해당 Provider 범위에서 대상 데이터가 없음 |
 | `resultKind=unavailable` | 인증·권한·Quota·Timeout·Backend·Parsing 실패로 사용할 수 없음 |
+| `contractStatus=verified` | 적용 중인 공식 응답 계약과 관찰 Schema가 일치함 |
+| `contractStatus=conflicting_official_schema` | 공식 상세·첨부·Sample 사이에 필수 Field 정의가 충돌해 단일 계약을 확정할 수 없음 |
+| `contractStatus=not_verified` | 실제 응답 또는 적용 공식 계약을 아직 대조하지 않음 |
 | `licenseStatus=license_blocked`, `resultKind=not_fetched` | 이용·변경·저장·표시 권리가 해소되지 않아 Provider 호출·제품 사용을 차단함 |
 | `licenseStatus=license_review_expired`, `resultKind=not_fetched` | 마지막 License 검토가 허용 기간을 지나 Provider 호출·제품 사용을 중단함 |
 
@@ -46,12 +49,13 @@
 | `conflicting` | 충돌 Source·시각을 함께 표시 | 금지 | 공식 Source 직접 확인 제시 | 임의 평균·다수결 금지 |
 | `unavailable` | 장애·다시 시도 시점 표시 | 금지 | 수동 확인·재시도 제공 | 오래된 Cache로 조용히 대체 금지 |
 | `valid_empty` | Provider 범위를 함께 표시 | “안전”으로 확대 해석 금지 | 예: 날씨 특보 없음은 비기상 재난 없음이 아님 | Empty 결과 시각 보존 |
+| `conflicting_official_schema` | 개발 Evidence에는 충돌한 공식 근거와 관찰 Field만 분리 표시 | 금지 | 공식 문서 확인 또는 제공기관 확인 필요 | 단일 Schema로 정규화·재가공 금지 |
 | `license_blocked` | 제품 데이터로 표시하지 않음 | 금지 | 승인된 대체 Source가 있을 때만 명시적 제공 | 저장·Model 입력 금지 |
 | `license_review_expired` | 제품 데이터로 표시하지 않음 | 금지 | 최신 이용조건 재검토 필요 표시 | 재검토 전 Cache 제공 금지 |
 
 ## 3. 결합 상태 제안
 
-1. 활동 판정에 필수인 Weather와 Air Quality 중 하나가 `resultKind=unavailable|not_fetched`이거나 `qualityStatus=stale|conflicting`이면 통합 Score와 Best Window를 생성하지 않는다.
+1. 활동 판정에 필수인 Weather와 Air Quality 중 하나가 `resultKind=unavailable|not_fetched`이거나 `qualityStatus=stale|conflicting`이거나 `contractStatus=conflicting_official_schema|not_verified`이면 통합 Score와 Best Window를 생성하지 않는다.
 2. `partial`은 누락 필드가 해당 활동의 Hard block·Score에 쓰이는지 먼저 확인한다. 영향 분석이 없으면 보수적으로 추천을 중단한다.
 3. Provider 상태를 단순 평균하지 않는다. 공식 특보 같은 Hard block은 일반 점수보다 우선한다.
 4. 공식 특보가 활성이라면 원문·기관·발표·발효시각을 NowSignal 설명보다 먼저 표시한다.
