@@ -2,26 +2,26 @@
 
 - 기준일: 2026-08-10 (Asia/Seoul)
 - 문서 상태: `offline_spec_ready`
-- 실제 C-11 실행 상태: 네 Provider 모두 `not_run`
+- 실제 C-11 실행 상태: KMA 초단기예보·단기예보는 Run 10 Capture-only `not_evaluated`; KMA 실황과 나머지 Provider·Endpoint는 `not_run`; C-11 `pass` 없음
 - 실행 Binding 상태: KMA 단기예보 3개 Endpoint의 queryless `sourceUrl`과 제1유형 일반증서 `license.termsUrl`은 `verified`; 공식 `sourceId`는 없음. 나머지 Provider·Endpoint와 Null·단위 Binding은 `not_verified`
 - 목적: 실제 Provider 호출 전에 Source·시각·지역·단위·License·Attribution 결합 규칙과 Sanitized Evidence 형식을 고정한다.
 - 비범위: Provider API 호출, 원 응답 저장, 제품 코드, Attribution UI 구현, 14일 Canary, 운영계정·Traffic 상향, 추가 기관 문의
 - 상위 계약: [공공 데이터 카탈로그의 ProviderEnvelope](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [Provider 실검증 Runbook](./provider-validation-runbook.md), [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md)
 
-이 명세는 C-11 실행 준비 Evidence다. 정적 License와 공식 Dataset 근거를 Runtime `sourceUrl`·`sourceId`·`license.termsUrl` Binding 또는 실제 응답 결합 성공으로 바꾸지 않으며, `offline_spec_ready`를 C-11·Contract·Gate 2 `pass`로 해석하지 않는다.
+이 명세는 C-11 실행 준비 Evidence다. 명시적으로 Hash 고정·검증한 KMA Source·Terms 외의 정적 License·공식 Dataset 근거를 Runtime Binding 또는 실제 응답 결합 성공으로 바꾸지 않으며, `offline_spec_ready`나 Capture 완료를 C-11·Contract·Gate 2 `pass`로 해석하지 않는다.
 
 ## 1. 상태 축
 
 | 축 | 허용 상태 | 현재 상태 |
 | --- | --- | --- |
 | 명세 | `draft`, `offline_spec_ready`, `superseded` | `offline_spec_ready` |
-| 실제 응답 결합 | `not_run`, `pass`, `fail`, `not_observed` | 네 Provider 모두 `not_run` |
+| 실제 응답 결합 | `not_run`, `not_evaluated`, `pass`, `fail`, `not_observed` | KMA 예보 2개 Endpoint Capture-only `not_evaluated`; 나머지 `not_run`; `pass` 없음 |
 | 정적 License | Product License Register의 Provider별 판정 | KMA `approved_for_dev`; AirKorea 개발 `approved_for_dev`, 운영 `conditional_for_production` |
-| Fixture 출처 | `provider_observed_sanitized`, `provider_official_sample`, `synthetic_classifier_fixture` | 이 문서는 `offline_documentation`; 실제 Fixture 없음 |
+| Fixture 출처 | `provider_observed_sanitized`, `provider_official_sample`, `synthetic_classifier_fixture` | Run 10 예보 2개는 `provider_observed_sanitized` Summary·Hash가 있으나 엄격한 C-11 평가는 하지 않음 |
 | Runtime Binding | Endpoint별 `verified`, `not_verified`, `not_observed` | KMA 단기예보 Source·Terms `verified`; 나머지 Provider·Endpoint와 Null·단위 Binding `not_verified` |
 | 제품 구현 | `not_started`, 향후 Gate 승인 상태 | `not_started` |
 
-Schema·License·실행 상태를 합치지 않는다. 예를 들어 정적 License가 `approved_for_dev`여도 응답의 Source·단위·Attribution 결합을 관찰하지 않았다면 C-11은 `not_run`이다.
+Schema·License·실행 상태를 합치지 않는다. 정적 License가 `approved_for_dev`여도 응답 결합을 실행하지 않았다면 C-11은 `not_run`이고, 일부 공개 값을 Capture했지만 전체 Assertion을 수행하지 않았다면 `not_evaluated`다.
 
 ## 2. 공통 필수 계약
 
@@ -143,7 +143,7 @@ Evidence Manifest는 상위 `ProviderEnvelope`를 대체하는 Schema가 아니�
 
 | Provider ID | 대상 Endpoint | Source 후보·고정 전 조건 | 시각 기준 | 공개 지역 Context | 단위 기준 | License | 현재 차단 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `kma-data-go-kr-vilage-fcst` | `/getUltraSrtNcst`, `/getUltraSrtFcst`, `/getVilageFcst` | API `15084084`는 공식 근거. Endpoint별 queryless Runtime `sourceUrl`과 제1유형 일반증서 `termsUrl`은 `verified`; 공식 canonical `sourceId`는 없어 Null 고정 | 실황 관측시각과 예보 발표·유효시각 분리 | KMA 공개 `nx`, `ny` | Category별 원 단위 필수; Field 단위표와 Null 규칙은 Endpoint Plan에서 고정 | `LIC-KMA-001`, 공공누리 제1유형 | 실황 외 두 Endpoint `not_run`; Source·Terms Binding `verified`; Null·단위 Plan과 실제 C-11 `not_run` |
+| `kma-data-go-kr-vilage-fcst` | `/getUltraSrtNcst`, `/getUltraSrtFcst`, `/getVilageFcst` | API `15084084`는 공식 근거. Endpoint별 queryless Runtime `sourceUrl`과 제1유형 일반증서 `termsUrl`은 `verified`; 공식 canonical `sourceId`는 없어 Null 고정 | 실황 관측시각과 예보 발표·유효시각 분리 | KMA 공개 `nx`, `ny` | Category별 원 단위 필수; Field 단위표와 Null 규칙은 Endpoint Plan에서 고정 | `LIC-KMA-001`, 공공누리 제1유형 | 실황 C-11 `not_run`; Run 10 예보 2개 Capture-only `not_evaluated`; Source·Terms Binding `verified`; 엄격한 C-11 `pass` 없음 |
 | `kma-data-go-kr-weather-warning` | `/getWthrWrnList`, `/getWthrWrnMsg`, `/getPwnStatus` | API `15000415`는 공식 근거. 공식 특보 ID 또는 발표기관·발표시각·대상구역 Composite의 정확한 규칙은 `not_verified` | 발표·발효·해제시각 분리 | 공식 특보구역 Code·Label | 비수치 Payload이면 `unitApplicability=not_applicable_by_payload_kind`·`units=[]` 후보; Endpoint별 공식 근거 전 `not_verified` | `LIC-KMA-002`, 공공누리 제1유형 | 전문·현황 `not_run`; Source·Terms·Null Binding `not_verified`; 실제 C-11 `not_run` |
 | `airkorea-station` | `/getMsrstnList`, `/getNearbyMsrstnList` | API `15073877`은 공식 근거. 안정된 측정소 ID·Code·명칭의 Runtime Binding은 실제 Field 확인 전 `not_verified` | Metadata의 관측·발표·유효시각 Null 허용 규칙은 `not_verified` | 시도·측정소·공개 TM Context | 비수치 Payload이면 `unitApplicability=not_applicable_by_payload_kind`·`units=[]` 후보; Endpoint별 공식 근거 전 `not_verified` | `LIC-AIR-001`, 공공누리 제3유형 | 근접 측정소 `not_run`; Source·Terms·Null Binding `not_verified`; 위치 절차·Cache는 별도 미확인; 실제 C-11 `not_run` |
 | `airkorea-air-measurement` | `/getMsrstnAcctoRltmMesureDnsty`, `/getMinuDustFrcstDspth` | API `15073861`은 공식 근거. 관측 측정소 Context 보충은 공식 Schema 분기와 새 Plan 전 `not_verified`이며 응답 Echo를 가정하지 않음 | 관측 `dataTime` 후보; 예보 발표회차·유효일 Mapping은 실제 검증 전 `not_observed` | 측정소 또는 예보 지역 | 오염물질별 원 단위·등급 보존; Field 단위표와 실제 결합은 `not_observed` | `LIC-AIR-001`, 공공누리 제3유형 | Run 9 원본 C-01 `fail`, 공식 Schema 충돌; Source·Terms·Null Binding `not_verified`; 파생·AI·Cache는 별도 미확인; 실제 C-11 `not_run` |
@@ -153,16 +153,16 @@ Evidence Manifest는 상위 `ProviderEnvelope`를 대체하는 Schema가 아니�
 | Field·Group | Presence 규칙 | 허용 Provenance | 현재 Binding |
 | --- | --- | --- | --- |
 | `providerId`, `endpointPath`, `evaluatedAt` | 항상 `required_non_null` | Plan·검증기 상수 | Provider ID만 확정, Endpoint별 C-11 Plan은 `not_verified` |
-| `fetchedAt` | 실제 호출 결과는 `required_non_null`; License 차단 `not_fetched`만 명시적 Null | 검증기 Clock | 실제 C-11 `not_run` |
+| `fetchedAt` | 실제 호출 결과는 `required_non_null`; License 차단 `not_fetched`만 명시적 Null | 검증기 Clock | Run 10 예보 2개 Capture에서 관찰했으나 엄격한 C-11은 `not_evaluated`; 나머지 `not_run` |
 | `sourceUrl`, `sourceId` | 둘 중 하나 이상 `required_non_null` | 공식 Record·응답 식별자·사전등록 Composite | KMA API `15084084`의 queryless `sourceUrl`과 공식 `sourceId=null`은 `verified`; 나머지 Provider는 `not_verified` |
 | `observedAt`, `issuedAt`, `validFrom`, `validUntil` | Endpoint별 `required_non_null`, `required_nullable`, `not_applicable_by_payload_kind` 중 하나를 Plan에 고정 | 원 응답 Field 우선; 공식 근거가 있는 요청 Context만 예외 | KMA 예보 2개 Endpoint의 Null 정책은 Run 10 Plan에 사전등록했지만 실제 C-11은 `not_evaluated`; 나머지는 `not_verified` |
-| 공개 지역 Context | `data`·`valid_empty`에서 `required_non_null` | 응답 Field 또는 공식 근거로 고정한 공개 요청 Context | 일부 요청 Context만 알려졌고 실제 결합 `not_run` |
+| 공개 지역 Context | `data`·`valid_empty`에서 `required_non_null` | 응답 Field 또는 공식 근거로 고정한 공개 요청 Context | Run 10 KMA Grid Capture는 완료됐지만 엄격한 결합은 `not_evaluated`; 나머지 `not_run` |
 | `units[].rawUnit` | 수치 Field마다 `required_non_null`; 비수치 Payload에는 항목을 만들지 않음 | 공식 Field·기술문서의 Version 고정 단위표 | KMA 예보 핵심 Category 단위표는 Run 10 Plan에 사전등록했지만 엄격한 C-11 결합은 `not_evaluated`; 나머지는 `not_verified` 또는 `not_observed` |
 | `units[].normalizedUnit` | 수치 Field에 승인된 정규화가 없으면 `required_nullable`과 `normalizationStatus=not_approved` | NowSignal 파생층 | 제품 설계 전 `not_approved` |
-| `unitApplicability` | 항상 `required_non_null`; `field_level`, `not_applicable_by_payload_kind`만 허용 | Payload 종류 | Endpoint별 실제 결합 `not_run` |
-| `units[].unitStatus` | 모든 수치 Field 항목 `required_non_null`; `observed`, `not_observed`만 허용 | 원 단위 관찰 여부 | Endpoint별 실제 결합 `not_run` |
+| `unitApplicability` | 항상 `required_non_null`; `field_level`, `not_applicable_by_payload_kind`만 허용 | Payload 종류 | Run 10 예보 2개 Capture는 `field_level`, 엄격한 결합 `not_evaluated`; 나머지 `not_run` |
+| `units[].unitStatus` | 모든 수치 Field 항목 `required_non_null`; `observed`, `not_observed`만 허용 | 원 단위 관찰 여부 | Run 10은 공개 단위 Signature를 Capture했지만 전체 상태 Assertion은 `not_evaluated`; 나머지 `not_run` |
 | License Group | Register ID·정확한 terms URL·Snapshot Hash·검토일·평가 범위 상태 모두 `required_non_null` | License Register와 발급 시점 공식 Snapshot | KMA `LIC-KMA-001`·제1유형 일반증서·공개 Evidence Projection은 고정; 평가 범위·실제 C-11 결합은 `not_evaluated`, 나머지는 일부 `not_verified` |
-| `attribution` | Placeholder가 모두 실제 검증값으로 채워진 문자열 `required_non_null` | 검증된 Source·시각·Provider Metadata | Template만 존재, 실제 렌더링 `not_run` |
+| `attribution` | Placeholder가 모두 실제 검증값으로 채워진 문자열 `required_non_null` | 검증된 Source·시각·Provider Metadata | Run 10은 렌더링 SHA만 Capture했고 엄격한 문자열·Token Assertion은 `not_evaluated`; 나머지 `not_run` |
 
 Provenance는 `response_field`, `request_context`, `registry_constant`, `derived`로 분리한다. `response_field`가 우선이며, `request_context`는 공식 계약이 같은 의미를 보장하고 Plan에 사전등록한 경우에만 사용한다. `registry_constant`는 License ID·Provider ID 같은 정적 값에 한정한다. `derived` 값은 Source·공식 시각·원 단위·License를 보충하거나 덮어쓸 수 없다.
 
@@ -242,7 +242,7 @@ AirKorea 대기오염의 측정소 Context는 공식 Schema 답변 전 `request_
 
 | Provider ID | Offline 명세 | 실제 C-11 | 다음 Evidence | 재개 권한 |
 | --- | --- | --- | --- | --- |
-| `kma-data-go-kr-vilage-fcst` | `offline_spec_ready` | `not_run` | 최종 Phase 1 Endpoint별 Sanitized 응답과 Field 단위·Attribution 결합 | `owner_network_decision_required` |
+| `kma-data-go-kr-vilage-fcst` | `offline_spec_ready` | 실황 `not_run`; Run 10 예보 2개 `not_evaluated`; `pass` 없음 | 엄격한 License scope·단위 상태·Attribution 문자열·원본/파생 Layer Assertion을 새 Plan에서 모두 평가 | `owner_network_decision_required` |
 | `kma-data-go-kr-weather-warning` | `offline_spec_ready` | `not_run` | 목록·전문·현황의 원문·정정·해제·Attribution 결합 | `owner_network_decision_required` |
 | `airkorea-station` | `offline_spec_ready` | `not_run` | 측정소 식별자·공개 지역 Context·제3유형 Attribution 결합 | `owner_network_decision_required` |
 | `airkorea-air-measurement` | `offline_spec_ready` | `not_run` | 공식 Schema 분기 뒤 새 Plan의 측정소 Context·원 단위·제3유형 Attribution 결합 | `owner_network_decision_required` |

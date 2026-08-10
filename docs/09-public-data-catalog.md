@@ -2,7 +2,7 @@
 
 - 문서 상태: `Gate 2 provider validation in_progress`; Desk research 완료, Contract는 Endpoint별 부분 검증, Freshness·Canary는 `not_run`
 - 조사 기준일: 2026-08-05 (Asia/Seoul)
-- 실행 근거 갱신일: 2026-08-10 — KMA 단기예보·기상특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`
+- 실행 근거 갱신일: 2026-08-10 — KMA 단기예보 조회서비스 정상 Endpoint 3개, 기상특보 목록과 AirKorea 측정소 목록 C-01 `pass`; Run 10 C-11 `not_evaluated`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`
 - Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌을 보수적으로 기록. 2026-08-09 Live 상세에서는 KMA·AirKorea 한·영문 개발 호출량이 일치해 KMA 충돌은 해소됐으며, 실제 승인량·Reset 시각은 승인 화면 확인 전 `not_verified`. AirKorea 영문 운영 승인 표기는 페이지 내부 충돌
 - 범위: 날씨, 대기질, 안전 알림, 지역 행사, 지오코딩, Web Push
 - 근거 원칙: 제공기관 또는 표준 제정기관의 1차 출처만 확정 근거로 사용한다. 포털의 “실시간”, “최신” 표시는 가용성 SLA가 아니다.
@@ -18,7 +18,7 @@
 
 | Adapter | 1차 Provider | Gate 2 판정 | 최초 적용 | 핵심 이유와 제한 |
 | --- | --- | --- | --- | --- |
-| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | `/getUltraSrtNcst` C-01 `pass`; 다른 정상 Endpoint와 Freshness는 `not_run`. 전국 5 km 격자, 공공누리 1유형. 승인 quota `not_verified` |
+| `WeatherProvider` | 기상청 단기예보 조회서비스 | `adopt` | Phase 1 | `/getUltraSrtNcst`, `/getUltraSrtFcst`, `/getVilageFcst` C-01 `pass`; Run 10 C-11은 Capture-only `not_evaluated`, Freshness·Coverage·Canary는 `not_run`. 전국 5 km 격자, 공공누리 1유형. 승인 quota `not_verified` |
 | `SafetyAlertProvider` | 기상청 기상특보 | `adopt` | Phase 1 | `/getWthrWrnList` C-01 `pass`; 통보문·현황·Freshness는 `not_run`. 상용 이용 가능한 날씨 특보 원문이며 비기상 재난까지 포괄하지 않음 |
 | `AirQualityProvider` | AirKorea 대기오염정보 + 측정소정보 | `adopt_for_dev`, `conditional_for_production` | Phase 1 | 측정소 목록 C-01 `pass`; 대기오염 Run 9 원본 C-01 `fail`과 공식 Schema 충돌은 미해소이며 문의 `접수`. 두 API 합산 500회를 보수적 상한으로 사용하고 실제 승인량·공공누리 3유형 파생·운영·위치 관련 조건을 별도 확인 |
 | `SafetyAlertProvider` | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 비상용 프로토타입 이후 재심의 | 공공데이터포털은 공공누리 4유형. 플랫폼의 일반 안내와도 불일치하며 현재 범위·할당량이 확인되지 않음 |

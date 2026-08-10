@@ -1,10 +1,10 @@
 # NowSignal AI Product License Register
 
-- 문서 상태: `working_draft_updated_after_run_9`
+- 문서 상태: `working_draft_updated_after_run_10`
 - 최초 작성일: 2026-08-05
 - 최종 확인일: 2026-08-10 (Asia/Seoul)
 - Phase 1 호출량 재확인: 2026-08-07 KMA Locale 표시 충돌 기록. 2026-08-09 Live 상세에서 KMA·AirKorea 한·영문 개발 호출량은 일치해 KMA 충돌 해소. AirKorea 영문 운영 승인 표기 내부 충돌은 License 판정과 분리해 Production 차단 조건으로 유지
-- Phase 1 실행 근거: 개발 활용신청 4건 승인·활용기간 2026-08-10~2028-08-10. KMA 단기예보·기상특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`; Freshness·Canary `not_run`
+- Phase 1 실행 근거: 개발 활용신청 4건 승인·활용기간 2026-08-10~2028-08-10. KMA 정상 예보 Endpoint 3개, 기상특보 목록과 AirKorea 측정소 목록 C-01 `pass`; Run 10 C-11 `not_evaluated`; AirKorea 대기오염 Run 9 원본 C-01 `fail`·공식 Schema `conflicting_official_schema`; Freshness·Canary `not_run`
 - 적용 범위: 제품이 수집·저장·변환·표시하거나 사용자 추천의 근거로 사용하는 공개 데이터와 외부 표준
 - 상세 기술 조사: [09-public-data-catalog.md](./09-public-data-catalog.md)
 - Founder scope: [founder-problem-evidence.md](./founder-problem-evidence.md)
@@ -50,7 +50,7 @@
 
 | ID | 데이터·표준 | 현재 판정 | 상업 이용 | 변경 | 저장·Cache | 핵심 미해결 사항 |
 | --- | --- | --- | --- | --- | --- | --- |
-| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | `/getUltraSrtNcst` C-01만 `pass`; 다른 Endpoint·Freshness, 제3자 권리 포함 필드·장기 Cache 범위 미검증 |
+| LIC-KMA-001 | 기상청 단기예보 | `approved_for_dev` | 가능 | 가능 | 제품 TTL 정책 내 후보 | 정상 Endpoint 3개 C-01 `pass`; Run 10 C-11 `not_evaluated`. Freshness·제3자 권리 포함 필드·장기 Cache 범위 미검증 |
 | LIC-KMA-002 | 기상청 기상특보 | `approved_for_dev` | 가능 | 가능하지만 공식 원문 보존 | 활성·해제 추적에 필요한 범위 | `/getWthrWrnList` C-01만 `pass`; 실제 전달 지연·정정 연결·통보문·현황 미검증 |
 | LIC-AIR-001 | AirKorea 대기오염정보·측정소정보 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | 가능 | 원문 변경 금지 | immutable 원본과 파생층 분리 | 측정소 C-01 `pass`; 대기오염 Schema 충돌·운영 심의·위치 절차·파생 허용 범위 미해소 |
 | LIC-MOIS-001 | 행정안전부 긴급재난문자 | `blocked_for_commercial` | 금지로 판정 | 금지 | 확인 전 금지 | 제3·제4유형 충돌, 현재 coverage·quota, AI 설명 허용 범위 |
@@ -88,7 +88,7 @@
 - 저장·Cache: 명시적 장기 재배포 권리는 이 조사에서 확인하지 않음. 데이터 유효기간과 quota 보호에 필요한 TTL cache만 설계 후보로 두고 활용신청 약관을 재확인
 - 출처표시 초안: `출처: 기상청 단기예보 조회서비스 · 발표 {baseDate/baseTime} KST · 확인 {fetchedAt} · 원문 {sourceReference}`
 - 금지·통제: 공공데이터포털 key를 client에 노출하지 않음. API허브의 별도 quota·약관을 같은 Provider 계약으로 혼합하지 않음
-- 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getUltraSrtNcst` C-01 `pass`. 다른 정상 Endpoint·오류 Contract·Freshness는 `not_run`
+- 현재 판정: `approved_for_dev`; 개발 활용신청 승인·활용기간 2026-08-10~2028-08-10, `/getUltraSrtNcst`·`/getUltraSrtFcst`·`/getVilageFcst` C-01 `pass`. Run 10 C-11은 `not_evaluated`, 오류 Contract·Freshness는 `not_run`
 - Release evidence: 활용신청 시점 상세/약관 snapshot, contract fixture, attribution UI, 14일 freshness canary
 - Owner: NowSignal Data/Privacy
 - 재검토: Gate 3 진입 전, 상세 페이지 변경 감지 시 또는 2026-09-10 중 빠른 날

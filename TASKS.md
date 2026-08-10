@@ -94,20 +94,20 @@
 - [x] `done` 2026-08-09 Phase 1 한·영문 Live 상세 재확인 — KMA Locale 충돌 해소, KMA·AirKorea 개발 호출량 표시 일치, AirKorea 영문 운영 승인 표기 내부 충돌은 승인 화면·기관 확인 항목으로 유지
 - [x] `done` Founder scope에 필요한 강수·기온·습도·풍속·대기질·기상특보 의미 필드와 14일 Canary 사전 합격 기준 초안 v1·Contract 후 잠금 절차 작성
 
-### Phase 1 실제 API·법적 검증 — Run 9 종료·Schema 답변 대기와 Offline 준비 병행
+### Phase 1 실제 API·법적 검증 — Run 10 종료·남은 Contract와 Canary 준비
 
 | 작업 | Workflow | Evidence | 재개 조건 |
 | --- | --- | --- | --- |
 | API 개발 활용신청 | `done` | `applications_4_of_4_approved`; 모두 2026-08-10~2028-08-10, 실제 승인 Traffic `not_verified` | 완료 |
 | 인증키 안전 저장·로드 | `done` | Decoding 형태 정규화·DPAPI Import 확인, C-12 원문·encoded 흔적 각 0건 | 완료 |
-| 정상·오류·Rate Limit Contract 검증 | `blocked` | KMA 단기예보·특보와 AirKorea 측정소 C-01 `pass`; AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개·핵심 Field 3개를 관찰했지만 원본 C-01 `fail`. 포털 Live 응답표·공식 Sample은 `stationName`을 생략하고 첨부 v1.4 필드표는 필수로 명시해 `conflicting_official_schema`; Network 1, Retry 0, Plan·Security·C-12 `pass`, 누적 10회 | 같은 이유의 재호출 금지. 기관 답변 또는 다음 Contract 범위·Plan·Hash·실호출 결정을 먼저 고정 |
+| 정상·오류·Rate Limit Contract 검증 | `blocked` | KMA 단기예보 조회서비스 정상 Endpoint 3개, KMA 특보 목록과 AirKorea 측정소 목록 C-01 `pass`. Run 10 KMA 예보 2회는 HTTP 200·Provider `00`, 필수 Schema·핵심 Category, Plan·Security·C-12 `pass`; C-01 전용 bounded pass, C-11 `not_evaluated`, 누적 12회. AirKorea 대기오염 Run 9 원본 C-01 `fail`과 `conflicting_official_schema`는 보존 | 남은 정상·오류 Contract, 엄격한 C-11, AirKorea 서면 분기와 Canary는 각 범위·Plan·Hash·사용자 결정을 먼저 고정 |
 | 14일 관측·발표 지연·Coverage 측정 | `deferred_manual` | `not_run` | 사전 합격 기준·호출 예산·실행환경 승인 뒤 |
 | AirKorea 제3유형 파생 설명·Cache·표시 및 위치 관련 조건 확인 | `deferred_manual` | `not_verified` | Gate 2 최종 판정 전 서면 확인 또는 전문 검토 |
 | AirKorea 응답 Schema 충돌 문의 | `in_progress` | [문의 기록](./docs/airkorea-schema-inquiry-draft.md) `submitted_pending_response`; 2026-08-10, 한국환경공단, 포털 처리상태 `접수` | 제공기관 또는 공공데이터포털의 서면 답변 확인 |
 | Provider별 장애·누락·시간대·중복 fixture 확보 | `in_progress` | Run 6 Sanitized HTTP 504 Envelope 1건은 발생 주체 `unclassified`; 공통 C-09·C-10 Client Synthetic Classifier 16/16·미처리 예외 0·두 새 Process 결정론·Network/Retry 0 `pass`. `providerBehaviorVerified=false`, Provider별 실제 C-09·C-10은 `not_run` | 실제 오류 Case는 별도 Plan·Hash·사용자 결정. 누락·시간대·중복 Fixture는 계속 준비 |
 | Local Validator Offline fixture | `done` | PS 5.1 StrictMode Cardinality 오류 재현 뒤 확장 Validator 25/25 기대 판정·미처리 예외 0·결정론적 반복 `pass`, 외부 호출 0 | 완료 |
 | Gate 2 Offline Evidence 무결성 검증 | `done` | Run 6~9 Canonical Plan·Manifest 8개 Hash·부모 연결·Run 9 Script SHA 일치, Frozen Validator 25/25와 오류 Classifier 16/16을 각각 새 Process 2회 반복해 동일 결과, Network 0 | [Evidence Matrix](./docs/gate-2-evidence-matrix.md)와 검증 Script Hash가 바뀌면 재실행 |
-| C-11 ProviderEnvelope·Attribution 사전등록 | `done` | [C-11 Evidence 명세](./docs/provider-c11-envelope-evidence-spec.md) `offline_spec_ready`; 네 Provider 실제 C-11 `not_run`, Runtime Source·Terms·Null Binding `not_verified`, Network 0 | Endpoint별 정확한 Binding·Plan·Hash·사용자 Network 결정 뒤 실제 응답 검증 |
+| C-11 ProviderEnvelope·Attribution 사전등록 | `done` | [C-11 Evidence 명세](./docs/provider-c11-envelope-evidence-spec.md) `offline_spec_ready`; KMA 예보 3개 Endpoint의 Source·Terms Binding은 `verified`. Run 10 예보 2개는 Capture-only `not_evaluated`, 실황과 나머지 Provider 실제 C-11은 `not_run`; 엄격한 C-11 `pass` 없음 | Endpoint별 남은 Null·단위·License scope·Attribution·Layer Assertion과 Plan·Hash·사용자 Network 결정을 고정한 뒤 실제 결합 검증 |
 | 위치기반서비스 신고 안내의 NowSignal 적용 여부 확인 | `deferred_manual` | `application_notice_observed_2026-08-10`, `not_verified` | 실제 사용자 위치 기능 설계·운영·배포 전 기관 확인 또는 전문 검토 |
 
 ### Production·후속 Phase 검증
@@ -151,7 +151,7 @@
 - KMA 단기예보 `15084084` 개발 활용신청은 2026-08-10 승인됐고 활용기간은 2026-08-10~2028-08-10이다. 결과 화면에 일일 Traffic이 없어 실제 승인량은 `not_verified`다.
 - 네 개발 활용신청이 모두 승인됐고 활용기간은 2026-08-10~2028-08-10이다. 결과 화면에 일일 Traffic이 없어 실제 승인량은 `not_verified`다.
 - 일반 인증키 Decoding 값은 OneDrive·Git 밖의 Windows 사용자 범위 DPAPI CLIXML로 저장했고, 같은 사용자 컨텍스트의 복호화 가능 여부만 확인했다. 키 값은 출력하지 않았다.
-- KMA 단기예보·특보와 AirKorea 측정소 C-01은 HTTP 200·Provider `00`으로 통과했다. AirKorea 대기오염 Run 9는 정확히 1회 호출에서 HTTP 200·Provider `00`·Item 1개와 `dataTime`·`pm10Value`·`pm25Value`를 관찰했다. 원본 C-01 실패는 보존한다. 포털 Live 응답표·공식 Sample과 첨부 v1.4 필드표가 `stationName` 포함 여부에서 충돌하므로 전체 Contract는 `conflicting_official_schema`, Freshness는 `not_evaluated`다. Retry 0, 호출 전후 C-12 `pass`, 당일 보수적 누적 10회이며 같은 이유로 재호출하지 않는다.
+- KMA 단기예보 조회서비스의 실황·초단기예보·단기예보 정상 Endpoint 3개, KMA 특보 목록과 AirKorea 측정소 목록 C-01은 통과했다. Run 10은 예보 2개를 정확히 1회씩 호출해 HTTP 200·Provider `00`·필수 Schema·핵심 Category와 C-12·Security를 통과했고 당일 보수적 누적은 12회다. 이 판정은 C-01 전용이며 C-11은 `not_evaluated`, Freshness·Coverage·Canary는 `not_run`이다. AirKorea 대기오염 Run 9 원본 C-01 `fail`과 `conflicting_official_schema`도 보존한다.
 - 기관 답변은 Network 검증 한 분기의 Trigger일 뿐 프로젝트 전체 정지 조건이 아니다. 답변 대기 중 [Gate 2 Evidence Matrix](./docs/gate-2-evidence-matrix.md), Phase 1 권리 연산표, C-09·C-10 무호출 Classifier와 [C-11 Evidence 명세](./docs/provider-c11-envelope-evidence-spec.md)를 준비했고, 실제 Provider 행동·C-11·Canary·제품 구현으로 확대하지 않는다.
 - Google Forms와 Interview는 외부 참여자 모집·연락·응답 수집, 공개 Beta 또는 시장 수요 주장 중 가장 먼저 도래하는 시점 전에 명시적 승인을 받고 재개한다.
 - Gate 2 통과와 Gate 3 설계 승인 전에는 제품 코드를 작성하지 않는다.

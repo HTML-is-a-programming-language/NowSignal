@@ -2,20 +2,20 @@
 
 - 최초 작성일: 2026-08-07
 - 문서 상태: `execution_in_progress`
-- 실행 이력: `attempted_nine_runs`
-- 현재 진행 상태: `blocked_pending_official_schema_response_and_next_network_scope_decision` — Run 9는 정확히 1회 호출을 종료했고 핵심 응답 필드를 관찰했으나 공식 `stationName` 계약이 충돌함. 2026-08-10 한국환경공단 대상 포털 문의가 `접수`돼 답변과 다음 호출 범위 결정을 기다림
-- 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·실호출과 AirKorea Schema 충돌 문의 제출. 운영계정·Traffic 상향·제품 코드는 비범위
+- 실행 이력: `attempted_ten_runs`
+- 현재 진행 상태: `blocked_pending_remaining_contract_c11_canary_and_airkorea_response` — Run 10에서 KMA 초단기예보·단기예보 C-01을 통과했다. AirKorea 공식 Schema 답변, 남은 Contract Case, 엄격한 C-11, 14일 Canary는 미완료다.
+- 사용자 승인: 2026-08-10, Phase 1 개발용 API 활용신청·제한된 실호출, AirKorea Schema 충돌 문의 제출과 Run 10 KMA 예보 최대 2회 검증. 운영계정·Traffic 상향·제품 코드는 비범위
 - 범위: 기상청 단기예보, 기상청 기상특보, AirKorea 대기오염정보·측정소정보
 - 비범위: 제품 코드, 운영계정 승인, Production 적합성 확정, 행정안전부 긴급재난문자, TourAPI, 외부 지오코더, Web Push. 로컬 좌표→KMA 격자 변환과 측정소 선택 알고리즘은 Gate 4 설계·테스트 대상이며 이 Provider 실호출 Runbook이 검증 완료로 대신하지 않는다.
 - 관련 문서: [창업자 문제 근거와 초기 범위](./founder-problem-evidence.md), [공공 데이터 카탈로그](./09-public-data-catalog.md), [Product License Register](./product-license-register.md), [C-11 ProviderEnvelope Evidence 명세](./provider-c11-envelope-evidence-spec.md), [Gate 2 Evidence Matrix](./gate-2-evidence-matrix.md), [Provider Fail-closed 판단 초안](./provider-fail-closed-draft.md), [사용자 수동 작업](./manual-action-checklist.md), [개발 활용신청 가이드](./provider-application-guide.md)
 
-이 Runbook은 인증키를 받은 뒤 동일한 방법으로 Contract·오류·Freshness를 검증하기 위한 실행 명세다. 2026-08-10까지 아홉 Run ID를 사용했고 실제 호출은 보수적으로 10회 계상했다. KMA 단기예보·특보와 AirKorea 측정소 Sentinel은 통과했다. AirKorea 대기오염 Run 9는 HTTP 200·Provider `00`·Item 1개와 핵심 응답 필드 3개를 관찰했다. 원본 Manifest의 C-01은 `stationName` 응답 필수 조건 때문에 `fail`로 보존한다. 포털 Live 응답표·공식 Sample은 이 Field를 생략하지만 같은 첨부 v1.4 필드표는 필수로 명시하므로 Provider 응답 Contract는 `conflicting_official_schema`다. Freshness·품질과 나머지 오류 Contract·Canary는 미평가다. 아래에서 명시적으로 실행 결과라고 표시하지 않은 수치는 계속 계획이다.
+이 Runbook은 인증키를 받은 뒤 동일한 방법으로 Contract·오류·Freshness를 검증하기 위한 실행 명세다. 2026-08-10까지 열 개 Run ID를 사용했고 실제 호출은 보수적으로 12회 계상했다. KMA 단기예보 조회서비스의 정상 Endpoint 3개, KMA 특보 목록과 AirKorea 측정소 목록 C-01은 통과했다. Run 10은 KMA 초단기예보·단기예보에서 HTTP 200·Provider `00`·필수 Schema와 핵심 Category를 확인했다. 다만 C-11은 Capture만 수행하고 엄격한 결합을 `not_evaluated`로 유지한다. AirKorea 대기오염 Run 9 원본 C-01 `fail`과 공식 Schema `conflicting_official_schema`도 보존한다. Freshness·품질, 나머지 오류 Contract와 Canary는 미평가다. 아래에서 명시적으로 실행 결과라고 표시하지 않은 수치는 계속 계획이다.
 
 ## 1. Provider·Endpoint 범위
 
 | Provider ID | 공식 상세 | 우선 검증 Endpoint | 보수적 실검증 상한 | 개발·License 판정 | 실행 이력 |
 | --- | --- | --- | --- | --- | --- |
-| `kma-data-go-kr-vilage-fcst` | [API 15084084](https://www.data.go.kr/data/15084084/openapi.do) | `/getUltraSrtNcst`, 초단기예보·단기예보 상세기능 | 10,000회/일과 승인 화면 중 더 낮은 값 | `approved_for_dev` | `c01_pass_run_3` |
+| `kma-data-go-kr-vilage-fcst` | [API 15084084](https://www.data.go.kr/data/15084084/openapi.do) | `/getUltraSrtNcst`, `/getUltraSrtFcst`, `/getVilageFcst` | 10,000회/일과 승인 화면 중 더 낮은 값 | `approved_for_dev` | 실황 `c01_pass_run_3`; 초단기·단기예보 `c01_pass_run_10` |
 | `kma-data-go-kr-weather-warning` | [API 15000415](https://www.data.go.kr/data/15000415/openapi.do) | `/getWthrWrnList`, 통보문·현황 상세기능 | 10,000회/일과 승인 화면 중 더 낮은 값 | `approved_for_dev` | `c01_pass_run_5` |
 | `airkorea-air-measurement` | [API 15073861](https://www.data.go.kr/data/15073861/openapi.do) | `/getMsrstnAcctoRltmMesureDnsty`, `/getMinuDustFrcstDspth` | 두 AirKorea API 합산 500회/일 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | Run 6 `failed_c01_http_504_body_unobserved`; Run 7 `http_200_provider_00_c01_fail_local_validator`; Run 8 `preflight_abort_network0`; Run 9 원본 `c01_fail_station_name_missing`, 사후판정 `core_observation_consistent_with_live_table_and_sample_schema_conflict_open` |
 | `airkorea-station` | [API 15073877](https://www.data.go.kr/data/15073877/openapi.do) | `/getMsrstnList`, 근접 측정소 상세기능 | 두 AirKorea API 합산 500회/일 | 개발 `approved_for_dev`, 운영 `conditional_for_production` | `c01_pass_run_5` |
@@ -110,7 +110,7 @@ review:
 
 공공데이터포털의 Provider error code와 HTTP status는 서로 대체하지 않는다. HTTP 200 안의 오류 payload도 실패로 분류한다.
 
-C-11의 문서·Manifest·Assertion 형식은 `offline_spec_ready`지만 Runtime `sourceUrl`·`sourceId`·`license.termsUrl`과 Endpoint별 Null 규칙은 `not_verified`다. 네 Provider의 실제 C-11은 모두 `not_run`이며, 정적 License·공식 Sample·C-01 성공을 실제 결합 `pass`로 대체하지 않는다.
+C-11의 문서·Manifest·Assertion 형식은 `offline_spec_ready`다. KMA 예보 3개 Endpoint의 queryless `sourceUrl`과 제1유형 일반증서 `license.termsUrl`은 `verified`지만, 엄격한 Null·단위·License scope·Attribution·Layer Assertion은 미완료다. Run 10 예보 2개 C-11은 Capture-only `not_evaluated`, 실황과 나머지 Provider는 `not_run`이며 실제 C-11 `pass`는 없다. 정적 License·공식 Sample·C-01 성공을 실제 결합 `pass`로 대체하지 않는다.
 
 ## 5. Provider별 의미 검증
 
@@ -510,6 +510,28 @@ Run 9 Sanitized Manifest Canonical JSON(UTF-8, 줄바꿈 없음):
 
 이 결과는 C-09·C-10 **Client 분류기**의 Offline Evidence다. Provider가 실제로 Timeout·Backend·Quota 오류를 어떤 HTTP status·code·body로 반환하는지는 계속 `not_run` 또는 기존 관찰 범위로 유지하며, 실제 Quota 소진이나 Provider Contract 통과로 승격하지 않는다.
 
+#### 6.1.21 Run 10 KMA 초단기예보·단기예보 C-01 실행 결과
+
+- 실행시각: 2026-08-10 13:38:25 KST
+- Plan·Run: `contract-smoke-20260810-v10`, `contract-smoke-20260810-r10`
+- [Canonical Plan](./validation-plans/kma-forecast-contract-smoke-plan.json) SHA-256: `d1e25d41032427799b6aaa426d7304fd97bcded63a9c1d30dcbdf85c377f86a8`
+- Script SHA-256: `c02217f0cfc8bc1e486479640394f965521a8b374870e430519c35d91e2f9ea0`
+- Offline Validator: 12/12, Descriptor SHA-256 `9c7d59c33f76ba92cc0800e3582e14e102695cb40eca8fa4c4706eb7bb76db8a`, Result Projection SHA-256 `817429f7be00d2e35c095bae19db0be6a5c38f20c56dc6cbc05d259f29368494`
+- 고정 공개 요청: `/getUltraSrtFcst`는 `pageNo=1`, `numOfRows=1000`, `dataType=JSON`, `base_date=20260810`, `base_time=1130`, `nx=60`, `ny=127`; `/getVilageFcst`는 같은 Pagination·Grid에 `base_time=1100`. Credential과 전체 URL은 기록하지 않는다.
+- 실행 통제: Network 2건, Endpoint별 1회, Retry·Redirect·Parallel 0, 호출 간 2초, 당일 보수적 누적 12회. C-12 사전·사후 Repository·환경 원문·1회 Encoding 표현과 Scan 오류는 모두 0건이다.
+- `/getUltraSrtFcst`: HTTP 200, Provider `00`, Item 66개, 필수 8개 Field와 `PTY`·`RN1`·`T1H`·`REH`·`WSD`, 요청 Grid·발표회차·Pagination·값 Domain 확인, C-01 `pass`.
+- `/getVilageFcst`: HTTP 200, Provider `00`, Item 835개, 필수 8개 Field와 `PTY`·`PCP`·`POP`·`TMP`·`REH`·`WSD`, 요청 Grid·발표회차·Pagination·값 Domain 확인, C-01 `pass`.
+- 보안·정리: 원 응답·예보값·전체 URL·예외 원문을 저장하지 않았고 Secret 참조 해제, BSTR ZeroFree, Error Buffer 제거, Runtime Secret Scan과 Output Allowlist가 모두 통과했다.
+- 판정 범위: `contractVerdict=pass`와 `planConformance=pass`는 이 Run의 **C-01 전용** 판정이다. `c11CaptureComplete=true`는 공개 필드 Capture 완료 Boolean일 뿐 엄격한 C-11 통과가 아니다. Endpoint와 Run 전체의 C-11은 `not_evaluated`, Freshness·Coverage·Canary는 `not_run`으로 유지한다.
+
+Run 10 Sanitized Evidence Summary Canonical JSON(UTF-8, 줄바꿈 없음):
+
+```json
+{"schemaVersion":"run10-sanitized-evidence-summary-v1","planId":"contract-smoke-20260810-v10","runId":"contract-smoke-20260810-r10","evaluatedAt":"2026-08-10T13:38:25+09:00","phase":"completed","networkCalls":2,"endpointCount":2,"cumulativeCalls":12,"retry":0,"redirect":0,"parallel":0,"rawResponseStored":false,"fullUrlStored":false,"exceptionTextStored":false,"planSha256":"d1e25d41032427799b6aaa426d7304fd97bcded63a9c1d30dcbdf85c377f86a8","scriptSha256":"c02217f0cfc8bc1e486479640394f965521a8b374870e430519c35d91e2f9ea0","preflightPass":true,"c12Pre":{"rawRepo":0,"encodedRepo":0,"rawEnv":0,"encodedEnv":0,"scanErrors":0},"c12Post":{"rawRepo":0,"encodedRepo":0,"rawEnv":0,"encodedEnv":0,"scanErrors":0},"c12Pass":true,"secretReferencesCleared":true,"bstrZeroFreeSucceeded":true,"errorBufferCleared":true,"cleanupFailure":false,"runtimeSecretScanPass":true,"outputAllowlistPass":true,"securityConformance":"pass","contractVerdictScope":"c01_only","c01Verdict":"pass","c11Verdict":"not_evaluated","contractVerdict":"pass","planConformance":"pass","runClosed":true,"endpoints":[{"endpointId":"getUltraSrtFcst","endpointPath":"/getUltraSrtFcst","fetchedAt":"2026-08-10T13:38:19+09:00","issuedAt":"2026-08-10T11:30:00+09:00","validFrom":"2026-08-10T12:00:00+09:00","validUntil":null,"validUntilNullReason":"official_interval_end_not_provided","httpStatus":200,"providerCode":"00","itemCount":66,"schemaStatus":"required_schema_observed","missingRequiredFields":[],"missingRequiredCategories":[],"fieldSignature":["baseDate:String","baseTime:String","category:String","fcstDate:String","fcstTime:String","fcstValue:String","nx:Integer","ny:Integer"],"grid":{"x":60,"y":127},"gridMatch":true,"baseEchoMatch":true,"baseTimeParseable":true,"forecastTimeParseable":true,"paginationComplete":true,"valueDomainPass":true,"units":["PTY:code","RN1:category_1mm","T1H:degC","REH:percent","WSD:m/s"],"responseBytes":8986,"sanitizedProjectionSha256":"43aa9e0232a276c404ff2e04690abcebdeda22919c1affc937b2b8f1ebabb141","attributionRenderedSha256":"3e763f22411c25898964ba8df60409e09e55b3ad77db81bf6546404ea1b7ea39","c11CaptureComplete":true,"providerContractVerdict":"pass","c01":"pass","c11":"not_evaluated","securityControls":"pass","cleanupPass":true},{"endpointId":"getVilageFcst","endpointPath":"/getVilageFcst","fetchedAt":"2026-08-10T13:38:22+09:00","issuedAt":"2026-08-10T11:00:00+09:00","validFrom":"2026-08-10T12:00:00+09:00","validUntil":null,"validUntilNullReason":"official_interval_end_not_provided","httpStatus":200,"providerCode":"00","itemCount":835,"schemaStatus":"required_schema_observed","missingRequiredFields":[],"missingRequiredCategories":[],"fieldSignature":["baseDate:String","baseTime:String","category:String","fcstDate:String","fcstTime:String","fcstValue:String","nx:Integer","ny:Integer"],"grid":{"x":60,"y":127},"gridMatch":true,"baseEchoMatch":true,"baseTimeParseable":true,"forecastTimeParseable":true,"paginationComplete":true,"valueDomainPass":true,"units":["PTY:code","PCP:category_1mm","POP:percent","TMP:degC","REH:percent","WSD:m/s"],"responseBytes":112392,"sanitizedProjectionSha256":"e69c28effbb3226083810ea36dbd5578c39cfc6fe3e0d7c6b85312043eb0db59","attributionRenderedSha256":"ca663d51aa4e5786971a2a92ca69745e29f8b745f2ba84afba36e99d65fd0eab","c11CaptureComplete":true,"providerContractVerdict":"pass","c01":"pass","c11":"not_evaluated","securityControls":"pass","cleanupPass":true}]}
+```
+
+- Run 10 Sanitized Evidence Summary SHA-256: `9c94281f2310d310207a0c4682b0aa1ab18c426345a66e0033866f9d15ea7ce6`
+
 ### 6.2 수집 항목
 
 매 호출에서 다음 값을 분리 기록한다.
@@ -621,11 +643,11 @@ AirKorea 관측은 현재 상태, 예보는 지역·일 단위 배경으로만 �
 
 | Provider | Contract Evidence | 오류 Evidence | 14일 Canary Evidence | License Evidence | License Decision | 실호출 Workflow |
 | --- | --- | --- | --- | --- | --- | --- |
-| KMA 단기예보 | `/getUltraSrtNcst` C-01 `pass`; 나머지 `not_run` | `observed_http_403_and_401_unclassified`; 계획 오류 Case `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `in_progress` |
+| KMA 단기예보 | `/getUltraSrtNcst` Run 3, `/getUltraSrtFcst`·`/getVilageFcst` Run 10 C-01 `pass`; Run 10은 C-01 전용 bounded pass, C-11 `not_evaluated` | `observed_http_403_and_401_unclassified`; 계획 오류 Case `not_run` | `not_run` | Source·Terms 정적 Binding `verified`, 엄격한 C-11 `not_evaluated` | `approved_for_dev` | `in_progress` |
 | KMA 기상특보 | `/getWthrWrnList` C-01 `pass`; 나머지 `not_run` | `not_run` | `not_run` | `not_verified` | `approved_for_dev` | `in_progress` |
 | AirKorea 측정소 | `/getMsrstnList` C-01 `pass`; 근접 측정소 `not_run` | `not_run` | `not_run` | `not_verified` | `conditional_for_production` | `in_progress` |
 | AirKorea 대기오염 | Run 5 전송 결과 미관찰, Run 6 HTTP 504, Run 7 Local Validator 실패, Run 8 사전검사 중단·Network 0. Run 9는 HTTP 200·Provider `00`·핵심 Field를 관찰했으나 원본 C-01 `fail`; Live 응답표·공식 Sample과 첨부 필드표가 충돌해 Contract `conflicting_official_schema`, Freshness `not_evaluated`, 나머지 Endpoint `not_run`. 2026-08-10 Schema 문의 `접수` | Sanitized HTTP 504 Envelope·Offline 504 Classifier 각 1건; 계획 C-09·C-10 `not_run`. Local Fixture와 공식 문서 충돌은 Provider 오류 Evidence와 분리 | `not_run` | `not_verified` | `conditional_for_production` | `blocked_pending_official_schema_response_and_next_network_scope_decision` |
 
 결과표는 실제 Evidence가 생긴 항목만 바꾼다. 활용신청이나 키 발급만으로 Contract 또는 Freshness를 통과 처리하지 않는다.
 
-위 표의 Workflow는 Provider 실호출 상태다. 과거 HTTP 403·401과 Run 6의 HTTP 504는 활용신청 승인이나 License 판정을 취소하는 근거가 아니다. Run 9의 원본 C-01 실패와 공식 문서 충돌을 함께 보존하고, Live 동작만으로 첨부 필드표를 무시하거나 계획된 오류 Case·Canary 성공으로 소급하지 않는다. 제출한 문의의 서면 답변을 기다리며, 다음 호출을 재개하려면 범위와 별도 증거 계획을 먼저 고정한다.
+위 표의 Workflow는 Provider 실호출 상태다. 과거 HTTP 403·401과 Run 6의 HTTP 504는 활용신청 승인이나 License 판정을 취소하는 근거가 아니다. Run 9의 원본 C-01 실패와 공식 문서 충돌을 함께 보존한다. Run 10의 KMA C-01 성공도 엄격한 C-11·Freshness·Coverage·Canary 성공으로 소급하지 않는다. AirKorea 서면 답변과 무관한 다음 검증도 범위·Plan·Hash·사용자 결정을 먼저 고정한다.
